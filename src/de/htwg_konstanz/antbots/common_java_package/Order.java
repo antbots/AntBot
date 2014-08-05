@@ -36,7 +36,22 @@ public class Order {
     public Tile getPosition(){
     	return new Tile(row,col);
     }
+
+    public Tile getNewPosition(){
+    	return new Tile(row+direction.getRowDelta(),col+direction.getColDelta());
+    }
     
+    @Override
+    public boolean equals(Object o) {
+        boolean result = false;
+        if (o instanceof Order) {
+            Order order = (Order)o;
+            result = row == order.row && col == order.col;
+        }
+        return result;
+    }
+    
+
     public Aim getDirection(){
     	return direction;
     }

@@ -5,6 +5,7 @@ package de.htwg_konstanz.antbots.common_java_package;
  * Represents a tile of the game map.
  */
 public class Tile  {
+
     private int row;
     
     private int col;
@@ -29,9 +30,6 @@ public class Tile  {
         this.col = col;
     }
     
-    public void setCol(int col) {
-    	this.col = col;
-    }
     
     public void setRow(int row) {
     	this.row = row;
@@ -44,6 +42,11 @@ public class Tile  {
      */
     public int getRow() {
         return row;
+    }
+    
+    
+    public void setCol(int col){
+    	this.col = col;
     }
     
     /**
@@ -70,12 +73,12 @@ public class Tile  {
     public boolean equals(Object o) {
         boolean result = false;
         if (o instanceof Tile) {
-            Tile tile = (Tile) o;
+            Tile tile = (Tile)o;
             result = row == tile.row && col == tile.col;
         }
         return result;
     }
-    
+
     /**
      * {@inheritDoc}
      */

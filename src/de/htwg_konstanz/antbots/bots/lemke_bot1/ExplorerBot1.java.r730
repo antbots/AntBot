@@ -1,4 +1,3 @@
-
 package de.htwg_konstanz.antbots.bots.lemke_bot1;
 
 import java.awt.Color;
@@ -42,7 +41,7 @@ public class ExplorerBot1 extends Bot {
 
 	private void init() {
 		gameI = gameStateInforamtions();
-		pathfinding = new Pathfinding(gameI);
+		pathfinding = new Pathfinding(logger, gameI);
 	}
 
 	@Override
@@ -300,7 +299,7 @@ public class ExplorerBot1 extends Bot {
 		Set<Tile> antsGoingForFoot = new HashSet<Tile>();
 
 		Set<Tile> foodTiles = gameI.getFoodTiles();
-		List<Ant> myAnts = gameI.getMyAnts();
+		Set<Ant> myAnts = gameI.getMyAnts();
 
 		// next ant to foot
 		for (Tile foot : foodTiles) {
@@ -364,7 +363,7 @@ public class ExplorerBot1 extends Bot {
 	private void collect() {
 		if (turn == 0) {
 			gameI = gameStateInforamtions();
-			pathfinding = new Pathfinding(gameI);
+			pathfinding = new Pathfinding(logger, gameI);
 		}
 		turn++;
 

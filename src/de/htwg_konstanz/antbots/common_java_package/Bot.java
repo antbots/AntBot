@@ -1,5 +1,4 @@
 package de.htwg_konstanz.antbots.common_java_package;
-
 /**
  * Provides basic game state handling.
  */

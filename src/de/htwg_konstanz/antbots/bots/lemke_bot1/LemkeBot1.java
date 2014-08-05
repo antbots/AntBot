@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
-import com.aicontest.java_package.Ants;
-
 import de.htwg_konstanz.antbots.common_java_package.Aim;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.Bot;
@@ -119,10 +117,5 @@ public class LemkeBot1 extends Bot {
 
 			}
 		}
-	}
-	
-	//draw test
-	private void drawtest(){
-		
 	}
 }

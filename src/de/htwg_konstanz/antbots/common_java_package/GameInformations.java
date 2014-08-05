@@ -42,6 +42,7 @@ public class GameInformations {
 	 */
 	private final int atLastVisible[][];
 
+
 	private final List<Ant> myAnts = new LinkedList<Ant>();
 
 	private final Set<Ant> enemyAnts_1 = new HashSet<Ant>();

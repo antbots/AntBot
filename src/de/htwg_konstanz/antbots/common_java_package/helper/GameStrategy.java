@@ -3,6 +3,7 @@ package de.htwg_konstanz.antbots.common_java_package.helper;
 import java.util.LinkedList;
 import java.util.Set;
 
+import sun.org.mozilla.javascript.internal.ast.ForInLoop;
 import de.htwg_konstanz.antbots.common_java_package.Aim;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;
@@ -130,7 +131,7 @@ public class GameStrategy {
 	
 	private void generatePossibleMoves(int depth, LinkedList<Ant> antsToGo, LinkedList<LinkedList<Order>> possibleMoves) {
 		// Rekursionstiefe erreicht
-		if (depth == 0){
+		if (depth <= 0){
 			// Hier werden die Züge die temporär in possibleMovesTmp (ändert sich beim zurückspringen) gespeichert wurden
 			// in eine neue Liste hinzugefügt und diese dann der possibleMoves Liste
 			LinkedList<Order> tmp = new LinkedList<Order>();
@@ -142,13 +143,26 @@ public class GameStrategy {
 		}
 		// Die erste Ameise aus der Liste nehmen
 		Ant ant = antsToGo.get(depth-1); 
+		
 		// Für jede Ameise alle Bewegungsmöglichkeiten durchgehen
 		for (Aim aim : possibleDirections) {
 			// Bedingungen für einen nciht gültigen Bewgungszug ansonsten zu possibleMovesTmp hinzufügen
-			if(board.getTile(ant.getAntPosition(), aim).getType() == Ilk.WATER ||
-					(board.getTile(ant.getAntPosition(), aim).getType() == Ilk.MY_ANT && !(ant.getAntPosition().getRow() == ant.getAntPosition().getRow()+aim.getRowDelta() && ant.getAntPosition().getCol() == ant.getAntPosition().getCol()+aim.getColDelta()))){
+			if(board.getTile(ant.getAntPosition(), aim).getType() == Ilk.WATER/* ||
+					(board.getTile(ant.getAntPosition(), aim).getType() == Ilk.MY_ANT && !(ant.getAntPosition().getRow() == ant.getAntPosition().getRow()+aim.getRowDelta() && ant.getAntPosition().getCol() == ant.getAntPosition().getCol()+aim.getColDelta()))*/){
 				continue;
 			}else{
+				boolean skip = false;
+				for (Order order1 : possibleMovesTmp) {
+					for (Order order2 : possibleMovesTmp) {
+						if(order1.getNewPosition().equals(order2.getNewPosition()) && !order1.equals(order2)){
+							skip = true;
+						}
+					}
+				}
+				if(skip){
+					// nicht vollkommen sicher zb wenn eien ameise alle Wege blockiert bekommt, bzw kreuzen
+					continue;
+				}
 				possibleMovesTmp.addFirst(new Order(ant.getAntPosition(), aim));
 			}
 			// Weiter in die Rekursion gehen d.h. nächste Ameise betrachten
@@ -384,7 +398,5 @@ public class GameStrategy {
 			ant.setEnemiesinAttackRadius(enemiesInAttackRadius);
 		}
 	}
-	
-	
-
 }
+

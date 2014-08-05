@@ -109,3 +109,4 @@ public class Ant {
 		isUsed = used;
 	}
 }
+

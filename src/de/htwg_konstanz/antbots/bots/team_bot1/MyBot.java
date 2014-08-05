@@ -1,11 +1,20 @@
 package de.htwg_konstanz.antbots.bots.team_bot1;
 
+
 import java.awt.Color;
 import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import de.htwg_konstanz.antbots.common_java_package.*;
+import de.htwg_konstanz.antbots.common_java_package.Aim;
+import de.htwg_konstanz.antbots.common_java_package.Ant;
+import de.htwg_konstanz.antbots.common_java_package.Bot;
+import de.htwg_konstanz.antbots.common_java_package.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.Logger;
+import de.htwg_konstanz.antbots.common_java_package.Tile;
 import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
@@ -59,6 +68,7 @@ public class MyBot extends Bot {
 		if(turn == 0){
 			gameI = gameStateInforamtions();
 			pathfinding = new Pathfinding(gameI);
+
 		}
 		turn++;
 		orders.clear();
