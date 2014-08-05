@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generates the bot-jar files in ./bots from bin/de/htwg_konstanz/bots/ -->
+<project basedir="." default="jar" name="generate bots jar files">
+	<property environment="env" />
+	<!--<property name="ECLIPSE_HOME" value="../../eclipseKepler64" /> -->
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+
+	<path id="lemke_bots.classpath">
+		<pathelement location="bin" />
+	</path>
+
+	<property name="botsDirName" value="bots"
+		description="Name od the destination bots dir" />
+	<property name="botsJarDir" location="./${botsDirName}" />
+
+	<property name="buildDir" location="bin/" />
+	<property name="botsBuildPackage" value="de/htwg_konstanz/antbots/bots" />
+
+
+	<target name="init" description="Init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="${botsBuildDir}/team_bot1">
+			<fileset dir="src/de/htwg_konstanz/bots/">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="cleanBots" description="delete all .jar files in botsJarDir">
+		<mkdir dir="bots" />
+		<delete>
+			<fileset dir="bots" includes="**/*.jar">
+				<exclude name="**/.svn" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- TODO es muss hier möglich sein alle bots im bots ordner automatisch 
+		in jars zu packen -->
+	<target name="jar" depends="cleanBots" description="Generates the JAR file/s">
+		<mkdir dir="bots" />
+
+		<echo>botsJarDir: ${botsJarDir}</echo>
+		<echo>buildDir: ${buildDir}</echo>
+		<echo>botsBuildPackage: ${botsBuildPackage}</echo>
+
+		<!-- LemkeBot -->
+		<jar jarfile="${botsJarDir}/LemkeBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class" value="${botsBuildPackage}/lemke_bot1/LemkeBot1" />
+			</manifest>
+		</jar>
+
+		<!-- ExplorerBot -->
+		<jar jarfile="${botsJarDir}/ExplorerBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class"
+					value="${botsBuildPackage}/lemke_bot1/ExplorerBot1" />
+			</manifest>
+		</jar>
+
+		<!-- MyBot -->
+		<jar jarfile="${botsJarDir}/MyBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class" value="${botsBuildPackage}/team_bot1/MyBot" />
+			</manifest>
+		</jar>
+
+		<!-- Attackbot -->
+		<jar jarfile="${botsJarDir}/AttackBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class"
+					value="${botsBuildPackage}/kartentest_bot/AttackBot" />
+			</manifest>
+		</jar>
+
+		<!-- DummyBot -->
+		<jar jarfile="${botsJarDir}/DummyBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class"
+					value="${botsBuildPackage}/kartentest_bot/DummyBot" />
+			</manifest>
+		</jar>
+
+		<!-- FoodCollectBot -->
+		<jar jarfile="${botsJarDir}/CollectFood.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class"
+					value="${botsBuildPackage}/collect_food_bot/CollectFood" />
+			</manifest>
+		</jar>
+
+	</target>
+
+</project>
