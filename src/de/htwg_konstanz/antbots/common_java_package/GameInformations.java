@@ -41,6 +41,8 @@ public class GameInformations {
 	 * setuped with maxTurns.
 	 */
 	private final int atLastVisible[][];
+	
+	private Set<Ant> myAntsDangered = new HashSet<Ant>();
 
 
 	private final List<Ant> myAnts = new LinkedList<Ant>();
@@ -62,7 +64,7 @@ public class GameInformations {
 	private final Set<Ant> enemyAnts_8 = new HashSet<Ant>();
 
 	private final Set<Ant> enemyAnts_9 = new HashSet<Ant>();
-
+	
 	private LinkedList<Set<Ant>> enemiesAsList = new LinkedList<>();
 
 	private final Set<Tile> myHills = new HashSet<Tile>();
@@ -1004,5 +1006,13 @@ public class GameInformations {
 
 	public Logger getLogger() {
 		return logger;
+	}
+
+	public Set<Ant> getMyAntsDangered() {
+		return myAntsDangered;
+	}
+
+	public void setMyAntDangered(Set<Ant> myAnts) {
+		myAntsDangered = myAnts;
 	}
 }

@@ -2,7 +2,9 @@ package de.htwg_konstanz.antbots.bots.collect_food_bot;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import de.htwg_konstanz.antbots.common_java_package.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.Logger;
 import de.htwg_konstanz.antbots.common_java_package.MapPrinter;
 import de.htwg_konstanz.antbots.common_java_package.Tile;
+import de.htwg_konstanz.antbots.common_java_package.attack.AttackInit;
 import de.htwg_konstanz.antbots.common_java_package.boarder.BuildBoarder;
 //import de.htwg_konstanz.antbots.common_java_package.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.helper.BreadthFirstSearch;
@@ -32,6 +35,7 @@ public class CollectFood extends Bot {
 	Pathfinding pathfinding;
 	int turn = 0;
 	BuildBoarder boarder;
+	AttackInit attack;
 
 	public static void main(String[] args) throws IOException {
 		new CollectFood().readSystemInput();
@@ -43,6 +47,7 @@ public class CollectFood extends Bot {
 		bsf = new BreadthFirstSearch(gameI);
 		pathfinding = new Pathfinding(gameI);
 		boarder = new BuildBoarder(gameI);
+		attack = new AttackInit(gameI);
 
 	}
 
@@ -62,9 +67,19 @@ public class CollectFood extends Bot {
 		// logger.log("Ameise " + myAnt.getAntPosition());
 		// }
 		boarder.buildBoarder();
-
+		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
+		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
+		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
+			logger.log(a.getKey().size() + " " + a.getValue() );
+		}
+		
+		initDanger();
+		markOwnAntsAsDangered();
+		
+		
 		collectFood();
 		exploration();
+		
 
 		// logger.log("");
 		// logger.log("");
@@ -78,10 +93,42 @@ public class CollectFood extends Bot {
 		turn++;
 
 	}
+	
+	private void initDanger() {
+		for(Ant myAnt : gameI.getMyAnts()) {
+			myAnt.setDanger(false);
+		}
+	}
 
 	private void markOwnAntsAsDangered() {
+		Set<Ant> myAnts = new HashSet<Ant>();
+		
+		for (Ant myAnt : gameI.getMyAnts()) {
+			Tile myAntTile = myAnt.getAntPosition();
+			Set<Tile> myTiles = gameI.getTilesInRadius(myAntTile,(int)Math.sqrt(gameI.getViewRadius2()));
+			for(Tile t : myTiles) {
+				OverlayDrawer.setFillColor(Color.GREEN);
+				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
+						SubTile.BR);
+			}
+			for (Ant enemyAnt : gameI.getEnemyAnts()) {
+				Tile enemyAntTile = enemyAnt.getAntPosition();
+				if (myTiles.contains(enemyAntTile)) {
+					myAnt.setDanger(true);
+					myAnt.setEnemysInViewRadius(enemyAnt);
+					
+				}
+			}
+			if(myAnt.isDanger()) {
+				myAnts.add(myAnt);
+			}
+
+		}
+		gameI.setMyAntDangered(myAnts);
 
 	}
+	
+	
 
 	private void exploration() {
 
@@ -196,32 +243,33 @@ public class CollectFood extends Bot {
 
 		for (Ant ant : gameI.getMyAnts()) {
 
-			if (ant.getRoute() == null || ant.getRoute().size() == 0 || ant.getMission() == Missions.NON) {
+			if (ant.getRoute() == null || ant.getRoute().size() == 0
+					|| ant.getMission() == Missions.NON) {
 				ant.setMission(Missions.NON);
 				ant.setRoute(null);
 				continue;
 			}
 
-			OverlayDrawer.drawLine(ant.getRoute().get(0), ant.getRoute().get(ant.getRoute().size() - 1));
+			OverlayDrawer.drawLine(ant.getRoute().get(0),
+					ant.getRoute().get(ant.getRoute().size() - 1));
 
 			Tile next = ant.getRoute().remove(0);
-			
+
 			executeMove(ant, next);
-			
 
 		}
 	}
-	
+
 	private void executeMove(Ant ownAnt, Tile nextTile) {
 		Tile actuallPosition = ownAnt.getAntPosition();
-		Map<Tile, Aim> neighbours = gameI.getMoveAbleNeighbours(actuallPosition);
-		
+		Map<Tile, Aim> neighbours = gameI
+				.getMoveAbleNeighbours(actuallPosition);
 
 		if (neighbours.containsKey(nextTile)) {
 			Aim aim = neighbours.get(nextTile);
 			gameI.issueOrder(actuallPosition, aim);
 			ownAnt.setPosition(nextTile.getRow(), nextTile.getCol());
-			
+
 		} else {
 			ownAnt.setMission(Missions.NON);
 			ownAnt.setRoute(null);

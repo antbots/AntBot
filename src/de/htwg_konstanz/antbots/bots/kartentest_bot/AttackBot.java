@@ -11,8 +11,8 @@ import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.Bot;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.Order;
+import de.htwg_konstanz.antbots.common_java_package.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
-import de.htwg_konstanz.antbots.common_java_package.helper.GameStrategy;
 import de.htwg_konstanz.antbots.common_java_package.helper.Statistic;
 import de.htwg_konstanz.antbots.common_java_package.helper.Statistic.Measure;
 
@@ -22,7 +22,7 @@ public class AttackBot extends Bot {
 
 	private int turn = 0;
 	private Pathfinding pathfinding;
-	private GameStrategy gameStrategy;
+	private MaxN gameStrategy;
 	private Statistic statistics;
 	Measure alphaBeta;
 	de.htwg_konstanz.antbots.common_java_package.Logger log = new de.htwg_konstanz.antbots.common_java_package.Logger("bla.txt");
@@ -33,7 +33,7 @@ public class AttackBot extends Bot {
 
 	private void init() {
 		gameI = gameStateInforamtions();
-		gameStrategy = new GameStrategy();
+		gameStrategy = new MaxN();
 		statistics = new Statistic(gameI);
 		alphaBeta = statistics.createMeasure("AlphaBeta");
 	}
@@ -98,7 +98,7 @@ public class AttackBot extends Bot {
 			
 			
 			
-			LinkedList<Order> move = gameStrategy.attack(gameI,1, GameStrategy.Strategy.AGGRESSIVE, beteiligteAmeisen);
+			LinkedList<Order> move = gameStrategy.attack(gameI,1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
 			log.log(Long.toString((System.nanoTime() - start) / 1000000));
 			 if (move != null)
 				 for (Order order : move) {

@@ -1,4 +1,4 @@
-package de.htwg_konstanz.antbots.common_java_package.helper;
+package de.htwg_konstanz.antbots.common_java_package.attack;
 
 import java.util.Stack;
 

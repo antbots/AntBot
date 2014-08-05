@@ -1,4 +1,4 @@
-package de.htwg_konstanz.antbots.common_java_package.helper;
+package de.htwg_konstanz.antbots.common_java_package.attack;
 
 import java.util.LinkedList;
 import java.util.Set;
@@ -12,7 +12,7 @@ import de.htwg_konstanz.antbots.common_java_package.Logger;
 import de.htwg_konstanz.antbots.common_java_package.Order;
 import de.htwg_konstanz.antbots.common_java_package.Tile;
 
-public class GameStrategy {
+public class MaxN {
 	
 	public enum Strategy{
 		AGGRESSIVE,
@@ -34,7 +34,7 @@ public class GameStrategy {
 	CommandManager cm;
 	Strategy gameStrategy;
 	
-	public GameStrategy(){
+	public MaxN(){
 		// Liste die alle möglichen Bewegungsmöglichkeiten beinhaltet
 		possibleDirections = new LinkedList<Aim>();
 		possibleDirections.add(Aim.DONTMOVE);

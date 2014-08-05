@@ -1,13 +1,15 @@
 package de.htwg_konstanz.antbots.common_java_package;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import de.htwg_konstanz.antbots.common_java_package.settings.Missions;
 
 public class Ant {
 
-	boolean danger = false;
+	private boolean danger = false;
 	private Tile position;
 	private Tile posBefore;
 	private int weakness;
@@ -16,6 +18,8 @@ public class Ant {
 	private Missions mission = Missions.NON;
 	private List<Tile> routeForMission;
 	private boolean isUsed = false;
+	
+	private Set<Ant> enemysInViewRadius = new HashSet<Ant>();
 
 	public Ant(Tile position) {
 		this.position = position;
@@ -107,6 +111,22 @@ public class Ant {
 
 	public void setUsed(boolean used) {
 		isUsed = used;
+	}
+
+	public boolean isDanger() {
+		return danger;
+	}
+
+	public void setDanger(boolean danger) {
+		this.danger = danger;
+	}
+
+	public Set<Ant> getEnemysInViewRadius() {
+		return enemysInViewRadius;
+	}
+
+	public void setEnemysInViewRadius(Ant enemyInRange) {
+		enemysInViewRadius.add(enemyInRange);
 	}
 }
 
