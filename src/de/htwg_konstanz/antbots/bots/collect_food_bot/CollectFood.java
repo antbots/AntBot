@@ -67,15 +67,17 @@ public class CollectFood extends Bot {
 		// logger.log("Ameise " + myAnt.getAntPosition());
 		// }
 		boarder.buildBoarder();
-		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
-		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
-		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
-			logger.log(a.getKey().size() + " " + a.getValue() );
-		}
+		
 		
 		initDanger();
 		markOwnAntsAsDangered();
 		
+		
+		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
+		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
+		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
+			logger.log("key " + a.getKey()+ " value " + a.getValue());
+		}
 		
 		collectFood();
 		exploration();
@@ -97,29 +99,35 @@ public class CollectFood extends Bot {
 	private void initDanger() {
 		for(Ant myAnt : gameI.getMyAnts()) {
 			myAnt.setDanger(false);
+			myAnt.setEnemysInViewRadius(null);
 		}
 	}
 
 	private void markOwnAntsAsDangered() {
 		Set<Ant> myAnts = new HashSet<Ant>();
-		
+
 		for (Ant myAnt : gameI.getMyAnts()) {
+			Set<Ant> enemyAnts = new HashSet<Ant>();
+			
 			Tile myAntTile = myAnt.getAntPosition();
 			Set<Tile> myTiles = gameI.getTilesInRadius(myAntTile,(int)Math.sqrt(gameI.getViewRadius2()));
+			
+			//DEBUG
 			for(Tile t : myTiles) {
 				OverlayDrawer.setFillColor(Color.GREEN);
 				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
 						SubTile.BR);
 			}
+			
 			for (Ant enemyAnt : gameI.getEnemyAnts()) {
 				Tile enemyAntTile = enemyAnt.getAntPosition();
 				if (myTiles.contains(enemyAntTile)) {
 					myAnt.setDanger(true);
-					myAnt.setEnemysInViewRadius(enemyAnt);
-					
+					enemyAnts.add(enemyAnt);
 				}
 			}
 			if(myAnt.isDanger()) {
+				myAnt.setEnemysInViewRadius(enemyAnts);
 				myAnts.add(myAnt);
 			}
 
