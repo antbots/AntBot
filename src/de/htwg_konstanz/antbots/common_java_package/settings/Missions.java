@@ -1,5 +1,8 @@
 package de.htwg_konstanz.antbots.common_java_package.settings;
-
+/**
+ * 
+ * @author Benjamin
+ */
 public enum Missions {
 
 	/*Sammelt Futter ein*/

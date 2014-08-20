@@ -53,8 +53,7 @@ public class MoveCommand implements Command {
 	public void undo() {
 		for (Ant a : ants) {
 			a.setexecutedDirection(lastExecutedDirection);
-			a.setPosition(orders.get(a).getPosition().getRow(), orders.get(a)
-					.getPosition().getCol());
+			a.setPosition(orders.get(a).getPosition().getRow(), orders.get(a).getPosition().getCol());
 		}
 	}
 }

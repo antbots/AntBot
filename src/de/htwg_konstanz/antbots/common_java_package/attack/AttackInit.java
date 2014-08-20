@@ -13,7 +13,10 @@ import java.util.Set;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.Logger;
-
+/**
+ * 
+ * @author Benjamin
+ */
 public class AttackInit {
 
 	GameInformations gameI;
@@ -24,6 +27,10 @@ public class AttackInit {
 		logger = gameI.getLogger();
 	}
 
+	/**
+	 * 
+	 * @return a map with the a set of own ants and the corosponding enemy ants in the view radius of the own ants
+	 */
 	public Map<Set<Ant>, Set<Ant>> initAttack() {
 
 		Map<Set<Ant>, Set<Ant>> attack = new HashMap<Set<Ant>, Set<Ant>>();
@@ -44,6 +51,12 @@ public class AttackInit {
 		return attack;
 	}
 	
+	/**
+	 * recursive function 
+	 * if their are own diffrent ants which have the same enemy ant in the view radius
+	 * they will be merged in a menge
+	 * @param attack 
+	 */
 	private void merge(Map<Set<Ant>, Set<Ant>> attack) {
 		for (Entry<Set<Ant>, Set<Ant>> area : attack.entrySet()) {
 			for (Entry<Set<Ant>, Set<Ant>> areaTwo : attack.entrySet()) {
