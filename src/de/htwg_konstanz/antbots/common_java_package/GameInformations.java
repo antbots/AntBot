@@ -1015,4 +1015,15 @@ public class GameInformations {
 	public void setMyAntDangered(Set<Ant> myAnts) {
 		myAntsDangered = myAnts;
 	}
+	
+	public Set<Ant> getOwnNotDangeredAnts() {
+		Set<Ant> notDangerd = new HashSet<>();
+		
+		for(Ant ant : myAnts) {
+			if(!ant.isDanger()) {
+				notDangerd.add(ant);
+			}
+		}
+		return notDangerd;
+	}
 }

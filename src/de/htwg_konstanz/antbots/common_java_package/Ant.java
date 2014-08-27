@@ -125,8 +125,8 @@ public class Ant {
 		return enemysInViewRadius;
 	}
 
-	public void setEnemysInViewRadius(Ant enemyInRange) {
-		enemysInViewRadius.add(enemyInRange);
+	public void setEnemysInViewRadius(Set<Ant> enemysInRange) {
+		enemysInViewRadius = enemysInRange;
 	}
 }
 

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-
 import de.htwg_konstanz.antbots.common_java_package.Aim;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;

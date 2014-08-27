@@ -16,6 +16,10 @@ import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
+/**
+ * 
+ * @author Benjamin
+ */
 public class BuildBoarder {
 
 	GameInformations gameI;

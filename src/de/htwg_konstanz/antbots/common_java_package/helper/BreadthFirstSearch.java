@@ -44,8 +44,7 @@ public class BreadthFirstSearch {
 	 * @return
 	 */
 
-	public List<Ant> extendedBSF(List<Tile> postion, List<Ant> targets,
-			boolean onlyOnTarget, boolean isStepUsed, int steps,
+	public List<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets,	boolean onlyOnTarget, boolean isStepUsed, int steps,
 			Set<Tile> visitableTiles) {
 
 		List<Ant> result = new LinkedList<Ant>();
