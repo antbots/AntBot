@@ -1,9 +1,10 @@
 package de.htwg_konstanz.antbots.common_java_package.attack;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
-import sun.org.mozilla.javascript.internal.ast.ForInLoop;
+
 import de.htwg_konstanz.antbots.common_java_package.Aim;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;
@@ -44,7 +45,7 @@ public class MaxN {
 		possibleDirections.add(Aim.WEST);
 	}
 	
-	public LinkedList<Order> attack(GameInformations board, int depth, Strategy st, LinkedList<Set<Ant>> playerAnts){
+	public LinkedList<Order> attack(GameInformations board, int depth, Strategy st, List<Set<Ant>> playerAnts){
 		// Variablen initialisieren
 		bestMove = null;
 		this.board = board;
@@ -101,7 +102,7 @@ public class MaxN {
 	    		return best;
 	    	}
 	    	
-	    	// Nächster Zur entnehmen und ausführen
+	    	// Nächster Zug entnehmen und ausführen
 	    	LinkedList<Order> childMove = possibleMoves.poll();
 	    	ExecuteNextMove(childMove,ants);
 	    	LinkedList<Integer> current = maxn(depth-1,playerAnts.get((player+1)%playerAnts.size()),boundSum-best.get(player));
