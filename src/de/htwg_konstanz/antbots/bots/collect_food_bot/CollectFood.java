@@ -108,13 +108,13 @@ public class CollectFood extends Bot {
 		beteiligteAmeisen.add(ownAnts);
 		beteiligteAmeisen.add(enemyAnts);
 		
-		LinkedList<Order> move = gameStrategy.attack(gameI, 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
+//		LinkedList<Order> move = gameStrategy.attack(gameI, 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
 
-		if (move != null)
-			for (Order order : move) {
-				gameI.issueOrder(order);
-				logger.log(order.toString());
-			}
+//		if (move != null)
+//			for (Order order : move) {
+//				gameI.issueOrder(order);
+//				logger.log(order.toString());
+//			}
 		
 		
 		collectFood();

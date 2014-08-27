@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import com.sun.istack.internal.logging.Logger;
-
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.Bot;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;
