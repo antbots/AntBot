@@ -78,43 +78,22 @@ public class CollectFood extends Bot {
 		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
 		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
 		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
+			
+			List<Set<Ant>> beteiligteAmeisen = new LinkedList<>();
+			
+			beteiligteAmeisen.add(a.getKey());
+			beteiligteAmeisen.add(a.getValue());
+			
 			logger.log("key " + a.getKey()+ " value " + a.getValue());
+			
+			
+			LinkedList<Order> move = gameStrategy.attack(gameI, 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
+			if (move != null)
+			for (Order order : move) {
+				gameI.issueOrder(order);
+				logger.log(order.toString());
+			}
 		}
-		
-		Set<Ant> ownAnts = new HashSet<Ant>();
-		
-		for(Set<Ant> ownAnt : att.keySet()) {
-			ownAnts.addAll(ownAnt);
-		}
-		
-		Set<Ant> enemyAnts = new HashSet<Ant>();
-		for( Set<Ant> enemyAnt : att.values()){
-			enemyAnts.addAll(enemyAnt);
-		}
-		
-		logger.log("OWN ANTS:");
-		for(Ant a : ownAnts) {
-			logger.logWithoutLineEnding(a.toString() + " ");
-		}
-		logger.log("");
-		logger.log("ENEMY ANTS:");
-		for(Ant a : enemyAnts) {
-			logger.logWithoutLineEnding(a.toString() + " ");
-		}
-		logger.log("");
-		
-		List<Set<Ant>> beteiligteAmeisen = new LinkedList<>();
-		
-		beteiligteAmeisen.add(ownAnts);
-		beteiligteAmeisen.add(enemyAnts);
-		
-//		LinkedList<Order> move = gameStrategy.attack(gameI, 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
-
-//		if (move != null)
-//			for (Order order : move) {
-//				gameI.issueOrder(order);
-//				logger.log(order.toString());
-//			}
 		
 		
 		collectFood();
