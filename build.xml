@@ -98,6 +98,15 @@
 					value="${botsBuildPackage}/collect_food_bot/CollectFood" />
 			</manifest>
 		</jar>
+		
+		<!-- AntBot -->
+		<jar jarfile="${botsJarDir}/AntBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class"
+					value="${botsBuildPackage}/AntBot" />
+			</manifest>
+		</jar>
 
 	</target>
 

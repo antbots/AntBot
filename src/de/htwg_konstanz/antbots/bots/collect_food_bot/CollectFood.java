@@ -9,19 +9,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import de.htwg_konstanz.antbots.common_java_package.Aim;
-import de.htwg_konstanz.antbots.common_java_package.Ant;
-import de.htwg_konstanz.antbots.common_java_package.Bot;
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Logger;
-import de.htwg_konstanz.antbots.common_java_package.Order;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
-import de.htwg_konstanz.antbots.common_java_package.attack.AttackInit;
-import de.htwg_konstanz.antbots.common_java_package.attack.MaxN;
-import de.htwg_konstanz.antbots.common_java_package.boarder.BuildBoarder;
-import de.htwg_konstanz.antbots.common_java_package.helper.BreadthFirstSearch;
-import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
-import de.htwg_konstanz.antbots.common_java_package.settings.Missions;
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.AttackInit;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
+import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Aim;
+import de.htwg_konstanz.antbots.common_java_package.model.Order;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
+import de.htwg_konstanz.antbots.common_java_package.model.settings.Missions;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 /**
@@ -73,7 +73,6 @@ public class CollectFood extends Bot {
 		
 		initDanger();
 		markOwnAntsAsDangered();
-		
 		
 		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
 		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());

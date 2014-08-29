@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.io.PrintStream;
 import java.util.List;
 
-import de.htwg_konstanz.antbots.common_java_package.Aim;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
+import de.htwg_konstanz.antbots.common_java_package.model.Aim;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 
 /**

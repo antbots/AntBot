@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.htwg_konstanz.antbots.common_java_package.Ant;
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Ilk;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 /**
  * This Class is responsible for the visualization of the exploration.

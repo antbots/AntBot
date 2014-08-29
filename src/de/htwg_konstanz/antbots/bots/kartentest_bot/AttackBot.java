@@ -5,15 +5,15 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import de.htwg_konstanz.antbots.common_java_package.Ant;
-import de.htwg_konstanz.antbots.common_java_package.Bot;
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Logger;
-import de.htwg_konstanz.antbots.common_java_package.Order;
-import de.htwg_konstanz.antbots.common_java_package.attack.MaxN;
-import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
-import de.htwg_konstanz.antbots.common_java_package.helper.Statistic;
-import de.htwg_konstanz.antbots.common_java_package.helper.Statistic.Measure;
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.Statistic;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.Statistic.Measure;
+import de.htwg_konstanz.antbots.common_java_package.model.Order;
 
 public class AttackBot extends Bot {
 

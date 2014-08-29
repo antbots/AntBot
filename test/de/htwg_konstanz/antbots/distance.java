@@ -3,8 +3,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 
 public class distance {
