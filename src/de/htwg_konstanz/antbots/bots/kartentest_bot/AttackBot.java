@@ -8,6 +8,7 @@ import java.util.Set;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
 import de.htwg_konstanz.antbots.common_java_package.Bot;
 import de.htwg_konstanz.antbots.common_java_package.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.Logger;
 import de.htwg_konstanz.antbots.common_java_package.Order;
 import de.htwg_konstanz.antbots.common_java_package.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
@@ -19,12 +20,11 @@ public class AttackBot extends Bot {
 	private GameInformations gameI;
 
 	private int turn = 0;
+	private Logger logger = new Logger("AttackBot.txt");
 	private Pathfinding pathfinding;
 	private MaxN gameStrategy;
 	private Statistic statistics;
 	Measure alphaBeta;
-	de.htwg_konstanz.antbots.common_java_package.Logger log = new de.htwg_konstanz.antbots.common_java_package.Logger(
-			"bla.txt");
 
 	public static void main(String[] args) throws IOException {
 		new AttackBot().readSystemInput();
@@ -32,6 +32,7 @@ public class AttackBot extends Bot {
 
 	private void init() {
 		gameI = gameStateInforamtions();
+		gameI.setLogger(logger);
 		gameStrategy = new MaxN();
 		statistics = new Statistic(gameI);
 		alphaBeta = statistics.createMeasure("AlphaBeta");
@@ -42,6 +43,7 @@ public class AttackBot extends Bot {
 		if (turn == 0) {
 			init();
 		}
+		logger.log("_------------------------------------ ");
 
 		if (gameI.getMyAnts().size() != 0) {
 			alphaBeta.startSample();
@@ -60,6 +62,8 @@ public class AttackBot extends Bot {
 	private void attack() {
 		// nur Ameisen übergeben die an Kampf beteiligt sein sollen
 
+		logger.log("----------------------" + gameI.getMyAnts() + "--------------------");
+		
 		LinkedList<Ant> eigene = new LinkedList<>();
 		LinkedList<Ant> gegner = new LinkedList<>();
 		for (Ant ant : gameI.getMyAnts()) {
@@ -92,13 +96,13 @@ public class AttackBot extends Bot {
 			}
 
 			beteiligteAmeisen.addLast(tmp);
-
+			//logger.log(beteiligteAmeisen.toString());
 			LinkedList<Order> move = gameStrategy.attack(gameI, 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
-			log.log(Long.toString((System.nanoTime() - start) / 1000000));
+			logger.log(Long.toString((System.nanoTime() - start) / 1000000));
 			if (move != null)
 				for (Order order : move) {
 					gameI.issueOrder(order);
-					log.log(order.toString());
+					logger.log(order.toString());
 				}
 		}
 		// beteiligteAmeisen.addLast(gameI.getMyAnts());

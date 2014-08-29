@@ -12,7 +12,7 @@ public class AntBot {
 		 * fuer build.xml hinzufuegen oder importieren.
 		 * Danach in dieser Datei den absoluten Pfad ändern*/
 		
-		File program = new File("C:\\Users\\Felix\\Documents\\TeamProjekt\\AntBotsProject\\attackbot.cmd");
+		File program = new File("C:\\Users\\Felix\\Documents\\TeamProjekt\\AntBotsProject\\collectFoodBot.cmd");
 	    if (!program.exists()) {
 	      System.err.println("File not found! " + program);
 	      return;

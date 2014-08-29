@@ -3,9 +3,11 @@ package de.htwg_konstanz.antbots.common_java_package.attack;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 
 import de.htwg_konstanz.antbots.common_java_package.Aim;
 import de.htwg_konstanz.antbots.common_java_package.Ant;
+import de.htwg_konstanz.antbots.common_java_package.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.Order;
 
 /**
@@ -13,7 +15,7 @@ import de.htwg_konstanz.antbots.common_java_package.Order;
  * @author Felix
  */
 public class MoveCommand implements Command {
-	private Map<Ant, Order> orders;
+	private LinkedList<Order> order;
 	private LinkedList<Ant> ants;
 	private Aim lastExecutedDirection;
 
@@ -21,38 +23,25 @@ public class MoveCommand implements Command {
 	// gespeichert.
 	public MoveCommand(LinkedList<Order> order, LinkedList<Ant> ants) {
 		this.ants = ants;
-		this.orders = new HashMap<Ant, Order>();
-		for (Order o : order) {
-			for (Ant a : ants) {
-				if (a.getAntPosition().getCol() == o.getPosition().getCol()
-						&& a.getAntPosition().getRow() == o.getPosition().getRow()) {
-					orders.put(a, o);
-				}
-			}
-		}
+		this.order = order;
 	}
 
 	// Speichert die ausgeführte Richtung ab und versetzt die Ameise an die neue
 	// Position
 	@Override
 	public void execute() {
-		for (Ant a : ants) {
+		ants.forEach( a -> {Optional<Order> matchedOrder = order.stream().filter(o -> a.getAntPosition().equals(o.getPosition())).findAny();
 			lastExecutedDirection = a.getexecutedDirection();
-			a.setexecutedDirection(orders.get(a).getDirection());
-			a.setPosition(a.getAntPosition().getRow()
-					+ orders.get(a).getDirection().getRowDelta(), a
-					.getAntPosition().getCol()
-					+ orders.get(a).getDirection().getColDelta());
-		}
+			a.setexecutedDirection(matchedOrder.get().getDirection());
+			a.setPosition(matchedOrder.get().getNewPosition());
+		});
 	}
 
 	// Weist der Ameise die letzte durchgeführte Richtung zu und versetzt sie
 	// wieder zurück
 	@Override
 	public void undo() {
-		for (Ant a : ants) {
-			a.setexecutedDirection(lastExecutedDirection);
-			a.setPosition(orders.get(a).getPosition().getRow(), orders.get(a).getPosition().getCol());
-		}
+		ants.forEach(a -> {a.setexecutedDirection(lastExecutedDirection);
+				a.setPosition(a.getPosBefore().getRow(), a.getPosBefore().getCol());});
 	}
 }

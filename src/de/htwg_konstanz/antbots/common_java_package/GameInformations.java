@@ -77,7 +77,7 @@ public class GameInformations {
 
 	private Set<Ant> enemiesAsSingle = new HashSet<Ant>();
 
-	private Logger logger;
+	private static Logger logger;
 
 	/**
 	 * Creates new {@link GameInformations} object.
@@ -999,12 +999,12 @@ public class GameInformations {
 		return new int[] { players, rows, cols };
 	}
 
-	public void setLogger(Logger logger) {
-		this.logger = logger;
+	public static void setLogger(Logger logger1) {
+		logger = logger1;
 
 	}
 
-	public Logger getLogger() {
+	public static Logger getLogger() {
 		return logger;
 	}
 

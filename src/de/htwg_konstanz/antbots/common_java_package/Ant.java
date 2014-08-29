@@ -42,6 +42,15 @@ public class Ant {
 		position.setCol(col);
 		position.setRow(row);
 	}
+	
+	public void setPosition(Tile t) {
+		if(position != null) {
+			posBefore = new Tile(position.getRow(), position.getCol());
+		}
+		
+		position.setCol(t.getCol());
+		position.setRow(t.getRow());
+	}
 
 	public void setWeakness(int weakness) {
 		this.weakness = weakness;
