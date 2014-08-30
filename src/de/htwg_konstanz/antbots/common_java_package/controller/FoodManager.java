@@ -54,13 +54,6 @@ public class FoodManager {
 				AntBot.getGameI().getMap()[e.getKey().getRow()][e.getKey().getCol()].setType(Ilk.LAND);
 			}
 			
-			//DEBUG
-			/*if(!e.getValue().isAlive()){
-				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", false);
-			}else{
-				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", true);
-			}*/
-			
 		}
 		
 		for(Entry<Tile,Food> e : onOffer.entrySet()){
@@ -68,19 +61,6 @@ public class FoodManager {
 				onOffer.remove(e);
 				AntBot.getGameI().getMap()[e.getKey().getRow()][e.getKey().getCol()].setType(Ilk.LAND);
 			}
-			
-			//DEBUG
-			/*if(!e.getValue().isAlive()){
-				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", false);
-			}else{
-				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", true);
-			}*/
-		}
-		
-		
-		//DEBUG
-		for(Entry<Ant,Food> e1 : markedAnts.entrySet()){
-			OverlayDrawer.drawStar(e1.getKey().getAntPosition(), 5, 5, "2", true);
 		}
 	}
 
@@ -115,8 +95,16 @@ public class FoodManager {
 			List<Tile> tmpList = new LinkedList<>();
 			tmpList.add(foodTile.getKey());
 
-			//TODO nur explorer Ameisen
-			List<Ant> nearestTarget = AntBot.getBsf().extendedBSF(tmpList,	AntBot.getGameI().getOwnNotDangeredAnts(), true, false, 0, visitableTiles);
+			/*Set<Ant> ants = new HashSet<Ant>();
+			for(Ant a : AntBot.getGameI().getMyAnts()){
+				if(!markedAnts.containsKey(a)){
+					ants.add(a);
+				}
+			}
+			if(ants.isEmpty()){
+				continue;
+			}*/
+			List<Ant> nearestTarget = AntBot.getBsf().extendedBSF(tmpList,	/*ants*/AntBot.getGameI().getOwnNotDangeredAnts(), true, false, 0, visitableTiles);
 
 			Ant targetAnt;
 			if (nearestTarget.size() == 0) {
@@ -127,6 +115,10 @@ public class FoodManager {
 			
 			acceptFood(targetAnt, foodTile.getValue());
 			markedAnts.put(targetAnt, foodTile.getValue());
+		}
+		//DEBUG
+		for(Entry<Ant,Food> e1 : markedAnts.entrySet()){
+			AntBot.getLogger().log(e1.getKey().getAntPosition() + "  " + e1.getValue().getPosition());
 		}
 	}
 }

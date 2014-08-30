@@ -15,14 +15,16 @@ import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 public class Attack implements State{
 
 	Ant ant;
+	private StateName stateName;
 
 	public Attack(Ant a) {
 		this.ant = a;
+		stateName = StateName.Attack;
 	}
 	
 	@Override
 	public void changeState() {
-		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(ant.isDanger()){
 			AntBot.getLogger().log(ant.getState().toString());
 			return;
 		}
@@ -51,5 +53,11 @@ public class Attack implements State{
 	public String toString() {
 		return "Attack State";
 	}
+
+	public StateName getStateName() {
+		return stateName;
+	}
+	
+	
 	
 }

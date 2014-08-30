@@ -19,14 +19,16 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 public class Exploration  implements State{
 	
 	Ant ant;
+	private StateName stateName;
 
 	public Exploration(Ant a) {
 		this.ant = a;
+		stateName = StateName.Exploration;
 	}
 
 	@Override
 	public void changeState() {
-		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(ant.isDanger()){
 			ant.setState(new Attack(ant));
 			AntBot.getLogger().log(ant.getState().toString());
 		}
@@ -110,6 +112,10 @@ public class Exploration  implements State{
 	@Override
 	public String toString() {
 		return "Exploration State";
+	}
+	
+	public StateName getStateName() {
+		return stateName;
 	}
 
 }

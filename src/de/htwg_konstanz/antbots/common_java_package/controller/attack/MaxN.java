@@ -55,7 +55,7 @@ public class MaxN {
 		for (Set<Ant> antList : playerAnts) {
 			LinkedList<Ant> tmp = new LinkedList<Ant>();
 			for (Ant ant : antList) {
-				tmp.add(new Ant(new Tile(ant.getAntPosition().getRow(),ant.getAntPosition().getCol())));
+				tmp.add(new Ant(new Tile(ant.getAntPosition().getRow(),ant.getAntPosition().getCol()),ant.getId()));
 			}
 			this.playerAnts.addLast(tmp);
 		}

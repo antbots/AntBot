@@ -6,15 +6,17 @@ import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 public class InitState  implements State{
 	
 	Ant ant;
+	private StateName stateName;
 
 	public InitState(Ant a) {
 		this.ant = a;
+		stateName = StateName.InitState;
 	}
 
 	@Override
 	public void changeState() {
 		
-		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(ant.isDanger()){
 			ant.setState(new Attack(ant));
 			AntBot.getLogger().log(ant.getState().toString());
 		}
@@ -38,6 +40,10 @@ public class InitState  implements State{
 	@Override
 	public String toString() {
 		return "InitState State";
+	}
+	
+	public StateName getStateName() {
+		return stateName;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.InitState;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.State;
+import de.htwg_konstanz.antbots.common_java_package.controller.state.StateName;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.common_java_package.model.settings.Missions;
@@ -24,6 +25,8 @@ public class Ant {
 	private List<Tile> routeForMission;
 	private boolean isUsed = false;
 	private State state;
+	private StateName currentState;
+	private int id;
 	
 	private Set<Ant> enemysInViewRadius = new HashSet<Ant>();
 
@@ -47,15 +50,21 @@ public class Ant {
 	
 	public void setState(State state1) {
         state=state1;
+        currentState = state.getStateName();
     }
+	
+	public StateName getCurrentState(){
+		return currentState;
+	}
  
     public State getState() {
         return state;
     }
 
-	public Ant(Tile position) {
+	public Ant(Tile position, int id) {
 		state = new InitState(this);
 		this.position = position;
+		this.id = id;;
 	}
 
 	public Tile getAntPosition() {
@@ -120,7 +129,7 @@ public class Ant {
 		boolean result = false;
 		if (o instanceof Ant) {
 			Ant ant = (Ant) o;
-			result = position.equals(ant.getAntPosition());
+			result = id == ant.id;
 
 		}
 		return result;
@@ -161,6 +170,10 @@ public class Ant {
 
 	public void setEnemysInViewRadius(Set<Ant> enemysInRange) {
 		enemysInViewRadius = enemysInRange;
+	}
+
+	public int getId() {
+		return id;
 	}
 }
 

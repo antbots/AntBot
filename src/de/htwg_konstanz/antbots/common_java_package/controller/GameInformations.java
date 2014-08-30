@@ -82,6 +82,10 @@ public class GameInformations {
 
 	private Set<Ant> enemiesAsSingle = new HashSet<Ant>();
 
+	private int antIdCounter = 0;
+	
+	private int enemyIdCounter = 0;
+
 	private static Logger logger;
 
 	/**
@@ -821,10 +825,10 @@ public class GameInformations {
 			boolean set = false;
 
 			if (turn == 1) {
-				myAnts.add(new Ant(tile));
+				myAnts.add(new Ant(tile,antIdCounter));
 			}
 			for (Ant ant : myAnts) {
-				if (ant.equals(new Ant(tile))) {// .getAntPosition().equals(tile))
+				if (ant.getAntPosition().equals(tile)) {// .getAntPosition().equals(tile))
 												// {
 					set = true;
 				}
@@ -833,7 +837,7 @@ public class GameInformations {
 			if (set == true) {
 				// logger.log("drinn");
 			} else {
-				myAnts.add(new Ant(tile));
+				myAnts.add(new Ant(tile,antIdCounter));
 				// logger.log("nicht drinn");
 			}
 			// if(myAnts.contains(tmp)) {
@@ -844,42 +848,44 @@ public class GameInformations {
 			// }
 			break;
 		case ENEMY_ANT_1:
-			enemyAnts_1.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_1.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_2:
-			enemyAnts_2.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_2.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_3:
-			enemyAnts_3.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_3.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_4:
-			enemyAnts_4.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_4.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_5:
-			enemyAnts_5.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_5.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_6:
-			enemyAnts_6.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_6.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_7:
-			enemyAnts_7.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_7.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_8:
-			enemyAnts_8.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_8.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		case ENEMY_ANT_9:
-			enemyAnts_9.add(new Ant(tile));
-			enemiesAsSingle.add(new Ant(tile));
+			enemyAnts_9.add(new Ant(tile,enemyIdCounter));
+			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
 			break;
 		}
+		antIdCounter++;
+		enemyIdCounter++;
 	}
 
 	/**
