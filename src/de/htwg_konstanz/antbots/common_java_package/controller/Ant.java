@@ -123,12 +123,6 @@ public class Ant {
 	}
 
 	@Override
-	public int hashCode() {
-		return position.getRow() * GameInformations.MAX_MAP_SIZE
-				+ position.getCol();
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		boolean result = false;
 		if (o instanceof Ant) {

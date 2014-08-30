@@ -832,7 +832,6 @@ public class GameInformations {
 		map[tile.getRow()][tile.getCol()].setType(ilk);
 		switch (ilk) {
 		case FOOD:
-			foodManager.beforeUpdate();
 			foodManager.update(tile);
 			break;
 		case MY_ANT:

@@ -16,86 +16,84 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 
 public class FoodManager {
 	
-	Map<Tile,Food> inDemand;
-	Map<Tile,Food> onOffer;
+	LinkedList<Food> food;
 	
 	Map<Ant,Food> markedAnts;
 
 	public FoodManager() {
-		this.inDemand = new HashMap<>();
-		this.onOffer = new HashMap<>();
+		this.food = new LinkedList<>();
 		markedAnts = new HashMap<>();
 	}
 	
-	public void beforeUpdate(){
-		inDemand.entrySet().forEach(e -> e.getValue().setAlive(false));
-		onOffer.entrySet().forEach(e -> e.getValue().setAlive(false));
-	}
-	
 	public void update(Tile t){
-		if(!onOffer.containsKey(t) && !inDemand.containsKey(t)){
-			onOffer.put(t, new Food(t));
+		Food newFood = new Food(t);
+		if(!food.contains(newFood)){
+			food.add(newFood);
+			AntBot.getLogger().log("add");
 		}
-		if(onOffer.containsKey(t)){
-			onOffer.get(t).setAlive(true);
-		}
-		if(inDemand.containsKey(t)){
-			inDemand.get(t).setAlive(true);
-		}
-		
-		for(Entry<Tile,Food> e : inDemand.entrySet()){
-			if(!e.getValue().isAlive()){
-				for(Entry<Ant,Food> e1 : markedAnts.entrySet()){
-					if(e1.getValue().getPosition().equals(e.getKey())){
-						markedAnts.remove(e1);
-					}
-				}
-				inDemand.remove(e);
-				AntBot.getGameI().getMap()[e.getKey().getRow()][e.getKey().getCol()].setType(Ilk.LAND);
-			}
-			
-		}
-		
-		for(Entry<Tile,Food> e : onOffer.entrySet()){
-			if(!e.getValue().isAlive()){
-				onOffer.remove(e);
-				AntBot.getGameI().getMap()[e.getKey().getRow()][e.getKey().getCol()].setType(Ilk.LAND);
-			}
+		if(food.contains(newFood)){
+			food.get(food.indexOf(newFood)).setAlive(true);
+			AntBot.getLogger().log("setAlive");
 		}
 	}
 
 	public Map<Ant, Food> getMarkedAnts() {
 		return markedAnts;
 	}
-
-	public Map<Tile, Food> getInDemand() {
-		return inDemand;
-	}
-
-	public Map<Tile, Food> getOnOffer() {
-		return onOffer;
-	}
 	
 	public void declineFood(Food f, Ant a) {
-		f.setConsumer(null);
-		inDemand.remove(f);
-		onOffer.put(f.getPosition(),f);
+		f.setOnOffer(true);
+		f.setInDemand(false);
 		markedAnts.remove(a);
 	}
 	
 	public void acceptFood(Ant a, Food f) {
-		f.setConsumer(a);
-		onOffer.remove(f);
-		inDemand.put(f.getPosition(),f);
+		f.setOnOffer(false);
+		f.setInDemand(true);
+		markedAnts.put(a, f);
+	}
+	
+	public void removeFalseFood(){
+		LinkedList<Food> toRemove = new LinkedList<Food>();
+		for(Food f : food){
+			if(!f.isAlive()){
+				for(Entry<Ant,Food> e : markedAnts.entrySet()){
+					if(f.equals(e.getValue())){
+						markedAnts.remove(e);
+						AntBot.getLogger().log("remove entry");
+					}
+				}
+				toRemove.add(f);
+				AntBot.getGameI().getMap()[f.getPosition().getRow()][f.getPosition().getCol()].setType(Ilk.LAND);
+			}
+		}
+		for(Food f : toRemove){
+			food.remove(f);
+			AntBot.getLogger().log("remove");
+		}
+		
+		food.forEach(e -> e.setAlive(false));
 	}
 
 	public void markAntsToCollectFood(){
-		for (Entry<Tile,Food> foodTile : onOffer.entrySet()) {
+		removeFalseFood();
+		
+		LinkedList<Food> foodOnOffer= new LinkedList<>();
+		for(Food f : food){
+			if(f.isOnOffer()){
+				foodOnOffer.add(f);
+			}
+		}
+		
+		AntBot.getLogger().log(Integer.toString(food.size()));
+		AntBot.getLogger().log(Integer.toString(foodOnOffer.size()));
+		
+		for (Food foodTile : foodOnOffer) {
 			Set<Tile> visitableTiles = new HashSet<Tile>();
 			List<Tile> tmpList = new LinkedList<>();
-			tmpList.add(foodTile.getKey());
+			tmpList.add(foodTile.getPosition());
 
-			/*Set<Ant> ants = new HashSet<Ant>();
+			Set<Ant> ants = new HashSet<Ant>();
 			for(Ant a : AntBot.getGameI().getMyAnts()){
 				if(!markedAnts.containsKey(a)){
 					ants.add(a);
@@ -103,8 +101,8 @@ public class FoodManager {
 			}
 			if(ants.isEmpty()){
 				continue;
-			}*/
-			List<Ant> nearestTarget = AntBot.getBsf().extendedBSF(tmpList,	/*ants*/AntBot.getGameI().getOwnNotDangeredAnts(), true, false, 0, visitableTiles);
+			}
+			List<Ant> nearestTarget = AntBot.getBsf().extendedBSF(tmpList,	ants/*AntBot.getGameI().getOwnNotDangeredAnts()*/, true, false, 0, visitableTiles);
 
 			Ant targetAnt;
 			if (nearestTarget.size() == 0) {
@@ -113,8 +111,8 @@ public class FoodManager {
 				targetAnt = nearestTarget.get(0);
 			}
 			
-			acceptFood(targetAnt, foodTile.getValue());
-			markedAnts.put(targetAnt, foodTile.getValue());
+			acceptFood(targetAnt, foodTile);
+			
 		}
 		//DEBUG
 		for(Entry<Ant,Food> e1 : markedAnts.entrySet()){

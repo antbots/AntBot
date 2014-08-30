@@ -6,13 +6,13 @@ public class Food {
 
 	private Tile position;
 	private boolean inDemand;
-	private Ant consumer;
+	private boolean onOffer;
 	private boolean isAlive;
 	
 	public Food(Tile position) {
 		this.position = position;
 		this.inDemand = false;
-		this.consumer = null;
+		this.onOffer = true;
 		isAlive = false;
 	}
 
@@ -24,20 +24,20 @@ public class Food {
 		this.position = position;
 	}
 
+	public boolean isOnOffer() {
+		return onOffer;
+	}
+
+	public void setOnOffer(boolean onOffer) {
+		this.onOffer = onOffer;
+	}
+
 	public boolean isInDemand() {
 		return inDemand;
 	}
 
 	public void setInDemand(boolean inDemand) {
 		this.inDemand = inDemand;
-	}
-
-	public Ant getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(Ant consumer) {
-		this.consumer = consumer;
 	}
 
 	public void setAlive(boolean b) {
@@ -48,6 +48,15 @@ public class Food {
 		return isAlive;
 	}
 	
+	@Override
+    public boolean equals(Object o) {
+        boolean result = false;
+        if (o instanceof Food) {
+        	Food food = (Food)o;
+            result = position.getRow() == food.getPosition().getRow() && position.getCol() == food.getPosition().getCol();
+        }
+        return result;
+    }
 	
 	
 }
