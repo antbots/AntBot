@@ -26,13 +26,16 @@ public class Exploration  implements State{
 
 	@Override
 	public void changeState() {
-		if(ant.isDanger()){
+		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Attack(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
-		if(!ant.isDanger()){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+			AntBot.getLogger().log(ant.getState().toString());
 			return;
 		}
 	}
@@ -43,9 +46,6 @@ public class Exploration  implements State{
 
 		Set<Tile> isTaken = new HashSet<Tile>();
 
-		/*if (!(ant.getMission() == Missions.NON)) {
-			continue;
-		}*/
 		Tile antTile = ant.getAntPosition();
 
 		// get the tiles in viewradius+1
@@ -96,8 +96,7 @@ public class Exploration  implements State{
 							order.add(new Tile(neig.getKey().getRow(), neig
 									.getKey().getCol()));
 							ant.setRoute(order);
-							AntBot.getLogger().log("llllllllllllll");
-							
+							AntBot.getLogger().log("Route is set: " + ant.getRoute());
 							route.remove(1);
 						}
 					} else {

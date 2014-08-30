@@ -23,15 +23,18 @@ public class CollectFood  implements State{
 
 	@Override
 	public void changeState() {
-		if(ant.isDanger()){
+		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
 			AntBot.getGameI().getFoodManager().declineFood(AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant), ant);
 			ant.setState(new Attack(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
-		if(!ant.isDanger()){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Exploration(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
 		
 	}
@@ -49,6 +52,7 @@ public class CollectFood  implements State{
 		}
 
 		ant.setRoute(r);
+		AntBot.getLogger().log("Route is set: " + ant.getRoute());
 		
 		OverlayDrawer.drawLine(ant.getRoute().get(0),
 				ant.getRoute().get(ant.getRoute().size() - 1));

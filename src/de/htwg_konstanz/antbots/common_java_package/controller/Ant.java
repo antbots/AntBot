@@ -21,10 +21,9 @@ public class Ant {
 	private int weakness;
 	private LinkedList<Ant> enemiesinAttackRadius;
 	private Aim executedDirection;
-	private Missions mission = Missions.NON;
 	private List<Tile> routeForMission;
 	private boolean isUsed = false;
-	private static State state;
+	private State state;
 	
 	private Set<Ant> enemysInViewRadius = new HashSet<Ant>();
 
@@ -32,13 +31,9 @@ public class Ant {
 	public void doLogic(){
 		state.changeState();
 		state.execute();
-		AntBot.getLogger().log(state.toString());
 	}
 	
 	public void move() {
-		if(routeForMission == null){
-			return;
-		}
 		Tile next = routeForMission.remove(0);
 		Map<Tile, Aim> neighbours = AntBot.getGameI()
 				.getMoveAbleNeighbours(position);
@@ -50,11 +45,11 @@ public class Ant {
 		}
 	}
 	
-	public static void setState(State state1) {
+	public void setState(State state1) {
         state=state1;
     }
  
-    public static State getState() {
+    public State getState() {
         return state;
     }
 
@@ -104,14 +99,6 @@ public class Ant {
 
 	public Aim getexecutedDirection() {
 		return executedDirection;
-	}
-
-	public void setMission(Missions mission) {
-		this.mission = mission;
-	}
-
-	public Missions getMission() {
-		return mission;
 	}
 
 	public void setRoute(List<Tile> route) {

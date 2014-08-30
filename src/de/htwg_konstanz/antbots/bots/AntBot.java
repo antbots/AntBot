@@ -74,6 +74,7 @@ public class AntBot extends Bot {
 		gameI.getFoodManager().markAntsToCollectFood();
 		
 		gameI.getMyAnts().forEach(a -> {
+			logger.log("Process Ant: " + a.getAntPosition());
 			a.doLogic();
 			a.move();
 		});

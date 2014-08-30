@@ -12,6 +12,7 @@ import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 
 public class FoodManager {
 	
@@ -52,6 +53,14 @@ public class FoodManager {
 				inDemand.remove(e);
 				AntBot.getGameI().getMap()[e.getKey().getRow()][e.getKey().getCol()].setType(Ilk.LAND);
 			}
+			
+			//DEBUG
+			/*if(!e.getValue().isAlive()){
+				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", false);
+			}else{
+				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", true);
+			}*/
+			
 		}
 		
 		for(Entry<Tile,Food> e : onOffer.entrySet()){
@@ -59,8 +68,20 @@ public class FoodManager {
 				onOffer.remove(e);
 				AntBot.getGameI().getMap()[e.getKey().getRow()][e.getKey().getCol()].setType(Ilk.LAND);
 			}
+			
+			//DEBUG
+			/*if(!e.getValue().isAlive()){
+				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", false);
+			}else{
+				OverlayDrawer.drawStar(e.getKey(), 5, 5, "2", true);
+			}*/
 		}
-
+		
+		
+		//DEBUG
+		for(Entry<Ant,Food> e1 : markedAnts.entrySet()){
+			OverlayDrawer.drawStar(e1.getKey().getAntPosition(), 5, 5, "2", true);
+		}
 	}
 
 	public Map<Ant, Food> getMarkedAnts() {

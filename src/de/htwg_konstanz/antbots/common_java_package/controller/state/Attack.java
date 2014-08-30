@@ -22,14 +22,17 @@ public class Attack implements State{
 	
 	@Override
 	public void changeState() {
-		if(ant.isDanger()){
+		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+			AntBot.getLogger().log(ant.getState().toString());
 			return;
 		}
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
-		if(!ant.isDanger()){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Exploration(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
 	}
 

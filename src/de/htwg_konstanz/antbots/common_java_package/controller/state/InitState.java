@@ -13,14 +13,19 @@ public class InitState  implements State{
 
 	@Override
 	public void changeState() {
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
-			ant.setState(new CollectFood(ant));
-		}
-		if(!ant.isDanger()){
-			ant.setState(new Exploration(ant));
-		}
-		if(ant.isDanger()){
+		
+		if(ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Attack(ant));
+			AntBot.getLogger().log(ant.getState().toString());
+		}
+		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
+			ant.setState(new CollectFood(ant));
+			AntBot.getLogger().log(ant.getState().toString());
+			
+		}
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+			ant.setState(new Exploration(ant));
+			AntBot.getLogger().log(ant.getState().toString());
 		}
 	}
 
