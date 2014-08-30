@@ -30,20 +30,24 @@ public class Exploration  implements State{
 	public void changeState() {
 		if(ant.isDanger()){
 			ant.setState(new Attack(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
-			AntBot.getLogger().log(ant.getState().toString());
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= 10){
+			ant.setState(new GoToBoarder(ant));
+			return;
+		}
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < 10){
 			return;
 		}
 	}
 
 	@Override
 	public void execute() {
+		
 		int radius = (int) Math.sqrt(AntBot.getGameI().getViewRadius2()) + 2;
 
 		Set<Tile> isTaken = new HashSet<Tile>();
@@ -116,6 +120,17 @@ public class Exploration  implements State{
 	
 	public StateName getStateName() {
 		return stateName;
+	}
+
+	@Override
+	public void stateEnter() {
+		AntBot.getGameI().increaseExplorerAnts();
+		AntBot.getLogger().log(ant.getState().toString());
+	}
+
+	@Override
+	public void stateExit() {
+		AntBot.getGameI().decreaseExplorerAnts();
 	}
 
 }

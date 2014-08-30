@@ -3,19 +3,25 @@ package de.htwg_konstanz.antbots.common_java_package.controller.state;
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 
-public class InitState  implements State{
+public class GoToBoarder implements State{
+
+	private StateName stateName;
 	
 	Ant ant;
-	private StateName stateName;
+	
+	public GoToBoarder(Ant a) {
+		this.stateName = StateName.GoToBoarder;
+		ant = a;
+	}
 
-	public InitState(Ant a) {
-		this.ant = a;
-		stateName = StateName.InitState;
+	@Override
+	public void execute() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void changeState() {
-		
 		if(ant.isDanger()){
 			ant.setState(new Attack(ant));
 			return;
@@ -25,7 +31,6 @@ public class InitState  implements State{
 			return;
 		}
 		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= 10){
-			ant.setState(new GoToBoarder(ant));
 			return;
 		}
 		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < 10){
@@ -35,20 +40,10 @@ public class InitState  implements State{
 	}
 
 	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public String toString() {
-		return "InitState State";
-	}
-	
 	public StateName getStateName() {
 		return stateName;
 	}
-
+	
 	@Override
 	public void stateEnter() {
 		AntBot.getLogger().log(ant.getState().toString());
@@ -58,5 +53,4 @@ public class InitState  implements State{
 	public void stateExit() {
 		
 	}
-
 }

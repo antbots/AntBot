@@ -4,5 +4,6 @@ public enum StateName {
 	CollectFood,
 	Attack,
 	Exploration,
-	InitState
+	InitState,
+	GoToBoarder
 }

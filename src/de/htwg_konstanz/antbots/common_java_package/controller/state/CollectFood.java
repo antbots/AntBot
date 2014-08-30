@@ -26,19 +26,19 @@ public class CollectFood  implements State{
 	@Override
 	public void changeState() {
 		if(ant.isDanger()){
-			if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
-				AntBot.getGameI().getFoodManager().declineFood(AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant), ant);
-			}
 			ant.setState(new Attack(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
-			ant.setState(new CollectFood(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= 10){
+			ant.setState(new GoToBoarder(ant));
+			return;
+		}
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < 10){
 			ant.setState(new Exploration(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
 		
 	}
@@ -69,5 +69,17 @@ public class CollectFood  implements State{
 	
 	public StateName getStateName() {
 		return stateName;
+	}
+	
+	@Override
+	public void stateEnter() {
+		AntBot.getLogger().log(ant.getState().toString());
+	}
+
+	@Override
+	public void stateExit() {
+		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+			AntBot.getGameI().getFoodManager().declineFood(AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant), ant);
+		}
 	}
 }

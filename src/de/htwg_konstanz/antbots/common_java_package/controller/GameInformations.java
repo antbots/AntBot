@@ -81,6 +81,8 @@ public class GameInformations {
 	private final Set<Order> orders = new HashSet<Order>();
 
 	private Set<Ant> enemiesAsSingle = new HashSet<Ant>();
+	
+	private int explorerAnts = 0;
 
 	private int antIdCounter = 0;
 	
@@ -179,6 +181,18 @@ public class GameInformations {
 			}
 		}
 		return set;
+	}
+	
+	public void increaseExplorerAnts(){
+		explorerAnts++;
+	}
+	
+	public void decreaseExplorerAnts(){
+		explorerAnts--;
+	}
+	
+	public int getExplorerAnts(){
+		return explorerAnts;
 	}
 
 	public Tile getTileOfMap(Tile t) {

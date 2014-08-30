@@ -25,16 +25,19 @@ public class Attack implements State{
 	@Override
 	public void changeState() {
 		if(ant.isDanger()){
-			AntBot.getLogger().log(ant.getState().toString());
 			return;
 		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= 10){
+			ant.setState(new GoToBoarder(ant));
+			return;
+		}
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < 10){
 			ant.setState(new Exploration(ant));
-			AntBot.getLogger().log(ant.getState().toString());
+			return;
 		}
 	}
 
@@ -58,6 +61,14 @@ public class Attack implements State{
 		return stateName;
 	}
 	
-	
+	@Override
+	public void stateEnter() {
+		AntBot.getLogger().log(ant.getState().toString());
+	}
+
+	@Override
+	public void stateExit() {
+		
+	}
 	
 }
