@@ -1,15 +1,8 @@
 package de.htwg_konstanz.antbots.bots;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
-import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import java.io.IOException;
+
 import de.htwg_konstanz.antbots.common_java_package.controller.AttackManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
@@ -19,14 +12,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
-import de.htwg_konstanz.antbots.common_java_package.controller.state.InitState;
-import de.htwg_konstanz.antbots.common_java_package.controller.state.State;
-import de.htwg_konstanz.antbots.common_java_package.model.Aim;
-import de.htwg_konstanz.antbots.common_java_package.model.Order;
-import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.common_java_package.model.settings.Missions;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
+
 /**
  * 
  * @author Benjamin
@@ -81,7 +67,6 @@ public class AntBot extends Bot {
 
 		logger.log("---------------------------------------------------------------------------------------");
 		turn++;
-
 	}
 	
 	

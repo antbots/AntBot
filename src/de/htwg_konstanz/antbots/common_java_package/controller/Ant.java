@@ -12,7 +12,6 @@ import de.htwg_konstanz.antbots.common_java_package.controller.state.State;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.StateName;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.common_java_package.model.settings.Missions;
 
 public class Ant {
 

@@ -1,14 +1,15 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.boarder;
 
 import java.awt.Color;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
@@ -22,23 +23,21 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
  */
 public class BuildBoarder {
 
-	GameInformations gameI;
-	BreadthFirstSearch bsf;
-	Logger logger;
-	Set<Tile> additionalTiles = new HashSet<Tile>();
-	Pathfinding pathfinding;
+	private GameInformations gameI;
+	private BreadthFirstSearch bsf;
+	private Pathfinding pathfinding;
+	private static Map<Set<Tile>, Set<Tile>> boarders; 
 
 	public BuildBoarder(GameInformations gameI) {
 		this.gameI = gameI;
-		this.logger = gameI.getLogger();
 		bsf = new BreadthFirstSearch(gameI);
 		pathfinding = new Pathfinding(gameI);
 	}
 
 	public void buildBoarder() {
-
+		boarders = new HashMap<>();
 		List<Set<Tile>> areas = buildAreas();
-		List<Set<Tile>> boarders = new LinkedList<>();
+		
 		
 		for (Set<Tile> area : areas) {
 			Set<Tile> boarder = new HashSet<>();
@@ -62,16 +61,20 @@ public class BuildBoarder {
 					}
 				}
 			}
-			boarders.add(boarder);
+			boarders.put(area, boarder);
 		}
 
-		for(Set<Tile> boarder : boarders) {
+		//TODO DEBUG Ausgabe
+		for(Set<Tile> boarder : boarders.values()) {
 			for (Tile t : boarder) {
 				OverlayDrawer.setFillColor(Color.RED);
 				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(), SubTile.TM);
 			}
 		}
-
+	}
+	
+	public static Map<Set<Tile>, Set<Tile>> getAreaAndBoarder() {
+		return boarders;
 	}
 
 	private List<Set<Tile>> buildAreas() {
@@ -115,39 +118,6 @@ public class BuildBoarder {
 			areas.add(visitableTiles);
 		}
 		merge(areas);
-//
-//		int a = 0;
-//		for (Set<Tile> area : areas) {
-//			for (Tile t : area) {
-//				if (a == 0) {
-//					OverlayDrawer.setFillColor(Color.GREEN);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.BR);
-//				} else if (a == 1) {
-//					OverlayDrawer.setFillColor(Color.ORANGE);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.BL);
-//				} else if (a == 2) {
-//					OverlayDrawer.setFillColor(Color.PINK);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.BM);
-//				} else if (a == 3) {
-//					OverlayDrawer.setFillColor(Color.RED);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.TM);
-//				} else if (a == 4) {
-//					OverlayDrawer.setFillColor(Color.BLACK);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.TR);
-//				} else if (a == 5) {
-//					OverlayDrawer.setFillColor(Color.GRAY);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.TL);
-//				}
-//
-//			}
-//			a++;
-//		}
 		return areas;
 
 	}
