@@ -11,53 +11,34 @@ import java.util.Set;
 
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 public class BreadthFirstSearch {
 
 	GameInformations gameI;
-	Logger logger;
 
 	public BreadthFirstSearch(GameInformations gameI) {
 		this.gameI = gameI;
-		this.logger = gameI.getLogger();
+
 	}
 
-	/**
-	 * 
-	 * @param postion
-	 *            position of the source
-	 * @param targets
-	 *            a set of Ants which will be used as a target
-	 * @param onlyOnTarget
-	 *            if ture = if found the first target the method will return if
-	 *            false = the bsf searched for more targets
-	 * @param step
-	 *            if true = the search will be only to with the path costs given
-	 *            by steps if flase = steps will be ignored
-	 * @param steps
-	 * @param visitableTiles
-	 *            give a map which will be filed with the Tiles which where
-	 *            visited by the bsf
-	 * @return
-	 */
-
-	public List<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets,	boolean onlyOnTarget, boolean isStepUsed, int steps,
-			Set<Tile> visitableTiles) {
+	
+	
+	public List<Ant> extendedBSF(Tile source, Set<Ant> targets,	boolean onlyOnTarget, boolean isStepUsed, int steps, Set<Tile> visitableTiles) {
 
 		List<Ant> result = new LinkedList<Ant>();
 		Map<Tile, Integer> pathCosts = new HashMap<Tile, Integer>();
 		Tile tmp;
 		Queue<Tile> q = new LinkedList<Tile>();
-		// visitableTiles = new HashSet<Tile>();
 
-		for (Tile t : postion) {
-			q.add(t);
-			visitableTiles.add(t);
-			pathCosts.put(t, 0);
+		if(visitableTiles != null) {
+			visitableTiles.add(source);
 		}
+		
+		pathCosts.put(source, 0);
+		q.add(source);
 
 		while (!q.isEmpty()) {
 			tmp = q.remove();
@@ -73,8 +54,7 @@ public class BreadthFirstSearch {
 
 						for (Ant target : targets) {
 							Tile pos = target.getAntPosition();
-							if (pos.getCol() == next.getCol()
-									&& pos.getRow() == next.getRow()) {
+							if (pos.getCol() == next.getCol() && pos.getRow() == next.getRow()) {
 
 								if (onlyOnTarget == true) {
 
@@ -93,10 +73,14 @@ public class BreadthFirstSearch {
 						// next.getCol(), SubTile.MM);
 						if (isStepUsed == true && steps >= pathCosts.get(next)) {
 							q.add(next);
-							visitableTiles.add(next);
+							if(visitableTiles != null) {
+								visitableTiles.add(next);
+							}
 						} else if (!isStepUsed) {
 							q.add(next);
-							visitableTiles.add(next);
+							if(visitableTiles != null) {
+								visitableTiles.add(next);
+							}
 						}
 
 					}
@@ -107,20 +91,42 @@ public class BreadthFirstSearch {
 		return result;
 	}
 
-	
-	
-	
-	public Map<Tile,Set<Tile>> visitableFromSet(Map<Tile,Set<Tile>> position) {
-		Set<Tile> visitableTiles = new HashSet<>();
-		Map<Tile,Set<Tile>> ret = new HashMap<>();
- 		for(Entry<Tile, Set<Tile>> pos : position.entrySet()) {
- 			visitableTiles = visitableFromSet(pos.getKey(), pos.getValue());
- 			ret.put(pos.getKey(), visitableTiles);
- 		}
- 		return ret;		
+	public Tile BSF(Tile source, Set<Tile> targets) {
+
+		Tile tmp;
+		Queue<Tile> q = new LinkedList<Tile>();
+
+		q.add(source);
+
+		while (!q.isEmpty()) {
+			tmp = q.remove();
+
+			for (Tile next : gameI.getNeighbour(tmp).keySet()) {
+
+				// check water
+				if (next.getType() != Ilk.WATER) {
+
+					if (!q.contains(next)) {
+
+						for (Tile target : targets) {
+
+							if (target.getCol() == next.getCol()
+									&& target.getRow() == next.getRow()) {
+
+								return target;
+							}
+
+						}
+					}
+
+					q.add(next);
+
+				}
+			}
+		}
+		return null;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param postion
