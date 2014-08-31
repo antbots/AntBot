@@ -88,11 +88,11 @@ public class AttackManager {
 			Set<Tile> myTiles = AntBot.getGameI().getTilesInRadius(myAntTile,(int)Math.sqrt(AntBot.getGameI().getViewRadius2()));
 			
 			//DEBUG
-			for(Tile t : myTiles) {
-				OverlayDrawer.setFillColor(Color.GREEN);
-				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-						SubTile.BR);
-			}
+//			for(Tile t : myTiles) {
+//				OverlayDrawer.setFillColor(Color.GREEN);
+//				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
+//						SubTile.BR);
+//			}
 			
 			for (Ant enemyAnt : AntBot.getGameI().getEnemyAnts()) {
 				Tile enemyAntTile = enemyAnt.getAntPosition();

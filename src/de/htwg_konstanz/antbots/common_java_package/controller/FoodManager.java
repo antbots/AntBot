@@ -12,7 +12,7 @@ import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+
 
 public class FoodManager {
 	

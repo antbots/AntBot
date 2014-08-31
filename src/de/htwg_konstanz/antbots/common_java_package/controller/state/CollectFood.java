@@ -1,11 +1,14 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.state;
 
+import java.awt.Color;
 import java.util.List;
+
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 public class CollectFood implements State {
 
@@ -57,12 +60,15 @@ public class CollectFood implements State {
 		if (r.size() > 1) {
 			r.remove(0);
 		}
+		for (Tile t : r) {
+			OverlayDrawer.setFillColor(Color.GREEN);
+			OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
+					SubTile.TR);
 
+		}
 		ant.setRoute(r);
 		AntBot.getLogger().log("Route is set: " + ant.getRoute());
 
-		OverlayDrawer.drawLine(ant.getRoute().get(0),
-				ant.getRoute().get(ant.getRoute().size() - 1));
 	}
 
 	@Override

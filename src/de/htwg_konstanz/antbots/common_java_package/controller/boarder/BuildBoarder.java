@@ -107,11 +107,11 @@ public class BuildBoarder {
 					Set<Tile> enemyTiles = gameI.getTilesInRadius(enemyAntPos, size);
 					Set<Tile> tmp = new HashSet<>(enemyTiles);
 					tmp.retainAll(visitableTiles);
-					for(Tile enemyTile : tmp) {
-						OverlayDrawer.setFillColor(Color.GREEN);
-						OverlayDrawer.drawTileSubtile(enemyTile.getRow(), enemyTile.getCol(),
-								SubTile.TL);
-					}
+//					for(Tile enemyTile : tmp) {
+//						OverlayDrawer.setFillColor(Color.GREEN);
+//						OverlayDrawer.drawTileSubtile(enemyTile.getRow(), enemyTile.getCol(),
+//								SubTile.TL);
+//					}
 					visitableTiles.removeAll(enemyTiles);
 				}
 			}
