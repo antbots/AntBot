@@ -37,13 +37,17 @@ public class Ant {
 	
 	public void move() {
 		Tile next = route.remove(0);
-		Map<Tile, Aim> neighbours = AntBot.getGameI()
-				.getMoveAbleNeighbours(position);
+		Map<Tile, Aim> neighbours = AntBot.getGameI().getMoveAbleNeighbours(position);
 
 		if (neighbours.containsKey(next)) {
-			Aim aim = neighbours.get(next);
-			AntBot.getGameI().issueOrder(position, aim);
-			setPosition(next.getRow(), next.getCol());
+			List<Tile> nextOrders = AntBot.getGameI().getNextOrders();
+			//damt sich die Ameisen nicht selbst umbringen
+			if(!nextOrders.contains(next)) {
+				Aim aim = neighbours.get(next);
+				AntBot.getGameI().issueOrder(position, aim);
+				setPosition(next.getRow(), next.getCol());
+				nextOrders.add(next);
+			}
 		}
 	}
 	

@@ -52,6 +52,8 @@ public class AntBot extends Bot {
 		if (turn == 0) {
 			init();
 		}
+		gameI.initNextOrder();
+		
 		logger.log("TURN " + turn);
 		boarder.buildBoarder();
 		

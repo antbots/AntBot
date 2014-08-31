@@ -40,6 +40,8 @@ public class GameInformations {
 	private final boolean visible[][];
 
 	private final Tile map[][];
+	
+	private List<Tile> nextOrder;
 
 	/**
 	 * Stores the information when the tile was at last visible. Unknowns are
@@ -1036,5 +1038,20 @@ public class GameInformations {
 			}
 		}
 		return notDangerd;
+	}
+	
+	/**
+	 * Liste muss bei jeder neuen Runde aufgerufen werden
+	 */
+	public void initNextOrder() {
+		nextOrder = new LinkedList<>();
+	}
+	
+	public List<Tile> getNextOrders() {
+		return nextOrder;
+	}
+	
+	public void addNewOrder(Tile tile) {
+		nextOrder.add(tile);
 	}
 }
