@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 
 public class Statistic {

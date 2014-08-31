@@ -21,7 +21,7 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 public class AttackManager {
 
 	Map<Ant,Order> markedAnts;
-	
+	private static int groupSize = 2;
 	
 	
 	public AttackManager() {
@@ -29,7 +29,7 @@ public class AttackManager {
 	}
 
 	public void markAntsToAttack(){
-		Map<Set<Ant>, Set<Ant>> att = AntBot.getAttack().initAttack();
+		Map<Set<Ant>, Set<Ant>> att = AntBot.getAttack().initAttackGroups();
 		AntBot.getLogger().log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
 		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
 			
@@ -43,8 +43,16 @@ public class AttackManager {
 			
 			LinkedList<Order> move = AntBot.getGameStrategy().attack(AntBot.getGameI(), 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
 			if (move != null){
-				AntBot.getGameI().getMyAntsDangered().forEach( ant -> {Optional<Order> matchedOrder = move.stream().filter(o -> ant.getAntPosition().equals(o.getPosition())).findAny();
-				markedAnts.put(ant, matchedOrder.get());});
+				for(Ant ant : AntBot.getGameI().getMyAntsDangered()){
+					for(Order o : move){
+						if(ant.getAntPosition().equals(o.getPosition())){
+							markedAnts.put(ant, o);
+						}
+					}
+				}
+				
+				///AntBot.getGameI().getMyAntsDangered().forEach( ant -> {Optional<Order> matchedOrder = move.stream().filter(o -> ant.getAntPosition().equals(o.getPosition())).findAny();
+				//markedAnts.put(ant, matchedOrder.get());});
 			}
 		}
 	}
