@@ -5,13 +5,11 @@ import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 public class Food {
 
 	private Tile position;
-	private boolean inDemand;
 	private boolean onOffer;
 	private boolean isAlive;
 	
 	public Food(Tile position) {
 		this.position = position;
-		this.inDemand = false;
 		this.onOffer = true;
 		isAlive = false;
 	}
@@ -31,15 +29,7 @@ public class Food {
 	public void setOnOffer(boolean onOffer) {
 		this.onOffer = onOffer;
 	}
-
-	public boolean isInDemand() {
-		return inDemand;
-	}
-
-	public void setInDemand(boolean inDemand) {
-		this.inDemand = inDemand;
-	}
-
+	
 	public void setAlive(boolean b) {
 		isAlive = b;
 	}
@@ -57,6 +47,14 @@ public class Food {
         }
         return result;
     }
+
+	@Override
+	public String toString() {
+		return "Food [position=" + position + ", onOffer=" + onOffer
+				+ ", isAlive=" + isAlive + "]";
+	}
+	
+	
 	
 	
 }

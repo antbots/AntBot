@@ -17,7 +17,7 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 public class FoodManager {
 	
 	LinkedList<Food> food;
-	
+
 	Map<Ant,Food> markedAnts;
 
 	public FoodManager() {
@@ -36,6 +36,10 @@ public class FoodManager {
 			AntBot.getLogger().log("setAlive");
 		}
 	}
+	
+	public LinkedList<Food> getFood() {
+		return food;
+	}
 
 	public Map<Ant, Food> getMarkedAnts() {
 		return markedAnts;
@@ -43,23 +47,22 @@ public class FoodManager {
 	
 	public void declineFood(Food f, Ant a) {
 		f.setOnOffer(true);
-		f.setInDemand(false);
 		markedAnts.remove(a);
 	}
 	
 	public void acceptFood(Ant a, Food f) {
 		f.setOnOffer(false);
-		f.setInDemand(true);
 		markedAnts.put(a, f);
 	}
 	
 	public void removeFalseFood(){
 		LinkedList<Food> toRemove = new LinkedList<Food>();
+		LinkedList<Entry<Ant,Food>> toRemoveEntry = new LinkedList<Entry<Ant,Food>>();
 		for(Food f : food){
 			if(!f.isAlive()){
 				for(Entry<Ant,Food> e : markedAnts.entrySet()){
 					if(f.equals(e.getValue())){
-						markedAnts.remove(e);
+						toRemoveEntry.add(e);
 						AntBot.getLogger().log("remove entry");
 					}
 				}
@@ -70,6 +73,10 @@ public class FoodManager {
 		for(Food f : toRemove){
 			food.remove(f);
 			AntBot.getLogger().log("remove");
+		}
+		
+		for(Entry<Ant,Food> e : toRemoveEntry){
+			markedAnts.remove(e.getKey());
 		}
 		
 		food.forEach(e -> e.setAlive(false));
@@ -115,6 +122,10 @@ public class FoodManager {
 			
 		}
 		//DEBUG
+		
+		for(Food f : food){
+			AntBot.getLogger().log(f.toString());
+		}
 		for(Entry<Ant,Food> e1 : markedAnts.entrySet()){
 			AntBot.getLogger().log(e1.getKey().getAntPosition() + "  " + e1.getValue().getPosition());
 		}
