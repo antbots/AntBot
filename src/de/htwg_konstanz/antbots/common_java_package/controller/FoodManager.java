@@ -85,6 +85,15 @@ public class FoodManager {
 	public void markAntsToCollectFood(){
 		removeFalseFood();
 		
+		Set<Ant> ants = new HashSet<Ant>();
+		for(Ant a : AntBot.getGameI().getMyAnts()){
+			if(!markedAnts.containsKey(a)){
+				ants.add(a);
+			}
+		}
+		if(ants.isEmpty()){
+			return;
+		}
 		LinkedList<Food> foodOnOffer= new LinkedList<>();
 		for(Food f : food){
 			if(f.isOnOffer()){
@@ -92,35 +101,25 @@ public class FoodManager {
 			}
 		}
 		
-		AntBot.getLogger().log(Integer.toString(food.size()));
-		AntBot.getLogger().log(Integer.toString(foodOnOffer.size()));
 		
-		for (Food foodTile : foodOnOffer) {
-			Set<Tile> visitableTiles = new HashSet<Tile>();
-			List<Tile> tmpList = new LinkedList<>();
-			tmpList.add(foodTile.getPosition());
-
-			Set<Ant> ants = new HashSet<Ant>();
-			for(Ant a : AntBot.getGameI().getMyAnts()){
-				if(!markedAnts.containsKey(a)){
-					ants.add(a);
+		for(Ant a : ants){
+			LinkedList<Tile> inViewRadius = new LinkedList<Tile>();
+			for(Food f: foodOnOffer){
+				AntBot.getGameI().getTilesInRadius(a.getAntPosition(), (int)Math.sqrt(AntBot.getGameI().getViewRadius2())).stream().filter(t -> t.equals(f.getPosition())).forEach(inViewRadius::add);
+			}
+			if(inViewRadius.isEmpty()){
+				continue;
+			}
+			Tile shortestTile = inViewRadius.getFirst();
+			for(Tile t : inViewRadius){
+				if(AntBot.getGameI().getDistance(a.getAntPosition(), t) < AntBot.getGameI().getDistance(a.getAntPosition(), shortestTile)){
+					shortestTile = t;
 				}
 			}
-			if(ants.isEmpty()){
-				continue;
-			}
-			List<Ant> nearestTarget = AntBot.getBsf().extendedBSF(tmpList,	ants/*AntBot.getGameI().getOwnNotDangeredAnts()*/, true, false, 0, visitableTiles);
-
-			Ant targetAnt;
-			if (nearestTarget.size() == 0) {
-				continue;
-			} else {
-				targetAnt = nearestTarget.get(0);
-			}
-			
-			acceptFood(targetAnt, foodTile);
-			
+			AntBot.getLogger().log("shortestTile " + shortestTile);
+			acceptFood(a, food.get(food.indexOf(new Food(shortestTile))));
 		}
+		
 		//DEBUG
 		
 		for(Food f : food){
