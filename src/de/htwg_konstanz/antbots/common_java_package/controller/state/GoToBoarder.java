@@ -17,6 +17,8 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 public class GoToBoarder implements State{
 
 	private StateName stateName;
+	private boolean goToBoarder = false;
+	private Tile destination;
 	
 	Ant ant;
 	
@@ -27,23 +29,39 @@ public class GoToBoarder implements State{
 
 	@Override
 	public void execute() {
-		for(Entry<Set<Tile>, Set<Tile>> e : BuildBoarder.getAreaAndBoarder().entrySet()) {
-			if(e.getKey().contains(ant.getAntPosition())) {
-				Tile target = (Tile) e.getValue().toArray()[(int) (Math.random() * e.getValue().size()) ];
-				List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), target);
-				ant.setRoute(route);
-				for (Tile rTile : route) {
-					OverlayDrawer.setFillColor(Color.BLACK);
-					OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
-							SubTile.TL);
+		if(destination != null && ant.getAntPosition().equals(destination)){
+			goToBoarder = false;
+			
+		}
+		if(!goToBoarder) {
+			for(Entry<Set<Tile>, Set<Tile>> e : BuildBoarder.getAreaAndBoarder().entrySet()) {
+				if(e.getKey().contains(ant.getAntPosition())) {
+					Tile target = (Tile) e.getValue().toArray()[(int) (Math.random() * e.getValue().size()) ];
+					List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), target);
+					route.remove(0);
+					ant.setRoute(route);
+					destination = route.get(route.size() - 1);
 				}
 			}
+			
+			goToBoarder = true;
+		} else {
+			//damit der weg jedes mal neu berechnet wird um zu verhindern, dass die Route über unentdecktes Land geht(könnte nämlich Wasser sein)
+			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
+			route.remove(0);
+			ant.setRoute(route);
+		}
+		
+		for (Tile rTile : ant.getRoute()) {
+			OverlayDrawer.setFillColor(Color.BLACK);
+			OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
+					SubTile.TL);
 		}
 	}
 
 	@Override
 	public void changeState() {
-		if(ant.isDanger()){
+		if(AntBot.getAttackManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Attack(ant));
 			return;
 		}
@@ -52,10 +70,6 @@ public class GoToBoarder implements State{
 			return;
 		}
 		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT){
-			return;
-		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT){
-			ant.setState(new Exploration(ant));
 			return;
 		}
 	}

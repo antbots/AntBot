@@ -22,7 +22,7 @@ public class CollectFood implements State {
 
 	@Override
 	public void changeState() {
-		if (ant.isDanger()) {
+		if (AntBot.getAttackManager().getMarkedAnts().containsKey(ant)) {
 			ant.setState(new Attack(ant));
 			return;
 		}

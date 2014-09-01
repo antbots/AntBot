@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
@@ -37,8 +38,26 @@ public class AttackInit {
 
 		}
 		merge(attack);
+		helpAnts(attack);
 		return attack;
 	}
+	
+	private Map<Set<Ant>, Set<Ant>> helpAnts(Map<Set<Ant>, Set<Ant>> attack){
+		for(Set<Ant> myAnts : attack.keySet()) {
+			Set<Ant> allAnts = new HashSet<>();
+			
+			for(Ant ant : myAnts) {
+				if(myAnts.size()+allAnts.size() > Configuration.GROUPSIZE)
+					break;
+				allAnts.addAll(gameI.getOwnAntsInViewRadiusNotDangered(ant,myAnts.size()));
+			}
+			myAnts.addAll(allAnts);
+			AntBot.getLogger().log("HELP GROUP");
+		}
+		return attack;
+	}
+	
+	
 
 	/**
 	 * recursive function if their are own diffrent ants which have the same

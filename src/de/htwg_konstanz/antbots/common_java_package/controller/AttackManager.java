@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
+import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -85,7 +86,7 @@ public class AttackManager {
 			Set<Ant> enemyAnts = new HashSet<Ant>();
 			
 			Tile myAntTile = myAnt.getAntPosition();
-			Set<Tile> myTiles = AntBot.getGameI().getTilesInRadius(myAntTile,(int)Math.sqrt(AntBot.getGameI().getViewRadius2()));
+			Set<Tile> myTiles = AntBot.getGameI().getTilesInRadius(myAntTile,Configuration.DANGERRADIUS);
 			
 			//DEBUG
 //			for(Tile t : myTiles) {

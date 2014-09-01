@@ -29,16 +29,12 @@ public class Exploration  implements State{
 
 	@Override
 	public void changeState() {
-		if(ant.isDanger()){
+		if(AntBot.getAttackManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Attack(ant));
 			return;
 		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
-			return;
-		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT){
-			ant.setState(new GoToBoarder(ant));
 			return;
 		}
 		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT){

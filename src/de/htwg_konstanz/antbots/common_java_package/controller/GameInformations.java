@@ -3,6 +3,7 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 import java.util.*;
 
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
+import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -1053,5 +1054,22 @@ public class GameInformations {
 	
 	public void addNewOrder(Tile tile) {
 		nextOrder.add(tile);
+	}
+	
+	/**
+	 * gibt alle eigenen Ameisen im SIchtfeld zurück
+	 */
+	public Set<Ant> getOwnAntsInViewRadiusNotDangered(Ant ant, int antSize){
+		Set<Ant> myAntsInViewRadius = new HashSet<>();
+		Set<Tile> tilesInViewRadius = getTilesInRadius(ant.getAntPosition(), (int)Math.sqrt(getViewRadius2()));
+		for(Ant myAnt : getMyAnts()) {
+			if(!myAnt.isDanger() && tilesInViewRadius.contains(myAnt.getAntPosition())) {
+				if(antSize + myAntsInViewRadius.size() <= Configuration.GROUPSIZE){
+					myAntsInViewRadius.add(myAnt);
+				}
+				
+			}
+		}
+		return myAntsInViewRadius;
 	}
 }
