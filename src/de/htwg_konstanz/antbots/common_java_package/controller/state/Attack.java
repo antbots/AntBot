@@ -28,6 +28,10 @@ public class Attack implements State{
 		if(AntBot.getAttackManager().getMarkedAnts().containsKey(ant)){
 			return;
 		}
+		if(AntBot.getEnemyHillManager().getAntsToHill().containsKey(ant)) {
+			ant.setState(new AttackEnemyHill(ant));
+			return;
+		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
 			return;

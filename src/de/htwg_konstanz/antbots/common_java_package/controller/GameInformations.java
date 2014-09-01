@@ -2,6 +2,7 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 
 import java.util.*;
 
+import de.htwg_konstanz.antbots.common_java_package.controller.state.AttackEnemyHill;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
@@ -80,6 +81,7 @@ public class GameInformations {
 	private final Set<Tile> enemyHills = new HashSet<Tile>();
 
 	private static FoodManager foodManager = new FoodManager();
+	
 
 	private final Set<Order> orders = new HashSet<Order>();
 
@@ -821,6 +823,7 @@ public class GameInformations {
 	public static FoodManager getFoodManager() {
 		return foodManager;
 	}
+
 
 	/**
 	 * Updates game state information about new ants and food locations.

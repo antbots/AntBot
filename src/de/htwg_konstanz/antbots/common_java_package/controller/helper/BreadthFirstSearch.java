@@ -44,10 +44,11 @@ public class BreadthFirstSearch {
 	 * @return
 	 */
 
-	public List<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets,	boolean onlyOnTarget, boolean isStepUsed, int steps,
+	public Set<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets,
+			boolean onlyOnTarget, boolean isStepUsed, int steps,
 			Set<Tile> visitableTiles) {
 
-		List<Ant> result = new LinkedList<Ant>();
+		Set<Ant> result = new HashSet<Ant>();
 		Map<Tile, Integer> pathCosts = new HashMap<Tile, Integer>();
 		Tile tmp;
 		Queue<Tile> q = new LinkedList<Tile>();
@@ -55,7 +56,10 @@ public class BreadthFirstSearch {
 
 		for (Tile t : postion) {
 			q.add(t);
-			visitableTiles.add(t);
+			if (visitableTiles != null) {
+				visitableTiles.add(t);
+			}
+
 			pathCosts.put(t, 0);
 		}
 
@@ -93,10 +97,14 @@ public class BreadthFirstSearch {
 						// next.getCol(), SubTile.MM);
 						if (isStepUsed == true && steps >= pathCosts.get(next)) {
 							q.add(next);
-							visitableTiles.add(next);
+							if (visitableTiles != null) {
+								visitableTiles.add(next);
+							}
 						} else if (!isStepUsed) {
 							q.add(next);
-							visitableTiles.add(next);
+							if (visitableTiles != null) {
+								visitableTiles.add(next);
+							}
 						}
 
 					}
@@ -107,20 +115,16 @@ public class BreadthFirstSearch {
 		return result;
 	}
 
-	
-	
-	
-	public Map<Tile,Set<Tile>> visitableFromSet(Map<Tile,Set<Tile>> position) {
+	public Map<Tile, Set<Tile>> visitableFromSet(Map<Tile, Set<Tile>> position) {
 		Set<Tile> visitableTiles = new HashSet<>();
-		Map<Tile,Set<Tile>> ret = new HashMap<>();
- 		for(Entry<Tile, Set<Tile>> pos : position.entrySet()) {
- 			visitableTiles = visitableFromSet(pos.getKey(), pos.getValue());
- 			ret.put(pos.getKey(), visitableTiles);
- 		}
- 		return ret;		
+		Map<Tile, Set<Tile>> ret = new HashMap<>();
+		for (Entry<Tile, Set<Tile>> pos : position.entrySet()) {
+			visitableTiles = visitableFromSet(pos.getKey(), pos.getValue());
+			ret.put(pos.getKey(), visitableTiles);
+		}
+		return ret;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param postion

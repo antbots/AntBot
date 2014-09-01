@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import de.htwg_konstanz.antbots.common_java_package.controller.AttackManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
+import de.htwg_konstanz.antbots.common_java_package.controller.EnemyHillManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
 import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
@@ -29,6 +30,7 @@ public class AntBot extends Bot {
 	private static AttackInit attack;
 	private static AlphaBeta gameStrategy;
 	private static AttackManager attackManager;
+	private static EnemyHillManager enemyHillManager;
 	
 
 	public static void main(String[] args) throws IOException {
@@ -44,6 +46,7 @@ public class AntBot extends Bot {
 		attack = new AttackInit(gameI);
 		gameStrategy = new AlphaBeta();
 		attackManager = new AttackManager();
+		enemyHillManager = new EnemyHillManager();
 		
 	}
 
@@ -58,8 +61,12 @@ public class AntBot extends Bot {
 		logger.log("TURN " + turn);
 		boarder.buildBoarder();
 		
+		enemyHillManager.antsToEnemyHill();
+		
 		attackManager.markOwnAntsAsDangered();
 		attackManager.markAntsToAttack();
+		
+		
 		gameI.getFoodManager().markAntsToCollectFood();
 		
 		gameI.getMyAnts().forEach(a -> {
@@ -108,6 +115,10 @@ public class AntBot extends Bot {
 
 	public static AlphaBeta getGameStrategy() {
 		return gameStrategy;
+	}
+	
+	public static EnemyHillManager getEnemyHillManager() {
+		return enemyHillManager;
 	}
 
 	

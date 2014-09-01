@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -13,7 +12,6 @@ import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
@@ -31,6 +29,10 @@ public class Exploration  implements State{
 	public void changeState() {
 		if(AntBot.getAttackManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new Attack(ant));
+			return;
+		}
+		if(AntBot.getEnemyHillManager().getAntsToHill().containsKey(ant)) {
+			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){

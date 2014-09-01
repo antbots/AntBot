@@ -26,6 +26,10 @@ public class CollectFood implements State {
 			ant.setState(new Attack(ant));
 			return;
 		}
+		if(AntBot.getEnemyHillManager().getAntsToHill().containsKey(ant)) {
+			ant.setState(new AttackEnemyHill(ant));
+			return;
+		}
 		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)
 				&& !ant.isDanger()) {
 			return;
