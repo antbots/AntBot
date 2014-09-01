@@ -7,6 +7,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.AttackManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
 import de.htwg_konstanz.antbots.common_java_package.controller.attack.AttackInit;
 import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
@@ -26,7 +27,7 @@ public class AntBot extends Bot {
 	private static int turn = 0;
 	private static BuildBoarder boarder;
 	private static AttackInit attack;
-	private static MaxN gameStrategy;
+	private static AlphaBeta gameStrategy;
 	private static AttackManager attackManager;
 	
 
@@ -41,7 +42,7 @@ public class AntBot extends Bot {
 		pathfinding = new Pathfinding(gameI);
 		boarder = new BuildBoarder(gameI);
 		attack = new AttackInit(gameI);
-		gameStrategy = new MaxN();
+		gameStrategy = new AlphaBeta();
 		attackManager = new AttackManager();
 		
 	}
@@ -105,7 +106,7 @@ public class AntBot extends Bot {
 		return attack;
 	}
 
-	public static MaxN getGameStrategy() {
+	public static AlphaBeta getGameStrategy() {
 		return gameStrategy;
 	}
 

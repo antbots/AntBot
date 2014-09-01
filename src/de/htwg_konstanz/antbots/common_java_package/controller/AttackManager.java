@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
 import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
@@ -42,7 +43,7 @@ public class AttackManager {
 			AntBot.getLogger().log("key " + a.getKey()+ " value " + a.getValue());
 			
 			
-			LinkedList<Order> move = AntBot.getGameStrategy().attack(AntBot.getGameI(), 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
+			LinkedList<Order> move = AntBot.getGameStrategy().alphaBeta(AntBot.getGameI(), Configuration.ATTACKSEARCHDEPTH, Configuration.ATTACKSTRATEGY, beteiligteAmeisen);
 			if (move != null){
 				for(Ant ant : AntBot.getGameI().getMyAntsDangered()){
 					for(Order o : move){
