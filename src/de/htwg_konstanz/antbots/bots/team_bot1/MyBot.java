@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.htwg_konstanz.antbots.common_java_package.Aim;
-import de.htwg_konstanz.antbots.common_java_package.Ant;
-import de.htwg_konstanz.antbots.common_java_package.Bot;
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Logger;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
-import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Aim;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 

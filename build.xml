@@ -4,8 +4,8 @@
 	<property environment="env" />
 	<!--<property name="ECLIPSE_HOME" value="../../eclipseKepler64" /> -->
 	<property name="debuglevel" value="source,lines,vars" />
-	<property name="target" value="1.7" />
-	<property name="source" value="1.7" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
 
 	<path id="lemke_bots.classpath">
 		<pathelement location="bin" />
@@ -96,6 +96,15 @@
 				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
 				<attribute name="Main-Class"
 					value="${botsBuildPackage}/collect_food_bot/CollectFood" />
+			</manifest>
+		</jar>
+		
+		<!-- AntBot -->
+		<jar jarfile="${botsJarDir}/AntBot.jar" basedir="${buildDir}">
+			<manifest>
+				<attribute name="Created-By" value="HTWG_Konstanz AntBots Team" />
+				<attribute name="Main-Class"
+					value="${botsBuildPackage}/AntBot" />
 			</manifest>
 		</jar>
 

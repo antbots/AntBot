@@ -2,31 +2,32 @@ package de.htwg_konstanz.antbots.bots.collect_food_bot;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import de.htwg_konstanz.antbots.common_java_package.Aim;
-import de.htwg_konstanz.antbots.common_java_package.Ant;
-import de.htwg_konstanz.antbots.common_java_package.Bot;
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Logger;
-import de.htwg_konstanz.antbots.common_java_package.MapPrinter;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
-import de.htwg_konstanz.antbots.common_java_package.attack.AttackInit;
-import de.htwg_konstanz.antbots.common_java_package.boarder.BuildBoarder;
-//import de.htwg_konstanz.antbots.common_java_package.boarder.BuildBoarder;
-import de.htwg_konstanz.antbots.common_java_package.helper.BreadthFirstSearch;
-import de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding;
-import de.htwg_konstanz.antbots.common_java_package.settings.Missions;
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.AttackInit;
+import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
+import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Aim;
+import de.htwg_konstanz.antbots.common_java_package.model.Order;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
+import de.htwg_konstanz.antbots.common_java_package.model.settings.Missions;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
-
+/**
+ * 
+ * @author Benjamin
+ */
 public class CollectFood extends Bot {
 
 	GameInformations gameI;
@@ -36,6 +37,7 @@ public class CollectFood extends Bot {
 	int turn = 0;
 	BuildBoarder boarder;
 	AttackInit attack;
+	private MaxN gameStrategy;
 
 	public static void main(String[] args) throws IOException {
 		new CollectFood().readSystemInput();
@@ -48,7 +50,7 @@ public class CollectFood extends Bot {
 		pathfinding = new Pathfinding(gameI);
 		boarder = new BuildBoarder(gameI);
 		attack = new AttackInit(gameI);
-
+		gameStrategy = new MaxN();
 	}
 
 	@Override
@@ -67,14 +69,30 @@ public class CollectFood extends Bot {
 		// logger.log("Ameise " + myAnt.getAntPosition());
 		// }
 		boarder.buildBoarder();
-		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
-		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
-		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
-			logger.log(a.getKey().size() + " " + a.getValue() );
-		}
+		
 		
 		initDanger();
 		markOwnAntsAsDangered();
+		
+		Map<Set<Ant>, Set<Ant>> att = attack.initAttack();
+		logger.log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
+		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
+			
+			List<Set<Ant>> beteiligteAmeisen = new LinkedList<>();
+			
+			beteiligteAmeisen.add(a.getKey());
+			beteiligteAmeisen.add(a.getValue());
+			
+			logger.log("key " + a.getKey()+ " value " + a.getValue());
+			
+			
+			LinkedList<Order> move = gameStrategy.attack(gameI, 1, MaxN.Strategy.AGGRESSIVE, beteiligteAmeisen);
+			if (move != null)
+			for (Order order : move) {
+				gameI.issueOrder(order);
+				logger.log(order.toString());
+			}
+		}
 		
 		
 		collectFood();
@@ -94,32 +112,47 @@ public class CollectFood extends Bot {
 
 	}
 	
+	/**
+	 * set the dangered value of the own ants to false and
+	 * set the enemy in view radius set to null
+	 */
 	private void initDanger() {
 		for(Ant myAnt : gameI.getMyAnts()) {
 			myAnt.setDanger(false);
+			myAnt.setEnemysInViewRadius(null);
 		}
 	}
 
+	/**
+	 * mark the own ants as dangerd if their are enemy ants in the view radius
+	 * if their are enemy ants in the view radius the method save this enemy ants in
+	 * a set and 
+	 */
 	private void markOwnAntsAsDangered() {
 		Set<Ant> myAnts = new HashSet<Ant>();
-		
+
 		for (Ant myAnt : gameI.getMyAnts()) {
+			Set<Ant> enemyAnts = new HashSet<Ant>();
+			
 			Tile myAntTile = myAnt.getAntPosition();
 			Set<Tile> myTiles = gameI.getTilesInRadius(myAntTile,(int)Math.sqrt(gameI.getViewRadius2()));
+			
+			//DEBUG
 			for(Tile t : myTiles) {
 				OverlayDrawer.setFillColor(Color.GREEN);
 				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
 						SubTile.BR);
 			}
+			
 			for (Ant enemyAnt : gameI.getEnemyAnts()) {
 				Tile enemyAntTile = enemyAnt.getAntPosition();
 				if (myTiles.contains(enemyAntTile)) {
 					myAnt.setDanger(true);
-					myAnt.setEnemysInViewRadius(enemyAnt);
-					
+					enemyAnts.add(enemyAnt);
 				}
 			}
 			if(myAnt.isDanger()) {
+				myAnt.setEnemysInViewRadius(enemyAnts);
 				myAnts.add(myAnt);
 			}
 
@@ -136,7 +169,7 @@ public class CollectFood extends Bot {
 
 		Set<Tile> isTaken = new HashSet<Tile>();
 
-		for (Ant ant : gameI.getMyAnts()) {
+		for (Ant ant : gameI.getOwnNotDangeredAnts()) {
 			if (!(ant.getMission() == Missions.NON)) {
 				continue;
 			}
@@ -207,8 +240,7 @@ public class CollectFood extends Bot {
 			List<Tile> tmpList = new LinkedList<>();
 			tmpList.add(foodTile);
 
-			List<Ant> nearestTarget = bsf.extendedBSF(tmpList,
-					gameI.getMyAnts(), true, false, 0, visitableTiles);
+			List<Ant> nearestTarget = bsf.extendedBSF(tmpList,	gameI.getOwnNotDangeredAnts(), true, false, 0, visitableTiles);
 
 			Ant targetAnt;
 			if (nearestTarget.size() == 0) {

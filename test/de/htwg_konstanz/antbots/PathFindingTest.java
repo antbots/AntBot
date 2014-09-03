@@ -16,10 +16,10 @@ import org.junit.Test;
 
 import de.htwg_konstanz.antbots.bots.kartentest_bot.DummyBot;
 import de.htwg_konstanz.antbots.bots.lemke_bot1.ExplorerBot1;
-import de.htwg_konstanz.antbots.common_java_package.Bot;
-import de.htwg_konstanz.antbots.common_java_package.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.Ilk;
-import de.htwg_konstanz.antbots.common_java_package.Tile;
+import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 /**
  * 
@@ -85,7 +85,7 @@ public class PathFindingTest {
 	
 	/**
 	 * Test method for
-	 * {@link de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding#visitableInXSteps(de.htwg_konstanz.antbots.common_java_package.Tile, de.htwg_konstanz.antbots.common_java_package.Tile[][], int)}
+	 * {@link de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding#visitableInXSteps(de.htwg_konstanz.antbots.common_java_package.model.Tile, de.htwg_konstanz.antbots.common_java_package.model.Tile[][], int)}
 	 * .
 	 */
 	@Test
@@ -95,7 +95,7 @@ public class PathFindingTest {
 
 	/**
 	 * Test method for
-	 * {@link de.htwg_konstanz.antbots.common_java_package.helper.Pathfinding#searchShortestPath(de.htwg_konstanz.antbots.common_java_package.Tile, de.htwg_konstanz.antbots.common_java_package.Tile, java.util.Set)}
+	 * {@link de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding#searchShortestPath(de.htwg_konstanz.antbots.common_java_package.model.Tile, de.htwg_konstanz.antbots.common_java_package.model.Tile, java.util.Set)}
 	 * .
 	 */
 	@Test
