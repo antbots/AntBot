@@ -4,7 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.abego.treelayout.util.DefaultTreeForTreeLayout;
+
 import de.htwg_konstanz.antbots.bots.AntBot;
+import de.htwg_konstanz.antbots.common_java_package.SampleTreeFactory;
+import de.htwg_konstanz.antbots.common_java_package.SwingDemo;
+import de.htwg_konstanz.antbots.common_java_package.TextInBox;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
@@ -22,7 +27,7 @@ public class AlphaBeta {
 		NEUTRAL
 	}
 	
-	private Logger logger  = new Logger("log.txt");
+private Logger logger  = new Logger("log.txt");
 	
 	LinkedList<Order> bestMove;
 	GameInformations board;
@@ -33,13 +38,17 @@ public class AlphaBeta {
 	LinkedList<Ant> myAntsToGo;
 	LinkedList<Ant> enemyAntsToGo;
 	
+	DefaultTreeForTreeLayout<TextInBox> tree;
+	TextInBox last = new TextInBox("root", 40, 20);
+	
 	CommandManager cm;
 	Strategy gameStrategy;
 	
 	public AlphaBeta(){
 		possibleDirections = new LinkedList<Aim>();
-		possibleDirections.add(Aim.DONTMOVE);
+		
 		possibleDirections.add(Aim.NORTH);
+		possibleDirections.add(Aim.DONTMOVE);
 		possibleDirections.add(Aim.SOUTH);
 		possibleDirections.add(Aim.EAST);
 		possibleDirections.add(Aim.WEST);
@@ -63,7 +72,15 @@ public class AlphaBeta {
 		cm = new CommandManager();
 		gameStrategy = st;
 		
+		tree = SampleTreeFactory.getTree(last);
+		
 		max(depth,Integer.MIN_VALUE , Integer.MAX_VALUE);
+		
+		SampleTreeFactory.setTree(tree);
+		String[] tt = new String[] {""};
+		if(AntBot.getTurn() == 1){
+			SwingDemo.main(tt);
+		}
 		
 		return bestMove;
 	}
@@ -77,12 +94,17 @@ public class AlphaBeta {
 	    possibleMovesTmp = new LinkedList<Order>();
 	    generatePossibleMoves(myAntsToGo.size(), myAntsToGo, possibleMoves);
 	    logger.log("max");
-	    printPossibleMoves(possibleMoves);
+	    //printPossibleMoves(possibleMoves);
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
 	    	ExecuteNextMove(childMove,myAntsToGo);
+	    	TextInBox beiUndoLast = last;
+	    	TextInBox newT = new TextInBox(childMove.toString(), 80, 20);
+	    	tree.addChild(last, newT);
+	    	last = newT;
 	    	int evaluation = min(depth-1, maxValue, beta);
 	    	UndoMove(childMove);
+	    	last = beiUndoLast;
 	    	if (evaluation > maxValue) {
 	    		maxValue = evaluation;
 	    		if (maxValue >= beta)
@@ -114,13 +136,18 @@ public class AlphaBeta {
 	    possibleMovesTmp = new LinkedList<Order>();
 	    generatePossibleMoves(enemyAntsToGo.size(), enemyAntsToGo, possibleMoves);
 	    logger.log("min");
-	    printPossibleMoves(possibleMoves);
+	    //printPossibleMoves(possibleMoves);
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
 	    	ExecuteNextMove(childMove,enemyAntsToGo);
+	    	TextInBox beiUndoLast = last;
+	    	TextInBox newT = new TextInBox(childMove.toString(), 80, 20);
+	    	tree.addChild(last, newT);
+	    	last = newT;
 	    	int evaluation = max(depth-1, 
 	                      alpha, minValue);
 	    	UndoMove(childMove);
+	    	last = beiUndoLast;
 	    	if (evaluation < minValue) {
 	    		minValue = evaluation;
 	    		if (minValue <= alpha)
