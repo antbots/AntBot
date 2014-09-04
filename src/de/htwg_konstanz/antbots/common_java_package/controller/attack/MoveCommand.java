@@ -27,10 +27,13 @@ public class MoveCommand implements Command {
 	private LinkedList<Ant> ants;
 	private LinkedList<Ant> enemyAnts;
 	private AlphaBeta ab;
+	private boolean min = false;
+	private int directionPoints = 0;
 
 	// Hier werden die Befehle der Ameisen zugeordnet und in einer Map
 	// gespeichert.
-	public MoveCommand(LinkedList<Order> order, LinkedList<Ant> ants, LinkedList<Ant> enemyAnts, AlphaBeta ab) {
+	public MoveCommand(LinkedList<Order> order, LinkedList<Ant> ants, LinkedList<Ant> enemyAnts, AlphaBeta ab, boolean min) {
+		this.min = min;
 		this.ants = ants;
 		this.enemyAnts = enemyAnts;
 		this.orders = new HashMap<Ant, Order>();
@@ -53,34 +56,41 @@ public class MoveCommand implements Command {
 		ants.forEach(a -> {
 			a.setPosition(orders.get(a).getNewPosition());
 			a.setexecutedDirection(orders.get(a).getDirection());});
-		
-		for (Ant ant : ants) {
-			enemies(ant, enemyAnts);
+		if(min){
+			directionPoints = directionPoints(1);
+			ab.setDirectionPoint(directionPoints);
+			
+			for (Ant ant : ants) {
+				enemies(ant, enemyAnts);
+			}
+			for (Ant ant : enemyAnts) {
+				enemies(ant,ants);
+			}
+			
+			numOfMyDeadAnts=calculateDeadAnts(ants, enemyAnts,myDeadAnts);
+			numOfEnemyDeadAnts=calculateDeadAnts(enemyAnts, ants,enemyDeadAnts);
+			
+			ab.setEnemyDeadAnts(numOfEnemyDeadAnts);		// enemyDeadAnts
+			ab.setMyDeadAnts(numOfMyDeadAnts);	// myDeadAnts
 		}
-		for (Ant ant : enemyAnts) {
-			enemies(ant,ants);
-		}
-		
-		numOfMyDeadAnts=calculateDeadAnts(ants, enemyAnts,myDeadAnts);
-		numOfEnemyDeadAnts=calculateDeadAnts(enemyAnts, ants,enemyDeadAnts);
-		
-		ab.setEnemyDeadAnts(numOfEnemyDeadAnts);		// enemyDeadAnts
-		ab.setMyDeadAnts(numOfMyDeadAnts);	// myDeadAnts
 	}
 
 	// Weist der Ameise die letzte durchgeführte Richtung zu und versetzt sie
 	// wieder zurück
 	@Override
 	public void undo() {
-		ab.setEnemyDeadAnts(-numOfEnemyDeadAnts);		// enemyDeadAnts
-		ab.setMyDeadAnts(-numOfMyDeadAnts);	// myDeadAnts
-		
-		for(Ant a : enemyDeadAnts){
-			enemyAnts.add(a);
-		}
-		
-		for(Ant a : myDeadAnts){
-			ants.add(a);
+		if(min){
+			ab.setDirectionPoint(-directionPoints);
+			ab.setEnemyDeadAnts(-numOfEnemyDeadAnts);		// enemyDeadAnts
+			ab.setMyDeadAnts(-numOfMyDeadAnts);	// myDeadAnts
+			
+			for(Ant a : enemyDeadAnts){
+				enemyAnts.add(a);
+			}
+			
+			for(Ant a : myDeadAnts){
+				ants.add(a);
+			}
 		}
 		ants.forEach(a -> {a.setPosition(orders.get(a).getPosition());});
 	}
@@ -117,5 +127,22 @@ public class MoveCommand implements Command {
 		}
 		ant.setWeakness(weakness);
 		ant.setEnemiesinAttackRadius(enemiesInAttackRadius);
+	}
+	
+	private int directionPoints(int increase){
+		int points = 0;
+		if(!enemyAnts.isEmpty()){
+			for (Ant ant : ants) {
+				for (Aim aim : ab.getBoard().getDirections(ant.getAntPosition(), enemyAnts.get((int)((Math.random()) * enemyAnts.size()-1 + 0)).getAntPosition())) {
+					if(ant.getexecutedDirection() == aim){
+						//logger.log("increase");
+						points = points + increase;
+						break;
+					}
+				}
+				
+			}
+		}
+		return points;
 	}
 }
