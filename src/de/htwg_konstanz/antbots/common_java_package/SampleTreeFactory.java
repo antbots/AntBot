@@ -1,7 +1,9 @@
 package de.htwg_konstanz.antbots.common_java_package;
 
-import org.abego.treelayout.TreeForTreeLayout;
-import org.abego.treelayout.util.DefaultTreeForTreeLayout;
+import de.htwg_konstanz.antbots.treedrawer.TreeForTreeLayout;
+import de.htwg_konstanz.antbots.treedrawer.util.DefaultTreeForTreeLayout;
+
+
 
 
 
@@ -33,7 +35,7 @@ public class SampleTreeFactory {
                 tree.addChild(n1, n1_3);
                 tree.addChild(root, n2);
                 tree.addChild(n2, n2_1);
-                return tree;
+                return myTree;
         }
         
         public static void setTree(DefaultTreeForTreeLayout<TextInBox> tree){

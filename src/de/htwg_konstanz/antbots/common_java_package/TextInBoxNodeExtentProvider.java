@@ -1,6 +1,8 @@
 package de.htwg_konstanz.antbots.common_java_package;
 
-import org.abego.treelayout.NodeExtentProvider;
+import de.htwg_konstanz.antbots.treedrawer.NodeExtentProvider;
+
+
 
 /**
  * A {@link NodeExtentProvider} for nodes of type {@link TextInBox}.

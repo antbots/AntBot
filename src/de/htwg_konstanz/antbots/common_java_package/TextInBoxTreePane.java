@@ -8,8 +8,9 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
-import org.abego.treelayout.TreeForTreeLayout;
-import org.abego.treelayout.TreeLayout;
+import de.htwg_konstanz.antbots.treedrawer.TreeForTreeLayout;
+import de.htwg_konstanz.antbots.treedrawer.TreeLayout;
+
 
 /**
  * A JComponent displaying a tree of TextInBoxes, given by a {@link TreeLayout}.

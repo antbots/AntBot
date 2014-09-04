@@ -4,7 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.abego.treelayout.util.DefaultTreeForTreeLayout;
+
+
+
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.SampleTreeFactory;
@@ -17,6 +19,7 @@ import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
+import de.htwg_konstanz.antbots.treedrawer.util.DefaultTreeForTreeLayout;
 
 
 public class AlphaBeta {
@@ -46,9 +49,8 @@ private Logger logger  = new Logger("log.txt");
 	
 	public AlphaBeta(){
 		possibleDirections = new LinkedList<Aim>();
-		
-		possibleDirections.add(Aim.NORTH);
 		possibleDirections.add(Aim.DONTMOVE);
+		possibleDirections.add(Aim.NORTH);
 		possibleDirections.add(Aim.SOUTH);
 		possibleDirections.add(Aim.EAST);
 		possibleDirections.add(Aim.WEST);
@@ -79,7 +81,13 @@ private Logger logger  = new Logger("log.txt");
 		SampleTreeFactory.setTree(tree);
 		String[] tt = new String[] {""};
 		if(AntBot.getTurn() == 1){
-			SwingDemo.main(tt);
+			//SwingDemo.main(tt);
+//			try {
+//				//Thread.sleep(5000000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 		
 		return bestMove;

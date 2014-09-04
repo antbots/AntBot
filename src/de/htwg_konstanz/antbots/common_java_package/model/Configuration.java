@@ -10,7 +10,7 @@ public class Configuration {
 	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) +2;
 	
 	// Angriffsalgorithmus
-	public static final AlphaBeta.Strategy ATTACKSTRATEGY = AlphaBeta.Strategy.PASSIVE;
+	public static final AlphaBeta.Strategy ATTACKSTRATEGY = AlphaBeta.Strategy.NEUTRAL;
 	public static final int ATTACKSEARCHDEPTH = 3;
 	public static final int GROUPSIZE = 3;
 	

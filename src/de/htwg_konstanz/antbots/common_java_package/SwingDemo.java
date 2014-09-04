@@ -6,9 +6,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 
-import org.abego.treelayout.TreeForTreeLayout;
-import org.abego.treelayout.TreeLayout;
-import org.abego.treelayout.util.DefaultConfiguration;
+import de.htwg_konstanz.antbots.treedrawer.TreeForTreeLayout;
+import de.htwg_konstanz.antbots.treedrawer.TreeLayout;
+import de.htwg_konstanz.antbots.treedrawer.util.DefaultConfiguration;
+
+
 
 /**
  * Demonstrates how to use the {@link TreeLayout} to render a tree in a Swing
