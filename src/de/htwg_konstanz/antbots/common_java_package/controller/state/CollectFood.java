@@ -53,10 +53,7 @@ public class CollectFood implements State {
 
 	@Override
 	public void execute() {
-		List<Tile> r = AntBot.getPathfinding().aStar(
-				ant.getAntPosition(),
-				AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant)
-						.getPosition());
+		List<Tile> r = AntBot.getPathfinding().aStar(ant.getAntPosition(),	AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant).getPosition());
 
 		// da beim essen sammel nicht direkt das Tile besucht werden muss,
 		// auf dem es liegt. Es reicht wenn man daneben steht.

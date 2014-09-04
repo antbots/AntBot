@@ -14,6 +14,12 @@ public class Configuration {
 	public static final int ATTACKSEARCHDEPTH = 3;
 	public static final int GROUPSIZE = 3;
 	
+	//angriff auf gegnerischen Ameisenhügel
 	public static final int ANTSINGROUPTOENEMYHILL = 3;
+	
+	//Verteidigung eigener Ameisenhügel
+	public static final int DEFENDANTS = 3;
+	
+	
 	
 }

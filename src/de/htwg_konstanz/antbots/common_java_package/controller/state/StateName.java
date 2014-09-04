@@ -5,5 +5,7 @@ public enum StateName {
 	Attack,
 	Exploration,
 	InitState,
-	GoToBoarder
+	GoToBoarder,
+	AttackEnemyHill,
+	Defend
 }

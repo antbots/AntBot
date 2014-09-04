@@ -42,7 +42,7 @@ public class EnemyHillManager {
 			AntBot.getGameI().getLogger().log("Ameise " + e.getKey() + " geht zu Hill " + e.getValue());
 		}
 		
-		AntBot.getGameI().getLogger().log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		AntBot.getGameI().getLogger().log("Attack Enemy Hill");
 	}
 
 	public Map<Ant, Tile> getAntsToHill() {

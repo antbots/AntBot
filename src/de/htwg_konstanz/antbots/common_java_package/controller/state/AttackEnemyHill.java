@@ -23,7 +23,7 @@ public class AttackEnemyHill implements State{
 	
 	public AttackEnemyHill(Ant ant) {
 		this.ant = ant;
-		stateName = StateName.CollectFood;
+		stateName = StateName.AttackEnemyHill;
 	}
 	
 	

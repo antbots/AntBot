@@ -44,9 +44,7 @@ public class BreadthFirstSearch {
 	 * @return
 	 */
 
-	public Set<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets,
-			boolean onlyOnTarget, boolean isStepUsed, int steps,
-			Set<Tile> visitableTiles) {
+	public Set<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets, boolean onlyOnTarget, boolean isStepUsed, int steps,	Set<Tile> visitableTiles) {
 
 		Set<Ant> result = new HashSet<Ant>();
 		Map<Tile, Integer> pathCosts = new HashMap<Tile, Integer>();
