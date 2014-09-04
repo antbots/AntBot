@@ -12,7 +12,7 @@ set playgame="%~dp0aichallenge_tools\ants\playgame.py"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\erkunden\exploration_skull.map"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\erkunden\exploration_1.map"
 ::set map="%~dp0aichallenge_tools/ants/maps/example/tutorial1.map"
-set map="%~dp0\src\de\htwg_konstanz\antbots\karten\angreifen\2vs1.map"
+set map="%~dp0\src\de\htwg_konstanz\antbots\karten\angreifen\2vs1_simple.map"
 
 
 ::players

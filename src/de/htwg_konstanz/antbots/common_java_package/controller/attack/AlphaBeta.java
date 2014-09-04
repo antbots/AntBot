@@ -49,11 +49,8 @@ private Logger logger  = new Logger("log.txt");
 	
 	public AlphaBeta(){
 		possibleDirections = new LinkedList<Aim>();
-		possibleDirections.add(Aim.DONTMOVE);
 		possibleDirections.add(Aim.NORTH);
 		possibleDirections.add(Aim.SOUTH);
-		possibleDirections.add(Aim.EAST);
-		possibleDirections.add(Aim.WEST);
 	}
 	
 	public LinkedList<Order> alphaBeta(GameInformations board, int depth, Strategy st, List<Set<Ant>> beteiligteAmeisen){
@@ -81,13 +78,13 @@ private Logger logger  = new Logger("log.txt");
 		SampleTreeFactory.setTree(tree);
 		String[] tt = new String[] {""};
 		if(AntBot.getTurn() == 1){
-			//SwingDemo.main(tt);
-//			try {
-//				//Thread.sleep(5000000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			SwingDemo.main(tt);
+			try {
+				Thread.sleep(5000000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return bestMove;
@@ -95,7 +92,10 @@ private Logger logger  = new Logger("log.txt");
 
 	private int max(int depth, int alpha, int beta) {
 	    if (depth == 0 ){
-	       return evaluation(gameStrategy);
+	    	int result = evaluation(gameStrategy);
+	    	TextInBox newT = new TextInBox(Integer.toString(result), 80, 20);
+	    	tree.addChild(last, newT);
+	       return result;
 	    }
 	    int maxValue = alpha;
 	    LinkedList<LinkedList<Order>> possibleMoves = new LinkedList<LinkedList<Order>>();
@@ -136,7 +136,10 @@ private Logger logger  = new Logger("log.txt");
 
 	private int min(int depth, int alpha, int beta) {
 	    if (depth == 0){
-	    	return evaluation(gameStrategy);
+	    	int result = evaluation(gameStrategy);
+	    	TextInBox newT = new TextInBox(Integer.toString(result), 80, 20);
+	    	tree.addChild(last, newT);
+	       return result;
 	    }
 	       
 	    int minValue = beta;
