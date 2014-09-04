@@ -276,8 +276,7 @@ public class Pathfinding {
 			// target node
 			private int h;
 
-			public AStarNode(Tile source, int distanceSource,
-					int distanceHeuristic) {
+			public AStarNode(Tile source, int distanceSource, int distanceHeuristic) {
 				node = source;
 				g = distanceSource;
 				h = distanceHeuristic;

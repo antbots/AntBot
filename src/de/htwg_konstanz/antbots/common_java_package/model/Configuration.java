@@ -19,6 +19,7 @@ public class Configuration {
 	
 	//Verteidigung eigener Ameisenhügel
 	public static final int DEFENDANTS = 3;
+	public static final int LIMITWHENDEFENDANTSAREORDERD = 10;
 	
 	
 	

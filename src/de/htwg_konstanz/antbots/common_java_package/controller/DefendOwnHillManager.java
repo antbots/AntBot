@@ -55,7 +55,7 @@ public class DefendOwnHillManager {
 		return defendAnts;
 	}
 	
-	public Map<Ant,List<Tile>> getTilesAroundHill() {
+	public Map<Ant,List<Tile>> getTilesAroundHill() {		
 		return antTotilesAroundHill;
 	}
 }
