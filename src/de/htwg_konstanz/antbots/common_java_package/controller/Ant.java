@@ -26,6 +26,7 @@ public class Ant {
 	private State state;
 	private StateName currentState;
 	private int id;
+	private boolean markedAsDead = false;;
 	
 	private Set<Ant> enemysInViewRadius = new HashSet<Ant>();
 
@@ -99,6 +100,15 @@ public class Ant {
 		
 		position.setCol(t.getCol());
 		position.setRow(t.getRow());
+	}
+
+	
+	public boolean isMarkedAsDead() {
+		return markedAsDead;
+	}
+
+	public void setMarkedAsDead(boolean markedAsDead) {
+		this.markedAsDead = markedAsDead;
 	}
 
 	public void setWeakness(int weakness) {
