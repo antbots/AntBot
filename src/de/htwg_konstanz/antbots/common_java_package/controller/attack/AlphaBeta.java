@@ -44,6 +44,9 @@ private Logger logger  = new Logger("log.txt");
 	DefaultTreeForTreeLayout<TextInBox> tree;
 	TextInBox last = new TextInBox("root", 40, 20);
 	
+	int myDeadAnts = 0;
+	int enemyDeadAnts = 0;
+	
 	CommandManager cm;
 	Strategy gameStrategy;
 	
@@ -105,7 +108,7 @@ private Logger logger  = new Logger("log.txt");
 	    //printPossibleMoves(possibleMoves);
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
-	    	ExecuteNextMove(childMove,myAntsToGo);
+	    	ExecuteNextMove(childMove,myAntsToGo,enemyAntsToGo);
 	    	TextInBox beiUndoLast = last;
 	    	TextInBox newT = new TextInBox(childMove.toString(), 80, 20);
 	    	tree.addChild(last, newT);
@@ -150,7 +153,7 @@ private Logger logger  = new Logger("log.txt");
 	    //printPossibleMoves(possibleMoves);
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
-	    	ExecuteNextMove(childMove,enemyAntsToGo);
+	    	ExecuteNextMove(childMove,enemyAntsToGo,myAntsToGo);
 	    	TextInBox beiUndoLast = last;
 	    	TextInBox newT = new TextInBox(childMove.toString(), 80, 20);
 	    	tree.addChild(last, newT);
@@ -172,8 +175,8 @@ private Logger logger  = new Logger("log.txt");
 		cm.undo();
 	}
 
-	private void ExecuteNextMove(LinkedList<Order> childMove, LinkedList<Ant> antsToGo){
-		cm.executeCommand(new MoveCommand(childMove, antsToGo));
+	private void ExecuteNextMove(LinkedList<Order> childMove, LinkedList<Ant> antsToGo, LinkedList<Ant> enemysToGo){
+		cm.executeCommand(new MoveCommand(childMove, antsToGo, enemysToGo, this));
 	}
 	
 	private void generatePossibleMoves(int depth, LinkedList<Ant> antsToGo, LinkedList<LinkedList<Order>> possibleMoves) {
@@ -215,15 +218,8 @@ private Logger logger  = new Logger("log.txt");
 	}
 	
 	private int evaluation(Strategy strategy) {
-		for (Ant ant : myAntsToGo) {
-			enemies(ant, enemyAntsToGo);
-		}
-		for (Ant ant : enemyAntsToGo) {
-			enemies(ant,myAntsToGo);
-		}
-		
-		int t1 = calculateDeadAnts(enemyAntsToGo, myAntsToGo);		// enemyDeadAnts
-		int t2 = calculateDeadAnts(myAntsToGo, enemyAntsToGo);	// myDeadAnts
+		int t1 = myDeadAnts;
+		int t2 = enemyDeadAnts;
 		int t3 = 1;
 		
 		int w1;
@@ -293,38 +289,26 @@ private Logger logger  = new Logger("log.txt");
 		return prevsum - nowsum;
 	}
 
-	private int calculateDeadAnts(LinkedList<Ant> myAntsToGo, LinkedList<Ant> enemyAntsToGo) {
-		int myDeadAnts = 0;
-
-		for (Ant ant : myAntsToGo) {
-			LinkedList<Ant> enemiesInAttackRadius = ant.getEnemiesinAttackRadius();
-			for (Ant enemy : enemiesInAttackRadius) {
-				if(ant.getWeakness() >= enemy.getWeakness()){
-					myDeadAnts++;
-					break;
-				}
-			}
-		}
-		return myDeadAnts;
+	public LinkedList<Ant> getMyAntsToGo() {
+		return myAntsToGo;
 	}
-	
-	private void enemies(Ant ant, LinkedList<Ant> enemyAnts){
-		int weakness = 0;
-		LinkedList<Ant> enemiesInAttackRadius = new LinkedList<Ant>();
-		Set<Tile> attackRadiusTiles= board.getTilesInAttackRadius(ant.getAntPosition(), (int)Math.sqrt(board.getAttackRadius2()));
-		for (Tile tile : attackRadiusTiles) {
-			for (Ant enemy : enemyAnts) {
-				if(tile.getRow() == enemy.getAntPosition().getRow() && tile.getCol() == enemy.getAntPosition().getCol()){
-					weakness++;
-					enemiesInAttackRadius.add(enemy);
-				}
-			}
-			
-		}
-		ant.setWeakness(weakness);
-		ant.setEnemiesinAttackRadius(enemiesInAttackRadius);
+
+	public LinkedList<Ant> getEnemyAntsToGo() {
+		return enemyAntsToGo;
+	}
+
+	public GameInformations getBoard() {
+		return board;
+	}
+
+	public void setMyDeadAnts(int deadAnts) {
+		myDeadAnts = myDeadAnts + deadAnts;
+		
+	}
+
+	public void setEnemyDeadAnts(int deadAnts) {
+		enemyDeadAnts = enemyDeadAnts + deadAnts;
 	}
 	
 	
-
 }

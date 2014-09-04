@@ -1,15 +1,18 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.attack;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 /**
  * 
@@ -17,13 +20,22 @@ import de.htwg_konstanz.antbots.common_java_package.model.Order;
  */
 public class MoveCommand implements Command {
 	private HashMap<Ant, Order> orders;
+	private int numOfMyDeadAnts;
+	private int numOfEnemyDeadAnts;
+	private LinkedList<Ant> myDeadAnts;
+	private LinkedList<Ant> enemyDeadAnts;
 	private LinkedList<Ant> ants;
+	private LinkedList<Ant> enemyAnts;
+	private AlphaBeta ab;
 
 	// Hier werden die Befehle der Ameisen zugeordnet und in einer Map
 	// gespeichert.
-	public MoveCommand(LinkedList<Order> order, LinkedList<Ant> ants) {
+	public MoveCommand(LinkedList<Order> order, LinkedList<Ant> ants, LinkedList<Ant> enemyAnts, AlphaBeta ab) {
 		this.ants = ants;
+		this.enemyAnts = enemyAnts;
 		this.orders = new HashMap<Ant, Order>();
+		this.myDeadAnts = new LinkedList<Ant>();
+		this.enemyDeadAnts = new LinkedList<Ant>();
         for (Order o : order) {
 			for (Ant a : ants) {
 				if(a.getAntPosition().getCol() == o.getPosition().getCol() && a.getAntPosition().getRow() == o.getPosition().getRow()){
@@ -31,6 +43,7 @@ public class MoveCommand implements Command {
 				}
 			}
 		}
+        this.ab = ab;
 	}
 
 	// Speichert die ausgeführte Richtung ab und versetzt die Ameise an die neue
@@ -40,12 +53,69 @@ public class MoveCommand implements Command {
 		ants.forEach(a -> {
 			a.setPosition(orders.get(a).getNewPosition());
 			a.setexecutedDirection(orders.get(a).getDirection());});
+		
+		for (Ant ant : ants) {
+			enemies(ant, enemyAnts);
+		}
+		for (Ant ant : enemyAnts) {
+			enemies(ant,ants);
+		}
+		
+		numOfMyDeadAnts=calculateDeadAnts(ants, enemyAnts,myDeadAnts);
+		numOfEnemyDeadAnts=calculateDeadAnts(enemyAnts, ants,enemyDeadAnts);
+		
+		ab.setEnemyDeadAnts(numOfEnemyDeadAnts);		// enemyDeadAnts
+		ab.setMyDeadAnts(numOfMyDeadAnts);	// myDeadAnts
 	}
 
 	// Weist der Ameise die letzte durchgeführte Richtung zu und versetzt sie
 	// wieder zurück
 	@Override
 	public void undo() {
+		ab.setEnemyDeadAnts(-numOfEnemyDeadAnts);		// enemyDeadAnts
+		ab.setMyDeadAnts(-numOfMyDeadAnts);	// myDeadAnts
+		
+		for(Ant a : enemyDeadAnts){
+			enemyAnts.add(a);
+		}
+		
+		for(Ant a : myDeadAnts){
+			ants.add(a);
+		}
 		ants.forEach(a -> {a.setPosition(orders.get(a).getPosition());});
+	}
+	
+	private int calculateDeadAnts(LinkedList<Ant> myAntsToGo, LinkedList<Ant> enemyAntsToGo, LinkedList<Ant> deadAnts) {
+		int numOfDeadAnts = 0;
+		for (Iterator<Ant> i = myAntsToGo.iterator(); i.hasNext();){
+			Ant ant = i.next();
+			LinkedList<Ant> enemiesInAttackRadius = ant.getEnemiesinAttackRadius();
+			for (Ant enemy : enemiesInAttackRadius) {
+				if(ant.getWeakness() >= enemy.getWeakness()){
+					deadAnts.add(ant);
+					numOfDeadAnts++;
+					myAntsToGo.remove(ant);
+					break;
+				}
+			}
+		}
+		return numOfDeadAnts;
+	}
+	
+	private void enemies(Ant ant, LinkedList<Ant> enemyAnts){
+		int weakness = 0;
+		LinkedList<Ant> enemiesInAttackRadius = new LinkedList<Ant>();
+		Set<Tile> attackRadiusTiles= ab.getBoard().getTilesInAttackRadius(ant.getAntPosition(), (int)Math.sqrt(ab.getBoard().getAttackRadius2()));
+		for (Tile tile : attackRadiusTiles) {
+			for (Ant enemy : enemyAnts) {
+				if(tile.getRow() == enemy.getAntPosition().getRow() && tile.getCol() == enemy.getAntPosition().getCol()){
+					weakness++;
+					enemiesInAttackRadius.add(enemy);
+				}
+			}
+			
+		}
+		ant.setWeakness(weakness);
+		ant.setEnemiesinAttackRadius(enemiesInAttackRadius);
 	}
 }
