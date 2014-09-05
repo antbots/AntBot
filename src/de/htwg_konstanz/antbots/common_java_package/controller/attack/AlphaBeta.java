@@ -1,8 +1,11 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.attack;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+
 
 
 
@@ -20,6 +23,8 @@ import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.treedrawer.util.DefaultTreeForTreeLayout;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 
 public class AlphaBeta {
@@ -77,19 +82,27 @@ private Logger logger  = new Logger("log.txt");
 		
 		tree = SampleTreeFactory.getTree(last);
 		
+		OverlayDrawer.setFillColor(Color.BLACK);
+		for(Tile t : board.getTilesInAttackRadius(enemyAntsToGo.get(0).getAntPosition(), (int)Math.sqrt(board.getAttackRadius2()))){
+			AntBot.getLogger().log(t.toString());
+			OverlayDrawer.drawTileSubtile(t.getRow(),t.getCol(), SubTile.MM);
+		}
+		
+		
+		
 		max(depth,Integer.MIN_VALUE , Integer.MAX_VALUE);
 		
 		SampleTreeFactory.setTree(tree);
 		String[] tt = new String[] {""};
-		if(AntBot.getTurn() == 1){
-			SwingDemo.main(tt);
-			try {
-				Thread.sleep(5000000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		if(AntBot.getTurn() == 1){
+//			SwingDemo.main(tt);
+//			try {
+//				Thread.sleep(5000000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		return bestMove;
 	}
@@ -219,31 +232,31 @@ private Logger logger  = new Logger("log.txt");
 	}
 	
 	private int evaluation(Strategy strategy) {
-		int t1 = myDeadAnts;
-		int t2 = enemyDeadAnts;
+		int t1 = enemyDeadAnts;
+		int t2 = myDeadAnts;
 		int t3 = 1;
 		
 		int w1;
 		int w2;
-		int w3 = 1;
+		int w3 = 0;
 		
 		switch (strategy) {
 		case AGGRESSIVE:
 			w1 = 100;
 			w2 = -50; // um die haelfte auf die gegnerischen Toten Ameisen gewichtet
-			w3 = directionPoint;
+			w3 = 0;
 			break;
 			
 		case PASSIVE:
 			w1 = 50;
 			w2 = -100; // um die haelfte auf die eigenen Toten Ameisen gewichtet
-			w3 = directionPoint;
+			w3 = 0;
 			break;
 			
 		case NEUTRAL:
 			w1 = 1;
 			w2 = -1;
-			w3 = directionPoint;
+			w3 = 0;
 			break;
 
 		default:
@@ -251,6 +264,10 @@ private Logger logger  = new Logger("log.txt");
 			w2 = -1;
 			break;
 		}
+		if(!( w1 * t1 + w2 * t2 == 0 && t1!= 0 && t2!= 0)){
+			w3 = directionPoint;
+		}
+		AntBot.getLogger().log(w1 + " " + t1 + " " + w2 + " " +t2 + " " + w3 + " " + t3);
 		return w1 * t1 + w2 * t2 + w3 * t3;
 	}
 

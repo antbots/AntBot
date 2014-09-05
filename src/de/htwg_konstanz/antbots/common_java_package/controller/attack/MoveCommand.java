@@ -1,5 +1,6 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.attack;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,6 +14,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 
 /**
  * 
@@ -67,11 +69,11 @@ public class MoveCommand implements Command {
 				enemies(ant,ants);
 			}
 			
-			numOfMyDeadAnts=calculateDeadAnts(ants, enemyAnts,myDeadAnts);
-			numOfEnemyDeadAnts=calculateDeadAnts(enemyAnts, ants,enemyDeadAnts);
+			numOfEnemyDeadAnts=calculateDeadAnts(enemyAnts, enemyDeadAnts);
+			numOfMyDeadAnts=calculateDeadAnts(ants, myDeadAnts);
 			
-			ab.setEnemyDeadAnts(numOfEnemyDeadAnts);		// enemyDeadAnts
-			ab.setMyDeadAnts(numOfMyDeadAnts);	// myDeadAnts
+			ab.setEnemyDeadAnts(numOfMyDeadAnts);		// enemyDeadAnts
+			ab.setMyDeadAnts(numOfEnemyDeadAnts);	// myDeadAnts
 		}
 	}
 
@@ -81,8 +83,8 @@ public class MoveCommand implements Command {
 	public void undo() {
 		if(min){
 			ab.setDirectionPoint(-directionPoints);
-			ab.setEnemyDeadAnts(-numOfEnemyDeadAnts);		// enemyDeadAnts
-			ab.setMyDeadAnts(-numOfMyDeadAnts);	// myDeadAnts
+			ab.setEnemyDeadAnts(-numOfMyDeadAnts);		// enemyDeadAnts
+			ab.setMyDeadAnts(-numOfEnemyDeadAnts);	// myDeadAnts
 			
 			for(Ant a : enemyDeadAnts){
 				enemyAnts.add(a);
@@ -95,7 +97,7 @@ public class MoveCommand implements Command {
 		ants.forEach(a -> {a.setPosition(orders.get(a).getPosition());});
 	}
 	
-	private int calculateDeadAnts(LinkedList<Ant> myAntsToGo, LinkedList<Ant> enemyAntsToGo, LinkedList<Ant> deadAnts) {
+	private int calculateDeadAnts(LinkedList<Ant> myAntsToGo, LinkedList<Ant> deadAnts) {
 		int numOfDeadAnts = 0;
 		for (Iterator<Ant> i = myAntsToGo.iterator(); i.hasNext();){
 			Ant ant = i.next();
@@ -109,6 +111,7 @@ public class MoveCommand implements Command {
 				}
 			}
 		}
+		AntBot.getLogger().log(Integer.toString(numOfDeadAnts));
 		return numOfDeadAnts;
 	}
 	
@@ -131,16 +134,23 @@ public class MoveCommand implements Command {
 	
 	private int directionPoints(int increase){
 		int points = 0;
-		if(!enemyAnts.isEmpty()){
-			for (Ant ant : ants) {
-				for (Aim aim : ab.getBoard().getDirections(ant.getAntPosition(), enemyAnts.get((int)((Math.random()) * enemyAnts.size()-1 + 0)).getAntPosition())) {
+		for (Ant ant : enemyAnts) {
+			if(!ants.isEmpty()){
+				for (Aim aim : ab.getBoard().getDirections(ant.getAntPosition(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
 					if(ant.getexecutedDirection() == aim){
-						//logger.log("increase");
+						AntBot.getLogger().log("increase");
 						points = points + increase;
 						break;
 					}
 				}
-				
+			}else{
+				for (Aim aim : ab.getBoard().getDirections(ant.getAntPosition(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
+					if(ant.getexecutedDirection() == aim){
+						AntBot.getLogger().log("increase");
+						points = points + increase;
+						break;
+					}
+				}
 			}
 		}
 		return points;
