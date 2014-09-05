@@ -255,6 +255,8 @@ private Logger logger  = new Logger("log.txt");
 	
 	private int directionPoints(int increase){
 		int pointCounter = 0;
+		
+	AntBot.getLogger().log("sizeeeeeeeeeee " + enemyAntsToGo.size());
 		for (Ant ant : myAntsToGo) {
 			for (Aim aim : board.getDirections(ant.getAntPosition(), enemyAntsToGo.get((int)((Math.random()) * enemyAntsToGo.size()-1 + 0)).getAntPosition())) {
 				if(ant.getexecutedDirection() == aim){
