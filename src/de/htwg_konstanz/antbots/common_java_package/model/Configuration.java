@@ -11,7 +11,7 @@ public class Configuration {
 	
 	// Angriffsalgorithmus
 	public static final AlphaBeta.Strategy ATTACKSTRATEGY = AlphaBeta.Strategy.NEUTRAL;
-	public static final int ATTACKSEARCHDEPTH = 3;
+	public static final int ATTACKSEARCHDEPTH = 2; // muss durch 2 teilbar sein
 	public static final int GROUPSIZE = 3;
 	
 	public static final int ANTSINGROUPTOENEMYHILL = 3;

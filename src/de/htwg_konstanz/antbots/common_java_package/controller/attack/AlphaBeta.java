@@ -1,8 +1,11 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.attack;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+
 
 
 
@@ -20,6 +23,8 @@ import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.treedrawer.util.DefaultTreeForTreeLayout;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 
 public class AlphaBeta {
@@ -44,6 +49,7 @@ private Logger logger  = new Logger("log.txt");
 	DefaultTreeForTreeLayout<TextInBox> tree;
 	TextInBox last = new TextInBox("root", 40, 20);
 	
+	int directionPoint = 0;
 	int myDeadAnts = 0;
 	int enemyDeadAnts = 0;
 	
@@ -76,25 +82,33 @@ private Logger logger  = new Logger("log.txt");
 		
 		tree = SampleTreeFactory.getTree(last);
 		
+		OverlayDrawer.setFillColor(Color.BLACK);
+		for(Tile t : board.getTilesInAttackRadius(enemyAntsToGo.get(0).getAntPosition(), (int)Math.sqrt(board.getAttackRadius2()))){
+			AntBot.getLogger().log(t.toString());
+			OverlayDrawer.drawTileSubtile(t.getRow(),t.getCol(), SubTile.MM);
+		}
+		
+		
+		
 		max(depth,Integer.MIN_VALUE , Integer.MAX_VALUE);
 		
 		SampleTreeFactory.setTree(tree);
 		String[] tt = new String[] {""};
-		if(AntBot.getTurn() == 1){
-			SwingDemo.main(tt);
-			try {
-				Thread.sleep(5000000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		if(AntBot.getTurn() == 1){
+//			SwingDemo.main(tt);
+//			try {
+//				Thread.sleep(5000000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		return bestMove;
 	}
 
 	private int max(int depth, int alpha, int beta) {
-	    if (depth == 0 ){
+	    if (depth == 0 || myAntsToGo.isEmpty() || enemyAntsToGo.isEmpty()){
 	    	int result = evaluation(gameStrategy);
 	    	TextInBox newT = new TextInBox(Integer.toString(result), 80, 20);
 	    	tree.addChild(last, newT);
@@ -108,7 +122,7 @@ private Logger logger  = new Logger("log.txt");
 	    //printPossibleMoves(possibleMoves);
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
-	    	ExecuteNextMove(childMove,myAntsToGo,enemyAntsToGo);
+	    	ExecuteNextMove(childMove,myAntsToGo,enemyAntsToGo, false);
 	    	TextInBox beiUndoLast = last;
 	    	TextInBox newT = new TextInBox(childMove.toString(), 80, 20);
 	    	tree.addChild(last, newT);
@@ -138,7 +152,7 @@ private Logger logger  = new Logger("log.txt");
 	}
 
 	private int min(int depth, int alpha, int beta) {
-	    if (depth == 0){
+	    if (depth == 0 || enemyAntsToGo.isEmpty() || myAntsToGo.isEmpty()){
 	    	int result = evaluation(gameStrategy);
 	    	TextInBox newT = new TextInBox(Integer.toString(result), 80, 20);
 	    	tree.addChild(last, newT);
@@ -153,7 +167,7 @@ private Logger logger  = new Logger("log.txt");
 	    //printPossibleMoves(possibleMoves);
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
-	    	ExecuteNextMove(childMove,enemyAntsToGo,myAntsToGo);
+	    	ExecuteNextMove(childMove,enemyAntsToGo,myAntsToGo,true);
 	    	TextInBox beiUndoLast = last;
 	    	TextInBox newT = new TextInBox(childMove.toString(), 80, 20);
 	    	tree.addChild(last, newT);
@@ -175,8 +189,8 @@ private Logger logger  = new Logger("log.txt");
 		cm.undo();
 	}
 
-	private void ExecuteNextMove(LinkedList<Order> childMove, LinkedList<Ant> antsToGo, LinkedList<Ant> enemysToGo){
-		cm.executeCommand(new MoveCommand(childMove, antsToGo, enemysToGo, this));
+	private void ExecuteNextMove(LinkedList<Order> childMove, LinkedList<Ant> antsToGo, LinkedList<Ant> enemysToGo, boolean min){
+		cm.executeCommand(new MoveCommand(childMove, antsToGo, enemysToGo, this, min));
 	}
 	
 	private void generatePossibleMoves(int depth, LinkedList<Ant> antsToGo, LinkedList<LinkedList<Order>> possibleMoves) {
@@ -218,19 +232,19 @@ private Logger logger  = new Logger("log.txt");
 	}
 	
 	private int evaluation(Strategy strategy) {
-		int t1 = myDeadAnts;
-		int t2 = enemyDeadAnts;
+		int t1 = enemyDeadAnts;
+		int t2 = myDeadAnts;
 		int t3 = 1;
 		
 		int w1;
 		int w2;
-		int w3 = 1;
+		int w3 = 0;
 		
 		switch (strategy) {
 		case AGGRESSIVE:
 			w1 = 100;
 			w2 = -50; // um die haelfte auf die gegnerischen Toten Ameisen gewichtet
-			w3 = directionPoints(2);
+			w3 = 0;
 			break;
 			
 		case PASSIVE:
@@ -242,7 +256,7 @@ private Logger logger  = new Logger("log.txt");
 		case NEUTRAL:
 			w1 = 1;
 			w2 = -1;
-			w3 = directionPoints(1);
+			w3 = 0;
 			break;
 
 		default:
@@ -250,23 +264,11 @@ private Logger logger  = new Logger("log.txt");
 			w2 = -1;
 			break;
 		}
-		return w1 * t1 + w2 * t2 + w3 * t3;
-	}
-	
-	private int directionPoints(int increase){
-		int pointCounter = 0;
-		
-	AntBot.getLogger().log("sizeeeeeeeeeee " + enemyAntsToGo.size());
-		for (Ant ant : myAntsToGo) {
-			for (Aim aim : board.getDirections(ant.getAntPosition(), enemyAntsToGo.get((int)((Math.random()) * enemyAntsToGo.size()-1 + 0)).getAntPosition())) {
-				if(ant.getexecutedDirection() == aim){
-					logger.log("increase");
-					pointCounter = pointCounter + increase;
-				}
-			}
-			
+		if(!( w1 * t1 + w2 * t2 == 0 && t1!= 0 && t2!= 0)){
+			w3 = directionPoint;
 		}
-		return pointCounter;
+		AntBot.getLogger().log(w1 + " " + t1 + " " + w2 + " " +t2 + " " + w3 + " " + t3);
+		return w1 * t1 + w2 * t2 + w3 * t3;
 	}
 
 	private double calculateDistanceGain() {
@@ -311,6 +313,12 @@ private Logger logger  = new Logger("log.txt");
 	public void setEnemyDeadAnts(int deadAnts) {
 		enemyDeadAnts = enemyDeadAnts + deadAnts;
 	}
+
+	public void setDirectionPoint(int directionPoint) {
+		this.directionPoint = this.directionPoint + directionPoint;
+	}
+	
+	
 	
 	
 }
