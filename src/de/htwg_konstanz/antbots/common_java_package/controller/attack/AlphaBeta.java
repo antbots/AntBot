@@ -60,6 +60,9 @@ private Logger logger  = new Logger("log.txt");
 		possibleDirections = new LinkedList<Aim>();
 		possibleDirections.add(Aim.NORTH);
 		possibleDirections.add(Aim.SOUTH);
+		possibleDirections.add(Aim.DONTMOVE);
+		possibleDirections.add(Aim.EAST);
+		possibleDirections.add(Aim.WEST);
 	}
 	
 	public LinkedList<Order> alphaBeta(GameInformations board, int depth, Strategy st, List<Set<Ant>> beteiligteAmeisen){
@@ -92,9 +95,9 @@ private Logger logger  = new Logger("log.txt");
 		
 		max(depth,Integer.MIN_VALUE , Integer.MAX_VALUE);
 		
-		SampleTreeFactory.setTree(tree);
-		String[] tt = new String[] {""};
-//		if(AntBot.getTurn() == 1){
+//		SampleTreeFactory.setTree(tree);
+//		String[] tt = new String[] {""};
+//		if(AntBot.getTurn() == 2){
 //			SwingDemo.main(tt);
 //			try {
 //				Thread.sleep(5000000);
@@ -266,6 +269,8 @@ private Logger logger  = new Logger("log.txt");
 		}
 		if(!( w1 * t1 + w2 * t2 == 0 && t1!= 0 && t2!= 0)){
 			w3 = directionPoint;
+		}else{
+			w3 = -1;
 		}
 		AntBot.getLogger().log(w1 + " " + t1 + " " + w2 + " " +t2 + " " + w3 + " " + t3);
 		return w1 * t1 + w2 * t2 + w3 * t3;
