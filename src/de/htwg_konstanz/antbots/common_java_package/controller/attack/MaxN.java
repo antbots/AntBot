@@ -126,7 +126,7 @@ public class MaxN {
 
 	// Zug ausführen
 	private void ExecuteNextMove(LinkedList<Order> childMove, LinkedList<Ant> antsToGo){
-		cm.executeCommand(new MoveCommand(childMove, antsToGo));
+		//cm.executeCommand(new MoveCommand(childMove, antsToGo));
 	}
 	
 	private void generatePossibleMoves(int depth, LinkedList<Ant> antsToGo, LinkedList<LinkedList<Order>> possibleMoves) {
