@@ -98,18 +98,21 @@ public class MoveCommand implements Command {
 	}
 	
 	private int calculateDeadAnts(LinkedList<Ant> myAntsToGo, LinkedList<Ant> deadAnts) {
+		LinkedList<Ant> antsToRemove = new LinkedList<>();
 		int numOfDeadAnts = 0;
-		for (Iterator<Ant> i = myAntsToGo.iterator(); i.hasNext();){
-			Ant ant = i.next();
+		for (Ant ant : myAntsToGo){
 			LinkedList<Ant> enemiesInAttackRadius = ant.getEnemiesinAttackRadius();
 			for (Ant enemy : enemiesInAttackRadius) {
 				if(ant.getWeakness() >= enemy.getWeakness()){
 					deadAnts.add(ant);
 					numOfDeadAnts++;
-					myAntsToGo.remove(ant);
+					antsToRemove.add(ant);
 					break;
 				}
 			}
+		}
+		for(Ant a: antsToRemove){
+			myAntsToGo.remove(a);
 		}
 		AntBot.getLogger().log(Integer.toString(numOfDeadAnts));
 		return numOfDeadAnts;

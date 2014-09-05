@@ -53,8 +53,11 @@ private Logger logger  = new Logger("log.txt");
 	
 	public AlphaBeta(){
 		possibleDirections = new LinkedList<Aim>();
+		possibleDirections.add(Aim.DONTMOVE);
 		possibleDirections.add(Aim.NORTH);
 		possibleDirections.add(Aim.SOUTH);
+		possibleDirections.add(Aim.EAST);
+		possibleDirections.add(Aim.WEST);
 	}
 	
 	public LinkedList<Order> alphaBeta(GameInformations board, int depth, Strategy st, List<Set<Ant>> beteiligteAmeisen){
@@ -76,11 +79,11 @@ private Logger logger  = new Logger("log.txt");
 		gameStrategy = st;
 
 		
-		OverlayDrawer.setFillColor(Color.BLACK);
-		for(Tile t : board.getTilesInAttackRadius(enemyAntsToGo.get(0).getAntPosition(), (int)Math.sqrt(board.getAttackRadius2()))){
-			AntBot.getLogger().log(t.toString());
-			OverlayDrawer.drawTileSubtile(t.getRow(),t.getCol(), SubTile.MM);
-		}
+//		OverlayDrawer.setFillColor(Color.BLACK);
+//		for(Tile t : board.getTilesInAttackRadius(enemyAntsToGo.get(0).getAntPosition(), (int)Math.sqrt(board.getAttackRadius2()))){
+//			AntBot.getLogger().log(t.toString());
+//			OverlayDrawer.drawTileSubtile(t.getRow(),t.getCol(), SubTile.MM);
+//		}
 		
 		
 		
