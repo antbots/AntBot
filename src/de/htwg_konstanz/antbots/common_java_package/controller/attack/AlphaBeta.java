@@ -244,6 +244,8 @@ private Logger logger  = new Logger("log.txt");
 		}
 		if(!( w1 * t1 + w2 * t2 == 0 && t1!= 0 && t2!= 0)){
 			w3 = directionPoint;
+		}else{
+			w3 = -1;
 		}
 		AntBot.getLogger().log(w1 + " " + t1 + " " + w2 + " " +t2 + " " + w3 + " " + t3);
 		return w1 * t1 + w2 * t2 + w3 * t3;

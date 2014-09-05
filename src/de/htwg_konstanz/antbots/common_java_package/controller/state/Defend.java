@@ -64,11 +64,11 @@ public class Defend implements State{
 
 	@Override
 	public void changeState() {
-		if(AntBot.getDefendOwnHillManager().getDefendAntsOfOwnHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
-			return;
-		}
 		if (AntBot.getAttackManager().getMarkedAnts().containsKey(ant)) {
 			ant.setState(new Attack(ant));
+			return;
+		}
+		if(AntBot.getDefendOwnHillManager().getDefendAntsOfOwnHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
 			return;
 		}
 	}
