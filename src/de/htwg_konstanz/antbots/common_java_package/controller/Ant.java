@@ -11,6 +11,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.state.InitState;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.State;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.StateName;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
+import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 public class Ant {
@@ -41,13 +42,21 @@ public class Ant {
 		Map<Tile, Aim> neighbours = AntBot.getGameI().getMoveAbleNeighbours(position);
 
 		if (neighbours.containsKey(next)) {
-			List<Tile> nextOrders = AntBot.getGameI().getNextOrders();
-			//damt sich die Ameisen nicht selbst umbringen
-			if(!nextOrders.contains(next)) {
-				Aim aim = neighbours.get(next);
+			Aim aim = neighbours.get(next);
+			
+			boolean skip = false;
+			Order thisOrder = new Order(position,aim);
+			for(Order o : AntBot.getAntsOrders()){
+				if((thisOrder.getNewPosition().equals(o.getNewPosition()) && !thisOrder.equals(o)) || AntBot.getInvalidPositions().contains(thisOrder.getNewPosition())){
+					skip = true;
+				}
+			}
+			if(!skip){
 				AntBot.getGameI().issueOrder(position, aim);
+				AntBot.getAntsOrders().add(thisOrder);
 				setPosition(next.getRow(), next.getCol());
-				nextOrders.add(next);
+			}else{
+				AntBot.getInvalidPositions().add(position);
 			}
 		}
 	}

@@ -2,7 +2,11 @@ package de.htwg_konstanz.antbots.bots;
 
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.AttackManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
 import de.htwg_konstanz.antbots.common_java_package.controller.DefendOwnHillManager;
@@ -15,6 +19,8 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Order;
+import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 /**
  * 
@@ -33,6 +39,8 @@ public class AntBot extends Bot {
 	private static AttackManager attackManager;
 	private static EnemyHillManager enemyHillManager;
 	private static DefendOwnHillManager defendOwnHillManager;
+	private static LinkedList<Order> antsOrders;
+	private static LinkedList<Tile> invalidPositions;
 	
 
 	public static void main(String[] args) throws IOException {
@@ -50,7 +58,6 @@ public class AntBot extends Bot {
 		attackManager = new AttackManager();
 		enemyHillManager = new EnemyHillManager();
 		defendOwnHillManager = new DefendOwnHillManager();
-		
 	}
 
 	@Override
@@ -59,7 +66,8 @@ public class AntBot extends Bot {
 		if (turn == 0) {
 			init();
 		}
-		gameI.initNextOrder();
+		antsOrders = new LinkedList<Order>();
+		invalidPositions = new LinkedList<>();
 		
 		logger.log("TURN " + turn);
 		boarder.buildBoarder();
@@ -128,6 +136,13 @@ public class AntBot extends Bot {
 	public static DefendOwnHillManager getDefendOwnHillManager(){
 		return defendOwnHillManager;
 	}
+	
+	public static LinkedList<Order> getAntsOrders(){
+		return antsOrders;
+	}
 
+	public static LinkedList<Tile> getInvalidPositions(){
+		return invalidPositions;
+	}
 	
 }

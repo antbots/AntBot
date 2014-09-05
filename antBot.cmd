@@ -8,11 +8,11 @@ set playgame="%~dp0aichallenge_tools\ants\playgame.py"
 ::map
 ::set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_04p_01.map"
 ::set map="%~dp0\aichallenge_tools\maps\cell_maze\cell_maze_p04_05.map"
-set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
+::set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\erkunden\exploration_skull.map"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\erkunden\exploration_1.map"
 ::set map="%~dp0aichallenge_tools/ants/maps/example/tutorial1.map"
-::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\angreifen\1vs1w.map"
+set map="%~dp0\src\de\htwg_konstanz\antbots\karten\angreifen\1vs1w.map"
 
 
 ::players
