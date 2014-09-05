@@ -38,7 +38,6 @@ private Logger logger  = new Logger("log.txt");
 	GameInformations board;
 	int startDepth;
 	
-	LinkedList<Aim> possibleDirections;
 	LinkedList<Order> possibleMovesTmp;
 	LinkedList<Ant> myAntsToGo;
 	LinkedList<Ant> enemyAntsToGo;
@@ -52,12 +51,6 @@ private Logger logger  = new Logger("log.txt");
 	Strategy gameStrategy;
 	
 	public AlphaBeta(){
-		possibleDirections = new LinkedList<Aim>();
-		possibleDirections.add(Aim.DONTMOVE);
-		possibleDirections.add(Aim.NORTH);
-		possibleDirections.add(Aim.SOUTH);
-		possibleDirections.add(Aim.EAST);
-		possibleDirections.add(Aim.WEST);
 	}
 	
 	public LinkedList<Order> alphaBeta(GameInformations board, int depth, Strategy st, List<Set<Ant>> beteiligteAmeisen){
@@ -192,24 +185,21 @@ private Logger logger  = new Logger("log.txt");
 		    return;
 		}
 		Ant ant = antsToGo.get(depth-1); 
-		for (Aim aim : possibleDirections) {
-			if(board.getTile(ant.getAntPosition(), aim).getType() == Ilk.WATER){
-				continue;
-			}else{
-				boolean skip = false;
-				for (Order order1 : possibleMovesTmp) {
-					for (Order order2 : possibleMovesTmp) {
-						if(order1.getNewPosition().equals(order2.getNewPosition()) && !order1.equals(order2)){
-							skip = true;
-						}
+		for (Aim aim : board.getMoveAbleDirections(ant.getAntPosition())) {
+			boolean skip = false;
+			for (Order order1 : possibleMovesTmp) {
+				for (Order order2 : possibleMovesTmp) {
+					if(order1.getNewPosition().equals(order2.getNewPosition()) && !order1.equals(order2)){
+						skip = true;
 					}
 				}
-				if(skip){
-					// nicht vollkommen sicher zb wenn eien ameise alle Wege blockiert bekommt, bzw kreuzen
-					continue;
-				}
-				possibleMovesTmp.addFirst(new Order(ant.getAntPosition(), aim));
 			}
+			if(skip){
+				// nicht vollkommen sicher zb wenn eien ameise alle Wege blockiert bekommt, bzw kreuzen
+				continue;
+			}
+			possibleMovesTmp.addFirst(new Order(ant.getAntPosition(), aim));
+			
 			generatePossibleMoves(depth-1, antsToGo, possibleMoves);
 			try {
 				possibleMovesTmp.removeFirst();

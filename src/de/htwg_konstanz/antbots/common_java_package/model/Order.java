@@ -1,5 +1,7 @@
 package de.htwg_konstanz.antbots.common_java_package.model;
 
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+
 /**
  * Represents an order to be issued.
  */
@@ -38,7 +40,7 @@ public class Order {
     }
 
     public Tile getNewPosition(){
-    	return new Tile(row+direction.getRowDelta(),col+direction.getColDelta());
+    	return GameInformations.getTile(new Tile(row, col),direction);
     }
     
     @Override

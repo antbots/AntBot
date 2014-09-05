@@ -15,8 +15,8 @@ public abstract class Bot extends AbstractSystemInputParser {
 	@Override
 	public void setup(int loadTime, int turnTime, int rows, int cols,
 			int turns, int viewRadius2, int attackRadius2, int spawnRadius2) {
-		setAnts(new GameInformations(loadTime, turnTime, rows, cols, turns,
-				viewRadius2, attackRadius2, spawnRadius2));
+		gameI = new GameInformations(loadTime, turnTime, rows, cols, turns,
+				viewRadius2, attackRadius2, spawnRadius2);
 	}
 
 	/**
@@ -26,16 +26,6 @@ public abstract class Bot extends AbstractSystemInputParser {
 	 */
 	public GameInformations gameStateInforamtions() {
 		return gameI;
-	}
-
-	/**
-	 * Sets game state information.
-	 * 
-	 * @param ants
-	 *            game state information to be set
-	 */
-	protected void setAnts(GameInformations ants) {
-		this.gameI = ants;
 	}
 
 	/**

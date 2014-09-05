@@ -20,9 +20,9 @@ public class GameInformations {
 
 	private final int turnTime;
 
-	private final int rows;
+	private static int rows;
 
-	private final int cols;
+	private static int cols;
 
 	// current turn
 	private int turn;
@@ -41,7 +41,7 @@ public class GameInformations {
 
 	private final boolean visible[][];
 
-	private final Tile map[][];
+	private static Tile map[][];
 	
 	private List<Tile> nextOrder;
 
@@ -230,10 +230,21 @@ public class GameInformations {
 		for (Aim a : Aim.values()) {
 			if (a != Aim.DONTMOVE && getIlk(t) != Ilk.WATER) {
 				Tile tile = getTile(t, a);
-				if(getIlk(tile) != Ilk.WATER) {
+				if(getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
 					list.put(tile, a);
 				}
 			}				
+		}
+		return list;
+	}
+	
+	public LinkedList<Aim> getMoveAbleDirections(Tile t) {
+		LinkedList<Aim> list = new LinkedList<Aim>();
+		for (Aim a : Aim.values()) {
+			Tile tile = getTile(t, a);
+			if(getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
+				list.add(a);
+			}			
 		}
 		return list;
 	}
@@ -528,7 +539,7 @@ public class GameInformations {
 	 * 
 	 * @return location in <code>direction</code> from <cod>tile</code>
 	 */
-	public Tile getTile(Tile tile, Aim direction) {
+	public static Tile getTile(Tile tile, Aim direction) {
 		int row = (tile.getRow() + direction.getRowDelta()) % rows;
 		if (row < 0) {
 			row += rows;
