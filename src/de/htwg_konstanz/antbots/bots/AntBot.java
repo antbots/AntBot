@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.AttackManager;
@@ -19,6 +20,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
@@ -80,7 +82,12 @@ public class AntBot extends Bot {
 		attackManager.markAntsToAttack();
 		
 		
-		gameI.getFoodManager().markAntsToCollectFood();
+		GameInformations.getFoodManager().markAntsToCollectFood();
+		GameInformations.getFoodManager().antToFood();
+		for(Entry<Food,Ant> e : GameInformations.getFoodManager().getFoodToAnt().entrySet()) {
+			debug.log("Ameise " + e.getValue() + " food " + e.getKey());
+		}
+		
 		debug.log("TURN " + turn);
 		
 		

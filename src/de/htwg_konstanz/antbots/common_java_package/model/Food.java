@@ -1,11 +1,15 @@
 package de.htwg_konstanz.antbots.common_java_package.model;
 
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+
 
 public class Food {
 
 	private Tile position;
 	private boolean onOffer;
 	private boolean isAlive;
+	private Ant antWhoCollectFood;
+	private int distanceToCollect = 999999;
 	
 	public Food(Tile position) {
 		this.position = position;
@@ -51,6 +55,22 @@ public class Food {
 	public String toString() {
 		return "Food [position=" + position + ", onOffer=" + onOffer
 				+ ", isAlive=" + isAlive + "]";
+	}
+
+	public Ant getAntWhoCollectFood() {
+		return antWhoCollectFood;
+	}
+
+	public void setAntWhoCollectFood(Ant antWhoCollectFood) {
+		this.antWhoCollectFood = antWhoCollectFood;
+	}
+
+	public int getDistanceToCollect() {
+		return distanceToCollect;
+	}
+
+	public void setDistanceToCollect(int distanceToCollect) {
+		this.distanceToCollect = distanceToCollect;
 	}
 	
 	

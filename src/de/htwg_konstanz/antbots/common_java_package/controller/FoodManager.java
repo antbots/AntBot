@@ -102,25 +102,29 @@ public class FoodManager {
 		
 		
 		for(Ant a : ants){
-			LinkedList<Tile> inViewRadius = new LinkedList<Tile>();
+			LinkedList<Tile> foodTilesInViewRadius = new LinkedList<Tile>();
 			for(Food f: foodOnOffer){
 				if(!f.isOnOffer()) {
 					continue;
 				}	
-				AntBot.getGameI().getTilesInRadius(a.getAntPosition(), (int)Math.sqrt(AntBot.getGameI().getViewRadius2())).stream().filter(t -> t.equals(f.getPosition())).forEach(inViewRadius::add);
-				
+				AntBot.getGameI().getTilesInRadius(a.getAntPosition(), (int)Math.sqrt(AntBot.getGameI().getViewRadius2())).stream().filter(t -> t.equals(f.getPosition())).forEach(foodTilesInViewRadius::add);
 			}
-			if(inViewRadius.isEmpty()){
+			
+			if(foodTilesInViewRadius.isEmpty()){
 				continue;
 			}
-			Tile shortestTile = inViewRadius.getFirst();
-			for(Tile t : inViewRadius){
+			
+			
+			Tile shortestTile = foodTilesInViewRadius.getFirst();
+			
+			for(Tile t : foodTilesInViewRadius){
 					
 				if(AntBot.getGameI().getDistance(a.getAntPosition(), t) < AntBot.getGameI().getDistance(a.getAntPosition(), shortestTile)){
 					shortestTile = t;
 				}
 			}
 			AntBot.getLogger().log("shortestTile " + shortestTile);
+			
 			acceptFood(a, food.get(food.indexOf(new Food(shortestTile))));
 		}
 		
@@ -133,4 +137,48 @@ public class FoodManager {
 			AntBot.getLogger().log(e1.getKey().getAntPosition() + "  " + e1.getValue().getPosition());
 		}
 	}
+	
+	
+	Map<Food,Ant> antToFood = new HashMap<>();
+	public void antToFood() {
+		boolean change = false;
+		
+		
+		for (Ant ant : AntBot.getGameI().getMyAnts()) {
+			for (Food fo : food) {
+				int i = AntBot.getGameI().getDistance(ant.getAntPosition(), fo.getPosition());
+				if(fo.getDistanceToCollect() > i) {
+					fo.setAntWhoCollectFood(ant);
+					fo.setDistanceToCollect(i);
+					
+					antToFood.put(fo, ant);
+					change = true;
+				}
+			}
+		}
+		if(change == false) {
+			return;
+		}
+		antToFood();
+	}
+	
+	public Map<Food,Ant> getFoodToAnt(){
+		
+		Food f;
+		Ant a;
+		for(Entry<Food,Ant> eOuter : antToFood.entrySet()) {
+			for(Entry<Food,Ant> eInner : antToFood.entrySet()) {
+				if(eOuter.getValue().equals(eInner.getValue())) {
+					if(eOuter.getKey().getDistanceToCollect() < eInner.getKey().getDistanceToCollect()) {
+						
+					}
+					
+				}
+				
+				
+			}
+		}
+		return antToFood;
+	}
+	
 }

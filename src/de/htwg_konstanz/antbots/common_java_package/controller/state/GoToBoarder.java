@@ -51,11 +51,11 @@ public class GoToBoarder implements State{
 		} else {
 			//damit der weg jedes mal neu berechnet wird um zu verhindern, dass die Route über unentdecktes Land geht(könnte nämlich Wasser sein)
 			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
-			if(route == null) {
-				AntBot.debug().log("JA Ameise " + ant.getAntPosition() + " Ziel " + destination);
-			} else {
-				AntBot.debug().log("NE Ameise " + ant.getAntPosition() + " Ziel " + destination + " size " + route.size());
-			}
+//			if(route == null) {
+//				AntBot.debug().log("JA Ameise " + ant.getAntPosition() + " Ziel " + destination);
+//			} else {
+//				AntBot.debug().log("NE Ameise " + ant.getAntPosition() + " Ziel " + destination + " size " + route.size());
+//			}
 			
 			route.remove(0);
 			ant.setRoute(route);

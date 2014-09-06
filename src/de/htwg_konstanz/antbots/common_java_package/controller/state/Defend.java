@@ -27,7 +27,7 @@ public class Defend implements State{
 	public void execute() {
 		if(destination != null && ant.getAntPosition().equals(destination)){
 			defendOwnHill = false;
-			AntBot.debug().log("Ameise " + ant.getAntPosition() + " destination " + destination + " flag " + defendOwnHill);
+//			AntBot.debug().log("Ameise " + ant.getAntPosition() + " destination " + destination + " flag " + defendOwnHill);
 			
 		}
 		if(!defendOwnHill) {

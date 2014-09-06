@@ -63,12 +63,7 @@ public class Exploration  implements State{
 			// get the tile with die highest exploreValue
 			targets = AntBot.getGameI().getMaxVisibilityAgo(visibleTiles);
 			
-			
-			for(Tile t : targets) {
-				OverlayDrawer.setFillColor(Color.WHITE);
-				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-						SubTile.MM);
-			}
+
 			
 			target = targets.iterator().next();
 
@@ -82,11 +77,11 @@ public class Exploration  implements State{
 
 
 		// draw
-//		for (Tile rTile : route) {
-//			OverlayDrawer.setFillColor(Color.WHITE);
-//			OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
-//					SubTile.MM);
-//		}
+		for (Tile rTile : route) {
+			OverlayDrawer.setFillColor(Color.WHITE);
+			OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
+					SubTile.MM);
+		}
 
 		// do step
 		if (route != null && route.size() > 1) {
