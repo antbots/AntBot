@@ -1,6 +1,5 @@
 package de.htwg_konstanz.antbots.common_java_package.model;
 
-import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 
 public class Food {
 

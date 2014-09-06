@@ -1,24 +1,17 @@
 package de.htwg_konstanz.antbots.common_java_package.controller;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
-import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
-import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
-import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 public class AttackManager {
 

@@ -8,8 +8,8 @@ import java.util.Set;
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
-import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
@@ -29,6 +29,9 @@ public class GoToBoarder implements State{
 
 	@Override
 	public void execute() {
+		if(destination != null && destination.getType() == Ilk.WATER) {
+			goToBoarder = false;
+		}
 		if(destination != null && ant.getAntPosition().equals(destination)){
 			goToBoarder = false;
 			
@@ -48,12 +51,18 @@ public class GoToBoarder implements State{
 		} else {
 			//damit der weg jedes mal neu berechnet wird um zu verhindern, dass die Route über unentdecktes Land geht(könnte nämlich Wasser sein)
 			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
+			if(route == null) {
+				AntBot.debug().log("JA Ameise " + ant.getAntPosition() + " Ziel " + destination);
+			} else {
+				AntBot.debug().log("NE Ameise " + ant.getAntPosition() + " Ziel " + destination + " size " + route.size());
+			}
+			
 			route.remove(0);
 			ant.setRoute(route);
 		}
 		
 		for (Tile rTile : ant.getRoute()) {
-			OverlayDrawer.setFillColor(Color.BLACK);
+			OverlayDrawer.setFillColor(Color.ORANGE);
 			OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
 					SubTile.TL);
 		}

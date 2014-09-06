@@ -41,6 +41,7 @@ public class AntBot extends Bot {
 	private static DefendOwnHillManager defendOwnHillManager;
 	private static LinkedList<Order> antsOrders;
 	private static LinkedList<Tile> invalidPositions;
+	private static Logger debug = new Logger("Debug.txt");
 	
 
 	public static void main(String[] args) throws IOException {
@@ -62,7 +63,7 @@ public class AntBot extends Bot {
 
 	@Override
 	public void doTurn() {
-		logger.log("---------------------------------------------------------------------------------------");
+		debug.log("---------------------------------------------------------------------------------------");
 		if (turn == 0) {
 			init();
 		}
@@ -80,14 +81,17 @@ public class AntBot extends Bot {
 		
 		
 		gameI.getFoodManager().markAntsToCollectFood();
+		debug.log("TURN " + turn);
+		
 		
 		gameI.getMyAnts().forEach(a -> {
 			logger.log("Process Ant: " + a.getAntPosition());
 			a.doLogic();
 			a.move();
 		});
-
-		logger.log("---------------------------------------------------------------------------------------");
+		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
+		
+		debug.log("---------------------------------------------------------------------------------------");
 		turn++;
 	}
 	
@@ -143,6 +147,10 @@ public class AntBot extends Bot {
 
 	public static LinkedList<Tile> getInvalidPositions(){
 		return invalidPositions;
+	}
+	
+	public static Logger debug() {
+		return debug;
 	}
 	
 }

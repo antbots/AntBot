@@ -21,7 +21,7 @@ public class InitState  implements State{
 			ant.setState(new Attack(ant));
 			return;
 		}
-		if(AntBot.getDefendOwnHillManager().getDefendAntsOfOwnHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
+		if(AntBot.getDefendOwnHillManager().getDefendAntsToHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
 			ant.setState(new Defend(ant));
 			return;
 		}

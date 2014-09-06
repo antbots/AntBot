@@ -3,7 +3,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller.state;
 import java.awt.Color;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
@@ -28,29 +27,35 @@ public class Defend implements State{
 	public void execute() {
 		if(destination != null && ant.getAntPosition().equals(destination)){
 			defendOwnHill = false;
+			AntBot.debug().log("Ameise " + ant.getAntPosition() + " destination " + destination + " flag " + defendOwnHill);
 			
 		}
 		if(!defendOwnHill) {
 			
 			
-			Map<Ant, Tile> antToHill = AntBot.getDefendOwnHillManager().getDefendAntsOfOwnHills();
+			Map<Ant, Tile> antToHill = AntBot.getDefendOwnHillManager().getDefendAntsToHills();
 			Map<Ant, List<Tile>> antTileToTilesArroundHill = AntBot.getDefendOwnHillManager().getTilesAroundHill();
+
+			
 			
 			if(antToHill.containsKey(ant)) {
 				List<Tile> tilesArroundHill = antTileToTilesArroundHill.get(ant);
+				tilesArroundHill.remove(ant.getAntPosition());
 				
 				Tile tileToGo = tilesArroundHill.get((int) (Math.random() * tilesArroundHill.size()));
 				
 				List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), tileToGo);
+				//remove because position 0 is the ant position
 				route.remove(0);
 				ant.setRoute(route);
 				destination = route.get(route.size() - 1);
+				defendOwnHill = true;
 			}
-		
-			defendOwnHill = true;
+			
 		} else {
 			//damit der weg jedes mal neu berechnet wird um zu verhindern, dass die Route über unentdecktes Land geht(könnte nämlich Wasser sein)
 			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
+			//remove because position 0 is the ant position
 			route.remove(0);
 			ant.setRoute(route);
 		}
@@ -68,7 +73,7 @@ public class Defend implements State{
 			ant.setState(new Attack(ant));
 			return;
 		}
-		if(AntBot.getDefendOwnHillManager().getDefendAntsOfOwnHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
+		if(AntBot.getDefendOwnHillManager().getDefendAntsToHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
 			return;
 		}
 	}
@@ -85,8 +90,7 @@ public class Defend implements State{
 
 	@Override
 	public StateName getStateName() {
-		// TODO Auto-generated method stub
-		return null;
+		return stateName;
 	}
 
 }

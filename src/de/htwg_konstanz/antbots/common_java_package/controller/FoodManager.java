@@ -3,7 +3,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -105,13 +104,18 @@ public class FoodManager {
 		for(Ant a : ants){
 			LinkedList<Tile> inViewRadius = new LinkedList<Tile>();
 			for(Food f: foodOnOffer){
+				if(!f.isOnOffer()) {
+					continue;
+				}	
 				AntBot.getGameI().getTilesInRadius(a.getAntPosition(), (int)Math.sqrt(AntBot.getGameI().getViewRadius2())).stream().filter(t -> t.equals(f.getPosition())).forEach(inViewRadius::add);
+				
 			}
 			if(inViewRadius.isEmpty()){
 				continue;
 			}
 			Tile shortestTile = inViewRadius.getFirst();
 			for(Tile t : inViewRadius){
+					
 				if(AntBot.getGameI().getDistance(a.getAntPosition(), t) < AntBot.getGameI().getDistance(a.getAntPosition(), shortestTile)){
 					shortestTile = t;
 				}

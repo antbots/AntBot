@@ -14,6 +14,7 @@ import java.util.Set;
 
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
+
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -332,13 +333,13 @@ public class Pathfinding {
 		}
 
 		public List<Tile> aStar(Tile source, Tile target, int weight) {
+			
+			
 			Map<Tile, AStarNode> openSet = new HashMap<Tile, AStarNode>();
-			PriorityQueue<AStarNode> pQueue = new PriorityQueue(20,
-					new AStarNodeComparator());
+			PriorityQueue<AStarNode> pQueue = new PriorityQueue<AStarNode>(20,	new AStarNodeComparator());
 			Map<Tile, AStarNode> closeSet = new HashMap<Tile, AStarNode>();
 
-			AStarNode start = new AStarNode(source, 0, gameI.getDistance(
-					source, target));
+			AStarNode start = new AStarNode(source, 0, gameI.getDistance(source, target));
 			openSet.put(source, start);
 			pQueue.add(start);
 
@@ -346,9 +347,15 @@ public class Pathfinding {
 			while (openSet.size() > 0) {
 				AStarNode current = pQueue.poll();
 				
-				//test
-				if(current == null)
+//				//test
+				if(current == null) {
+//					AntBot.debug().log("am anfang Ameise " + source + " zu " + target );
 					return null;
+				} 
+////				else {
+////					AntBot.debug().log("Ameise " + source + " current " + current.node);
+////				}
+					
 				
 				openSet.remove(current.getId());
 				if (current.getId().equals(target.toString())) {
@@ -423,7 +430,7 @@ public class Pathfinding {
 				// }
 				return list;
 			}
-
+//			AntBot.debug().log("Am ende");
 			return null;
 		}
 	}

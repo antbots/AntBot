@@ -3,12 +3,10 @@ package de.htwg_konstanz.antbots.common_java_package.controller.state;
 import java.awt.Color;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
+
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
-import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
@@ -40,6 +38,7 @@ public class AttackEnemyHill implements State{
 			
 			if(antToHill.containsKey(ant)) {
 				List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), antToHill.get(ant));
+				//remove because position 0 is the ant position
 				route.remove(0);
 				ant.setRoute(route);
 				destination = route.get(route.size() - 1);
@@ -49,6 +48,7 @@ public class AttackEnemyHill implements State{
 		} else {
 			//damit der weg jedes mal neu berechnet wird um zu verhindern, dass die Route über unentdecktes Land geht(könnte nämlich Wasser sein)
 			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
+			//remove because position 0 is the ant position
 			route.remove(0);
 			ant.setRoute(route);
 		}
@@ -104,8 +104,7 @@ public class AttackEnemyHill implements State{
 
 	@Override
 	public StateName getStateName() {
-		// TODO Auto-generated method stub
-		return null;
+		return stateName;
 	}
 
 }

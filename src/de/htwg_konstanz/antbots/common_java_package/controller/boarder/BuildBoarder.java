@@ -12,6 +12,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
@@ -83,7 +84,7 @@ public class BuildBoarder {
 
 		for (Ant myAnt : gameI.getMyAnts()) {
 			Tile myAntPos = myAnt.getAntPosition();
-			Set<Tile> tilesInRadius = gameI.getTilesInRadius(myAntPos, 9);
+			Set<Tile> tilesInRadius = gameI.getTilesInRadius(myAntPos, Configuration.BOARDDISTANCE);
 			Set<Tile> visitableTiles = bsf.visitableFromSet(myAntPos, tilesInRadius);
 			Set<Ant> enemyAnts = new HashSet<>();
 			

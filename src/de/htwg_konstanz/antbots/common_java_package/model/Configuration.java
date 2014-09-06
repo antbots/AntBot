@@ -18,8 +18,11 @@ public class Configuration {
 	public static final int ANTSINGROUPTOENEMYHILL = 3;
 	
 	//Verteidigung eigener Ameisenhügel
-	public static final int DEFENDANTS = 3;
+	public static final int DEFENDANTS = 1;
 	public static final int LIMITWHENDEFENDANTSAREORDERD = 10;
+	
+	//Boardergroesse
+	public static final int BOARDDISTANCE = 15;
 	
 	
 	

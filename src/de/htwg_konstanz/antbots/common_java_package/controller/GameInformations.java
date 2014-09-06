@@ -2,7 +2,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 
 import java.util.*;
 
-import de.htwg_konstanz.antbots.common_java_package.controller.state.AttackEnemyHill;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
@@ -395,7 +394,7 @@ public class GameInformations {
 	}
 
 	/**
-	 * Returns the Tiles with the oldest Visibility or null.
+	 * Returns the Tiles with the oldest Visibility.
 	 * 
 	 * @param collection
 	 * @author Chrisi

@@ -1,20 +1,15 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.attack;
 
-import java.awt.Color;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Set;
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
-import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+
 
 /**
  * 
