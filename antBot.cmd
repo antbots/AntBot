@@ -41,7 +41,7 @@ echo Player1: %player1%
 ::start
 ::python %playgame% --verbose -e -So --engine_seed 42 --player_seed 42 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 200 --map_file %map% %* %player1% %player2% | java -jar %visualizer%
 
-python %playgame% --verbose -e --scenario --food none --player_seed 42 --turntime 30000 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 100 --map_file %map% %* %player1% %player2% 
+python %playgame% --verbose -e --player_seed 42 --turntime 30000 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 100 --map_file %map% %* %player1% %player2% 
 
 ::--scenario --food none
 
