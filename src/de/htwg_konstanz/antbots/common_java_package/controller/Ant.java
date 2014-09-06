@@ -52,11 +52,11 @@ public class Ant {
 					skip = true;
 				}
 			}
-			if(!skip){
+			if(!skip) {
 				AntBot.getGameI().issueOrder(position, aim);
 				AntBot.getAntsOrders().add(thisOrder);
 				setPosition(next.getRow(), next.getCol());
-			}else{
+			} else {
 				AntBot.getInvalidPositions().add(position);
 			}
 		}

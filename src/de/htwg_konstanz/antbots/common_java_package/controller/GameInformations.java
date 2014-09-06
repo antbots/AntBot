@@ -414,7 +414,6 @@ public class GameInformations {
 				oldest.add(tile);
 			}
 		}
-
 		return oldest;
 	}
 
