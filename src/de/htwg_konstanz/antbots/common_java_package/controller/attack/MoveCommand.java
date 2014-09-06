@@ -134,7 +134,7 @@ public class MoveCommand implements Command {
 		int points = 0;
 		for (Ant ant : enemyAnts) {
 			if(!ants.isEmpty()){
-				for (Aim aim : ab.getBoard().getDirections(ant.getAntPosition(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
+				for (Aim aim : ab.getBoard().getDirections(ant.getPosBefore(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
 					if(ant.getexecutedDirection() == aim){
 						AntBot.getLogger().log("increase");
 						points = points + increase;
@@ -142,7 +142,7 @@ public class MoveCommand implements Command {
 					}
 				}
 			}else{
-				for (Aim aim : ab.getBoard().getDirections(ant.getAntPosition(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
+				for (Aim aim : ab.getBoard().getDirections(ant.getPosBefore(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
 					if(ant.getexecutedDirection() == aim){
 						AntBot.getLogger().log("increase");
 						points = points + increase;

@@ -20,12 +20,13 @@ public class AttackManager {
 	
 	
 	public AttackManager() {
-		this.markedAnts = new HashMap<>();
+		
 	}
 
 	public void markAntsToAttack(){
+		this.markedAnts = new HashMap<>();
 		Map<Set<Ant>, Set<Ant>> att = AntBot.getAttack().initAttackGroups();
-		AntBot.getLogger().log("ATACKEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + att.size());
+		AntBot.getLogger().log("Groups for AlphaBeta:");
 		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
 			
 			List<Set<Ant>> beteiligteAmeisen = new LinkedList<>();
@@ -38,7 +39,7 @@ public class AttackManager {
 			
 			LinkedList<Order> move = AntBot.getGameStrategy().alphaBeta(AntBot.getGameI(), Configuration.ATTACKSEARCHDEPTH, Configuration.ATTACKSTRATEGY, beteiligteAmeisen);
 			if (move != null){
-				for(Ant ant : AntBot.getGameI().getMyAntsDangered()){
+				for(Ant ant : AntBot.getGameI().getMyAnts()){
 					for(Order o : move){
 						if(ant.getAntPosition().equals(o.getPosition())){
 							markedAnts.put(ant, o);
@@ -49,6 +50,11 @@ public class AttackManager {
 				///AntBot.getGameI().getMyAntsDangered().forEach( ant -> {Optional<Order> matchedOrder = move.stream().filter(o -> ant.getAntPosition().equals(o.getPosition())).findAny();
 				//markedAnts.put(ant, matchedOrder.get());});
 			}
+		}
+		// DEBUG
+		AntBot.getLogger().log("Marked Ants:");
+		for(Entry<Ant,Order> entry : markedAnts.entrySet()){
+			AntBot.getLogger().log(entry.toString());
 		}
 	}
 	
