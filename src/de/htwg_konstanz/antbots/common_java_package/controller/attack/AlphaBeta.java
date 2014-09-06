@@ -95,9 +95,9 @@ private Logger logger  = new Logger("log.txt");
 		
 		max(depth,Integer.MIN_VALUE , Integer.MAX_VALUE);
 		
-//		SampleTreeFactory.setTree(tree);
-//		String[] tt = new String[] {""};
-//		if(AntBot.getTurn() == 2){
+		SampleTreeFactory.setTree(tree);
+		String[] tt = new String[] {""};
+//		if(AntBot.getTurn() == 1){
 //			SwingDemo.main(tt);
 //			try {
 //				Thread.sleep(5000000);
@@ -212,18 +212,17 @@ private Logger logger  = new Logger("log.txt");
 				continue;
 			}else{
 				boolean skip = false;
+				Order newOrder = new Order(ant.getAntPosition(), aim);
 				for (Order order1 : possibleMovesTmp) {
-					for (Order order2 : possibleMovesTmp) {
-						if(order1.getNewPosition().equals(order2.getNewPosition()) && !order1.equals(order2)){
-							skip = true;
-						}
+					if(order1.getNewPosition().equals(newOrder.getNewPosition())){
+						skip = true;
 					}
 				}
 				if(skip){
 					// nicht vollkommen sicher zb wenn eien ameise alle Wege blockiert bekommt, bzw kreuzen
 					continue;
 				}
-				possibleMovesTmp.addFirst(new Order(ant.getAntPosition(), aim));
+				possibleMovesTmp.addFirst(newOrder);
 			}
 			generatePossibleMoves(depth-1, antsToGo, possibleMoves);
 			try {
