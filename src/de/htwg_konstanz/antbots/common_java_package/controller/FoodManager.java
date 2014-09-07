@@ -1,184 +1,135 @@
 package de.htwg_konstanz.antbots.common_java_package.controller;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
-import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 
 public class FoodManager {
-	
-	LinkedList<Food> food;
 
-	Map<Ant,Food> markedAnts;
+	LinkedList<Tile> food;
+
+	Map<Ant, Tile> markedAnts;
+	List<AntFood> antfood;
+
 
 	public FoodManager() {
-		this.food = new LinkedList<>();
+		food = new LinkedList<>();
 		markedAnts = new HashMap<>();
 	}
-	
-	public void update(Tile t){
-		Food newFood = new Food(t);
-		if(!food.contains(newFood)){
-			food.add(newFood);
-			AntBot.getLogger().log("add");
-		}
-		if(food.contains(newFood)){
-			food.get(food.indexOf(newFood)).setAlive(true);
-			AntBot.getLogger().log("setAlive");
-		}
-	}
-	
-	public LinkedList<Food> getFood() {
-		return food;
-	}
 
-	public Map<Ant, Food> getMarkedAnts() {
-		return markedAnts;
+	/**
+	 * must be call at the beginning of each turn
+	 */
+	public void initFood(){
+		food = new LinkedList<>();
 	}
 	
-	public void declineFood(Food f, Ant a) {
-		f.setOnOffer(true);
-		markedAnts.remove(a);
+	public void update(Tile t) {
+		food.add(t);
 	}
 	
-	public void acceptFood(Ant a, Food f) {
-		f.setOnOffer(false);
-		markedAnts.put(a, f);
-	}
-	
-	public void removeFalseFood(){
-		LinkedList<Food> toRemove = new LinkedList<Food>();
-		LinkedList<Entry<Ant,Food>> toRemoveEntry = new LinkedList<Entry<Ant,Food>>();
-		for(Food f : food){
-			if(!f.isAlive()){
-				for(Entry<Ant,Food> e : markedAnts.entrySet()){
-					if(f.equals(e.getValue())){
-						toRemoveEntry.add(e);
-						AntBot.getLogger().log("remove entry");
-					}
-				}
-				toRemove.add(f);
-				AntBot.getGameI().getMap()[f.getPosition().getRow()][f.getPosition().getCol()].setType(Ilk.LAND);
-			}
-		}
-		for(Food f : toRemove){
-			food.remove(f);
-			AntBot.getLogger().log("remove");
-		}
-		
-		for(Entry<Ant,Food> e : toRemoveEntry){
-			markedAnts.remove(e.getKey());
-		}
-		
-		food.forEach(e -> e.setAlive(false));
-	}
+	public void markAntsToCollectFood() {
+		antfood = new LinkedList<>();
+		markedAnts = new HashMap<>();
 
-	public void markAntsToCollectFood(){
-		removeFalseFood();
-		
 		Set<Ant> ants = new HashSet<Ant>();
-		for(Ant a : AntBot.getGameI().getMyAnts()){
-			if(!markedAnts.containsKey(a)){
+		for (Ant a : AntBot.getGameI().getMyAnts()) {
+			if (!getMarkedAnts().containsKey(a)) {
 				ants.add(a);
 			}
 		}
-		if(ants.isEmpty()){
+		if (ants.isEmpty()) {
 			return;
 		}
-		LinkedList<Food> foodOnOffer= new LinkedList<>();
-		for(Food f : food){
-			if(f.isOnOffer()){
-				foodOnOffer.add(f);
-			}
-		}
-		
-		
-		for(Ant a : ants){
+
+		for (Ant a : ants) {
 			LinkedList<Tile> foodTilesInViewRadius = new LinkedList<Tile>();
-			for(Food f: foodOnOffer){
-				if(!f.isOnOffer()) {
-					continue;
-				}	
-				AntBot.getGameI().getTilesInRadius(a.getAntPosition(), (int)Math.sqrt(AntBot.getGameI().getViewRadius2())).stream().filter(t -> t.equals(f.getPosition())).forEach(foodTilesInViewRadius::add);
+			for (Tile food : food) {
+				AntBot.getGameI().getTilesInRadius(	a.getAntPosition(),	(int) Math.sqrt(AntBot.getGameI().getViewRadius2())).stream().filter(t -> t.equals(food)).forEach(foodTilesInViewRadius::add);		
 			}
-			
-			if(foodTilesInViewRadius.isEmpty()){
+
+			if (foodTilesInViewRadius.isEmpty()) {
 				continue;
 			}
-			
-			
-			Tile shortestTile = foodTilesInViewRadius.getFirst();
-			
-			for(Tile t : foodTilesInViewRadius){
-					
-				if(AntBot.getGameI().getDistance(a.getAntPosition(), t) < AntBot.getGameI().getDistance(a.getAntPosition(), shortestTile)){
-					shortestTile = t;
-				}
-			}
-			AntBot.getLogger().log("shortestTile " + shortestTile);
-			
-			acceptFood(a, food.get(food.indexOf(new Food(shortestTile))));
-		}
-		
-		//DEBUG
-		
-		for(Food f : food){
-			AntBot.getLogger().log(f.toString());
-		}
-		for(Entry<Ant,Food> e1 : markedAnts.entrySet()){
-			AntBot.getLogger().log(e1.getKey().getAntPosition() + "  " + e1.getValue().getPosition());
-		}
-	}
-	
-	
-	Map<Food,Ant> antToFood = new HashMap<>();
-	public void antToFood() {
-		boolean change = false;
-		
-		
-		for (Ant ant : AntBot.getGameI().getMyAnts()) {
-			for (Food fo : food) {
-				int i = AntBot.getGameI().getDistance(ant.getAntPosition(), fo.getPosition());
-				if(fo.getDistanceToCollect() > i) {
-					fo.setAntWhoCollectFood(ant);
-					fo.setDistanceToCollect(i);
-					
-					antToFood.put(fo, ant);
-					change = true;
-				}
+
+
+			for (Tile t : foodTilesInViewRadius) {
+				int distance = AntBot.getPathfinding().aStar(a.getAntPosition(), t).size();
+				antfood.add(new AntFood(a, t, distance));
 			}
 		}
-		if(change == false) {
-			return;
+		
+//		AntBot.debug().log("--------------------------------------");
+//		
+//		for(AntFood a : antfood) {
+//			AntBot.debug().log(a.toString());
+//		}
+//		AntBot.debug().log("--------------------------------------");
+		antfood.sort(new AntFoodComperator());
+		
+		List<Tile> tmpFood = new LinkedList<>();
+		
+		for(AntFood a : antfood) {
+//			AntBot.debug().log(a.toString());
+			Ant ant = a.getA();
+			Tile foodT = a.getFood();
+			if(!markedAnts.containsKey(ant) && !tmpFood.contains(foodT)) {
+				markedAnts.put(ant, foodT);
+				tmpFood.add(foodT);
+			}
 		}
-		antToFood();
+//		AntBot.debug().log("--------------------------------------");
 	}
 	
-	public Map<Food,Ant> getFoodToAnt(){
+	class AntFood {
 		
-		Food f;
-		Ant a;
-		for(Entry<Food,Ant> eOuter : antToFood.entrySet()) {
-			for(Entry<Food,Ant> eInner : antToFood.entrySet()) {
-				if(eOuter.getValue().equals(eInner.getValue())) {
-					if(eOuter.getKey().getDistanceToCollect() < eInner.getKey().getDistanceToCollect()) {
-						
-					}
-					
-				}
+		private Ant a;
+		private Tile food;
+		private int distance;
+
+		public AntFood(Ant a, Tile food, int distance) {
+			this.a = a;
+			this.food = food;
+			this.distance = distance;
+		}
 				
-				
-			}
+		public int getDistance(){
+			return distance;
 		}
-		return antToFood;
+
+		public Tile getFood() {
+			return food;
+		}
+
+		public Ant getA() {
+			return a;
+		}
+		
+		@Override
+		public String toString() {
+			return "[Ameise : " + a.getAntPosition() + " collect Food " + food + " with distance " + distance;
+		}
 	}
 	
+	class AntFoodComperator implements Comparator<AntFood> {
+
+		@Override
+		public int compare(AntFood o1, AntFood o2) {
+			return o1.distance-o2.getDistance();
+		}
+		
+	}
+	
+	public Map<Ant, Tile> getMarkedAnts() {
+		return markedAnts;
+	}
 }

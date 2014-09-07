@@ -25,19 +25,24 @@ public class DefendOwnHillManager {
 		antTotilesAroundHill = new HashMap<>();
 		for (Tile hill : AntBot.getGameI().getMyHills()) {
 
-			Set<Ant> allMyAnts = new HashSet<>();
-			allMyAnts.addAll(AntBot.getGameI().getMyAnts());
+			Set<Tile> allMyAnts = new HashSet<>();
+			Map<Tile, Ant> tileToAnt = new HashMap<>();
+			
+			for(Ant a : AntBot.getGameI().getMyAnts()) {
+				Tile t = a.getAntPosition();
+				allMyAnts.add(t);
+				tileToAnt.put(t, a);
+			}
 
-			List<Tile> ownHill = new LinkedList<>();
-			ownHill.add(hill);
 
 			Set<Tile> tilesAroundHill = new HashSet<>();
-			Set<Ant> myAnts = AntBot.getBsf().extendedBSF(ownHill, allMyAnts, false, true, 8, tilesAroundHill);
+			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, 8, tilesAroundHill);
 			
 			int i = 0;
 			
 			//TODO bug behoben aber schlechte lösung
-			for(Ant ant : myAnts) {
+			for(Tile a : myAnts) {
+				Ant ant = tileToAnt.get(a);
 				if(ant.getCurrentState() == StateName.Defend) {
 					defendAnts.put(ant, hill);
 					List<Tile> tmp = new LinkedList<>();
@@ -48,7 +53,8 @@ public class DefendOwnHillManager {
 				}
 			}
 			
-			for (Ant ant : myAnts) {
+			for(Tile a : myAnts) {
+				Ant ant = tileToAnt.get(a);
 				if (i < Configuration.DEFENDANTS) {
 					defendAnts.put(ant, hill);
 					List<Tile> tmp = new LinkedList<>();

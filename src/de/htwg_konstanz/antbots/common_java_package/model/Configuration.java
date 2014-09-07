@@ -24,6 +24,8 @@ public class Configuration {
 	//Boardergroesse
 	public static final int BOARDDISTANCE = 15;
 	
+	//CollectFoodRadius
+	public static final int COLLECTFOODRADIUS = 10;
 	
 	
 }

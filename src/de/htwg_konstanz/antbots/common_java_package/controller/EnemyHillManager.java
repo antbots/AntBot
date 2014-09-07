@@ -2,8 +2,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -20,17 +18,21 @@ public class EnemyHillManager {
 		antToHill = new HashMap<>();
 
 		for (Tile hill : AntBot.getGameI().getEnemyHills()) {
-			Set<Ant> allMyAnts = new HashSet<>();
-			allMyAnts.addAll(AntBot.getGameI().getMyAnts());
+			Set<Tile> allMyAnts = new HashSet<>();
+			Map<Tile, Ant> tileToAnt = new HashMap<>();
+			
+			for(Ant a : AntBot.getGameI().getMyAnts()) {
+				Tile t = a.getAntPosition();
+				allMyAnts.add(t);
+				tileToAnt.put(t, a);
+			}
 
-			List<Tile> tmp = new LinkedList<>();
-			tmp.add(hill);
-
-			Set<Ant> myAnts = AntBot.getBsf().extendedBSF(tmp, allMyAnts, false, true, 30, null);
+			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, 30, null);
 
 			if (myAnts.size() > Configuration.ANTSINGROUPTOENEMYHILL) {
 				int i = 0;
-				for (Ant ant : myAnts) {
+				for (Tile t : myAnts) {	
+					Ant ant = tileToAnt.get(t);
 					if (i <= Configuration.ANTSINGROUPTOENEMYHILL) {
 						antToHill.put(ant, hill);
 						i++;
@@ -39,10 +41,10 @@ public class EnemyHillManager {
 			}
 		}
 		for(Entry<Ant, Tile> e : antToHill.entrySet()) {
-			AntBot.getGameI().getLogger().log("Ameise " + e.getKey() + " geht zu Hill " + e.getValue());
+			AntBot.getLogger().log("Ameise " + e.getKey() + " geht zu Hill " + e.getValue());
 		}
 		
-		AntBot.getGameI().getLogger().log("Attack Enemy Hill");
+		AntBot.getLogger().log("Attack Enemy Hill");
 	}
 
 	public Map<Ant, Tile> getAntsToHill() {

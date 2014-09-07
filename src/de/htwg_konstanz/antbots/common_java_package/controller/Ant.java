@@ -38,7 +38,7 @@ public class Ant {
 	}
 	
 	public void move() {
-		//AntBot.debug().log("Before " + position + " state " + currentState + " route " + route.size());
+		AntBot.debug().log("Before " + position + " state " + currentState + " route " + route.size());
 		Tile next = route.remove(0);
 		Map<Tile, Aim> neighbours = AntBot.getGameI().getMoveAbleNeighbours(position);
 
@@ -60,7 +60,7 @@ public class Ant {
 				AntBot.getInvalidPositions().add(position);
 			}
 		}
-		//AntBot.debug().log("After  " + position + " state " + currentState + " route " + route.size());
+		AntBot.debug().log("After  " + position + " state " + currentState + " route " + route.size());
 	}
 	
 	public void setState(State state1) {

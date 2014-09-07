@@ -53,7 +53,7 @@ public class CollectFood implements State {
 
 	@Override
 	public void execute() {
-		List<Tile> r = AntBot.getPathfinding().aStar(ant.getAntPosition(),	AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant).getPosition());
+		List<Tile> r = AntBot.getPathfinding().aStar(ant.getAntPosition(),	AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant));
 
 		// da beim essen sammel nicht direkt das Tile besucht werden muss,
 		// auf dem es liegt. Es reicht wenn man daneben steht.
@@ -88,12 +88,12 @@ public class CollectFood implements State {
 
 	@Override
 	public void stateExit() {
-		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)) {
-			AntBot.getGameI()
-					.getFoodManager()
-					.declineFood(
-							AntBot.getGameI().getFoodManager().getMarkedAnts()
-									.get(ant), ant);
-		}
+//		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)) {
+//			AntBot.getGameI()
+//					.getFoodManager()
+//					.declineFood(
+//							AntBot.getGameI().getFoodManager().getMarkedAnts()
+//									.get(ant), ant);
+//		}
 	}
 }

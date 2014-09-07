@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import jdk.internal.org.objectweb.asm.commons.GeneratorAdapter;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.AttackManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.Bot;
@@ -69,6 +70,8 @@ public class AntBot extends Bot {
 		if (turn == 0) {
 			init();
 		}
+		
+		debug.log("TURN " + turn);
 		antsOrders = new LinkedList<Order>();
 		invalidPositions = new LinkedList<>();
 		
@@ -81,15 +84,7 @@ public class AntBot extends Bot {
 		attackManager.markOwnAntsAsDangered();
 		attackManager.markAntsToAttack();
 		
-		
 		GameInformations.getFoodManager().markAntsToCollectFood();
-		GameInformations.getFoodManager().antToFood();
-		for(Entry<Food,Ant> e : GameInformations.getFoodManager().getFoodToAnt().entrySet()) {
-			debug.log("Ameise " + e.getValue() + " food " + e.getKey());
-		}
-		
-		debug.log("TURN " + turn);
-		
 		
 		gameI.getMyAnts().forEach(a -> {
 			logger.log("Process Ant: " + a.getAntPosition());
@@ -100,6 +95,7 @@ public class AntBot extends Bot {
 		
 		debug.log("---------------------------------------------------------------------------------------");
 		turn++;
+		GameInformations.getFoodManager().initFood();
 	}
 	
 	

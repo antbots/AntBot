@@ -44,22 +44,23 @@ public class BreadthFirstSearch {
 	 * @return
 	 */
 
-	public Set<Ant> extendedBSF(List<Tile> postion, Set<Ant> targets, boolean onlyOnTarget, boolean isStepUsed, int steps,	Set<Tile> visitableTiles) {
+	public Set<Tile> extendedBSF(Tile postion, Set<Tile> targets, boolean onlyOnTarget, boolean isStepUsed, int steps,	Set<Tile> visitableTiles) {
 
-		Set<Ant> result = new HashSet<Ant>();
+		Set<Tile> result = new HashSet<Tile>();
 		Map<Tile, Integer> pathCosts = new HashMap<Tile, Integer>();
 		Tile tmp;
 		Queue<Tile> q = new LinkedList<Tile>();
 		// visitableTiles = new HashSet<Tile>();
 
-		for (Tile t : postion) {
-			q.add(t);
+		//for (Tile t : postion) {
+//			q.add(t);
+		q.add(postion);
 			if (visitableTiles != null) {
-				visitableTiles.add(t);
+				visitableTiles.add(postion);
 			}
 
-			pathCosts.put(t, 0);
-		}
+			pathCosts.put(postion, 0);
+//		}
 
 		while (!q.isEmpty()) {
 			tmp = q.remove();
@@ -73,19 +74,19 @@ public class BreadthFirstSearch {
 
 					if (!q.contains(next)) {
 
-						for (Ant target : targets) {
-							Tile pos = target.getAntPosition();
+						for (Tile pos : targets) {
+							//Tile pos = target.getAntPosition();
 							if (pos.getCol() == next.getCol()
 									&& pos.getRow() == next.getRow()) {
 
 								if (onlyOnTarget == true) {
 
-									result.add(target);
+									result.add(pos);
 
 									return result;
 
 								} else {
-									result.add(target);
+									result.add(pos);
 								}
 
 							}
