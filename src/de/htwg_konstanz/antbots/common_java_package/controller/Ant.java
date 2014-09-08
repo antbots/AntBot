@@ -39,6 +39,9 @@ public class Ant {
 	
 	public void move() {
 		AntBot.debug().log("Before " + position + " state " + currentState + " route " + route.size());
+		if(route.size() == 0) {
+			return;
+		}
 		Tile next = route.remove(0);
 		Map<Tile, Aim> neighbours = AntBot.getGameI().getMoveAbleNeighbours(position);
 

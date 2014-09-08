@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
@@ -79,7 +80,7 @@ public class BuildBoarder {
 	}
 
 	private List<Set<Tile>> buildAreas() {
-
+		Set<Tile> enemyTilesSet = new HashSet<>();
 		List<Set<Tile>> areas = new LinkedList<Set<Tile>>();
 
 		for (Ant myAnt : gameI.getMyAnts()) {
@@ -100,25 +101,30 @@ public class BuildBoarder {
 			
 			for(Ant enemyAntInRange : enemyAnts ) {
 				Tile enemyAntPos = enemyAntInRange.getAntPosition();
-				List<Tile> path = pathfinding.aStar(enemyAntPos, myAntPos);
-				int size = path.size();
+				int size= AntBot.getGameI().getDistance(enemyAntPos, myAntPos);
+				
 				
 				if(size <9) {
 					size = size /2;
 					Set<Tile> enemyTiles = gameI.getTilesInRadius(enemyAntPos, size);
-					Set<Tile> tmp = new HashSet<>(enemyTiles);
-					tmp.retainAll(visitableTiles);
+					
+					enemyTilesSet.addAll(enemyTiles);
+	
 //					for(Tile enemyTile : tmp) {
 //						OverlayDrawer.setFillColor(Color.GREEN);
 //						OverlayDrawer.drawTileSubtile(enemyTile.getRow(), enemyTile.getCol(),
 //								SubTile.TL);
 //					}
-					visitableTiles.removeAll(enemyTiles);
+
 				}
 			}
 			areas.add(visitableTiles);
 		}
 		merge(areas);
+		for(Set<Tile> t : areas) {
+			t.removeAll(enemyTilesSet);
+		}
+		
 		return areas;
 
 	}

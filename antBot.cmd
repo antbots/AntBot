@@ -20,11 +20,11 @@ set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
 
 
 set player1="java -jar %~dp0bots\AntBot.jar"
-::set player2="java -jar %~dp0bots\MyBot.jar"
+set player2="java -jar %~dp0bots\MyBot.jar"
 ::set player2="java -jar %~dp0bots\ExplorerBot.jar"
 
 
-set player2="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
+::set player2="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
 
 
 

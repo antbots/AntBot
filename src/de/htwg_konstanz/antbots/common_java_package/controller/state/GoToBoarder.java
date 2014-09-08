@@ -43,6 +43,10 @@ public class GoToBoarder implements State{
 					List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), target);
 					route.remove(0);
 					ant.setRoute(route);
+					if(route.size() == 0) {
+						AntBot.debug().log("Ameise " +  ant.getAntPosition() + " NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+						continue;
+					}
 					destination = route.get(route.size() - 1);
 				}
 			}
