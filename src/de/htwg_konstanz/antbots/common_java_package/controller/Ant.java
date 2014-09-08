@@ -38,7 +38,7 @@ public class Ant {
 	}
 	
 	public void move() {
-		AntBot.debug().log("Before " + position + " state " + currentState + " route " + route.size());
+		AntBot.debug().log("Before " + position + " state " + currentState);
 		if(route.size() == 0) {
 			return;
 		}
@@ -63,7 +63,7 @@ public class Ant {
 				AntBot.getInvalidPositions().add(position);
 			}
 		}
-		AntBot.debug().log("After  " + position + " state " + currentState + " route " + route.size());
+		AntBot.debug().log("After  " + position + " state " + currentState );
 	}
 	
 	public void setState(State state1) {

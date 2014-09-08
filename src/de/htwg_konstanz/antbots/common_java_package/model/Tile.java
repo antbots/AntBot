@@ -12,6 +12,7 @@ public class Tile  {
     
     private int col;
     private Ilk ilk = Ilk.UNKNOWN;
+    private int discoverdAtTurn = Integer.MAX_VALUE;
     
     public void setType(Ilk ilk) {
     	this.ilk = ilk;
@@ -88,4 +89,12 @@ public class Tile  {
     public String toString() {
         return row + " " + col;
     }
+
+	public int getDiscoverdAtTurn() {
+		return discoverdAtTurn;
+	}
+
+	public void setDiscoverdAtTurn(int discoverdAtTurn) {
+		this.discoverdAtTurn = discoverdAtTurn;
+	}
 }

@@ -9,7 +9,7 @@ public class Food {
 	private boolean onOffer;
 	private boolean isAlive;
 	private Ant antWhoCollectFood;
-	private int distanceToCollect = 999999;
+	private int distanceToCollect = Integer.MAX_VALUE;
 	
 	public Food(Tile position) {
 		this.position = position;

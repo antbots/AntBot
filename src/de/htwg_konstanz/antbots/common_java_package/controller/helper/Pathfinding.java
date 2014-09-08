@@ -347,14 +347,11 @@ public class Pathfinding {
 			while (openSet.size() > 0) {
 				AStarNode current = pQueue.poll();
 				
-//				//test
+
 				if(current == null) {
-//					AntBot.debug().log("am anfang Ameise " + source + " zu " + target );
 					return null;
 				} 
-////				else {
-////					AntBot.debug().log("Ameise " + source + " current " + current.node);
-////				}
+
 					
 				
 				openSet.remove(current.getId());
@@ -367,16 +364,7 @@ public class Pathfinding {
 
 					// get neigbours of the current node
 					Set<Tile> neighbors =  gameI.getMoveAbleNeighbours(current.getNode()).keySet();
-					
-					//TODO check in the first route tile that no other ant have the order to move there
-					// first step so don't walk on my ants
-					if(current.equals(start)){
-						for (Order order : gameI.getOrders()) {
-							// check the orders if the neighbours are free
-							neighbors.remove(gameI.getTile(order.getPosition(), order.getDirection()));
-						}
-					}
-					
+									
 					for (Tile neighbor : neighbors) {
 
 						AStarNode visited = closeSet.get(neighbor);

@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 
-
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
@@ -62,21 +62,17 @@ public class AttackEnemyHill implements State{
 
 	@Override
 	public void changeState() {
-		if (AntBot.getAttackManager().getMarkedAnts().containsKey(ant)) {
-			ant.setState(new Attack(ant));
-			return;
-		}
 		if(AntBot.getEnemyHillManager().getAntsToHill().containsKey(ant)) {
 			return;
 		}
-		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)
-				&& !ant.isDanger()) {
+		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)	&& !ant.isDanger()) {
+			ant.setState(new CollectFood(ant));
 			return;
 		}
 		if (!ant.isDanger()
 				&& !AntBot.getGameI().getFoodManager().getMarkedAnts()
 						.containsKey(ant)
-				&& AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT) {
+				&& AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT && BuildBoarder.marktAnts().contains(ant)) {
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
