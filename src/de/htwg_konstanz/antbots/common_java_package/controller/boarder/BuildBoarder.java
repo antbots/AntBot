@@ -59,7 +59,6 @@ public class BuildBoarder {
 								break;
 							}
 						}
-
 					}
 					if (tr) {
 						boarder.add(t);

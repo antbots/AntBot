@@ -10,6 +10,8 @@ import javax.swing.OverlayLayout;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
@@ -38,13 +40,14 @@ public class Exploration  implements State{
 			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
+		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT){
+		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT || BuildBoarder.getAreaAndBoarder() == null)){
 			return;
 		}
+		AntBot.debug().log("COLLECTFOOD FAILD");
 	}
 
 	@Override
@@ -66,14 +69,6 @@ public class Exploration  implements State{
 			while (route == null) {
 				// get the tile with die highest exploreValue
 				targets = AntBot.getGameI().getTilesToExplore(visibleTiles);
-				
-//				for(Tile t : targets) {
-//					OverlayDrawer.setFillColor(Color.LIGHT_GRAY);
-//					OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//							SubTile.BM);
-//				}
-
-				
 				target = targets.iterator().next();
 				destination = target;
 				// get the route to the target
@@ -95,14 +90,9 @@ public class Exploration  implements State{
 			AntBot.getLogger().log("Route is set: " + ant.getRoute());
 		} else {
 			List<Tile> route = null;
+			AntBot.debug().log("destiantion in Exploration " + destination.getType());
 			route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
-			
-//			try {
-//				route.remove(0);
-//			} catch (Exception e) {
-//				AntBot.debug().log("DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-//				AntBot.debug().log(destination + " typ " + destination.getType());
-//			}
+			route.remove(0);
 			
 			ant.setRoute(route);
 			for (Tile rTile : route) {
@@ -111,9 +101,6 @@ public class Exploration  implements State{
 						SubTile.MM);
 			}
 		}
-		
-		
-
 	}
 	
 	@Override

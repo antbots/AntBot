@@ -94,6 +94,7 @@ public class GoToBoarder implements State{
 		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT && BuildBoarder.marktAnts().contains(ant)){
 			return;
 		}
+		AntBot.debug().log("GoToBoarder FAILD");
 	}
 
 	@Override

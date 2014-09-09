@@ -40,6 +40,7 @@ public class Attack implements State{
 			ant.setState(new Exploration(ant));
 			return;
 		}
+		AntBot.debug().log("ATTACK FAILD");
 	}
 
 	@Override

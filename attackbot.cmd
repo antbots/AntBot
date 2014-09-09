@@ -17,12 +17,12 @@ set map="%~dp0\src\de\htwg_konstanz\antbots\karten\angreifen\wallpunch.map"
 
 ::players
 set player1="java -jar %~dp0bots\AttackBot.jar"
-set player2="java -jar %~dp0bots\DummyBot.jar"
+::set player2="java -jar %~dp0bots\DummyBot.jar"
 ::set player3="java -jar %~dp0bots\AttackBot.jar"
 ::set player2="java -jar %~dp0bots\AttackBot.jar"
 ::set player1="java -jar %~dp0bots\ExplorerBot.jar"
 
-::set player2="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
+set player2="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
 ::set player3="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\LeftyBot.py"
 ::set player4="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\LeftyBot.py"
 

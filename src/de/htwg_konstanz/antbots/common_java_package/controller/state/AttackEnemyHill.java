@@ -83,7 +83,7 @@ public class AttackEnemyHill implements State{
 			ant.setState(new Exploration(ant));
 			return;
 		}
-		
+		AntBot.debug().log("ATTACK ENEMY HILL FAILD");
 	}
 
 	@Override
