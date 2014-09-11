@@ -166,9 +166,13 @@ public class AntBot extends Bot {
 				if((o1.getNewPosition().equals(o2.getNewPosition()) && !o1.equals(o2))){
 					skip = true;
 					if(o1.getDirection() == Aim.DONTMOVE){
-						errorMoves.add(o2);
+						if(!errorMoves.contains(o2)){
+							errorMoves.add(o2);
+						}
 					}else{
-						errorMoves.add(o1);
+						if(!errorMoves.contains(o1)){
+							errorMoves.add(o1);
+						}
 					}
 				}
 			}
