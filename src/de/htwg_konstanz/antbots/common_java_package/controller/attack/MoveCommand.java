@@ -40,6 +40,7 @@ public class MoveCommand implements Command {
 			for (Ant a : ants) {
 				if(a.getAntPosition().getCol() == o.getPosition().getCol() && a.getAntPosition().getRow() == o.getPosition().getRow()){
 					orders.put(a,o);
+					break;
 				}
 			}
 		}

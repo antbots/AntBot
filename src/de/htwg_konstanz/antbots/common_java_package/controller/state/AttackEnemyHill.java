@@ -71,6 +71,7 @@ public class AttackEnemyHill implements State{
 		}
 		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)
 				&& !ant.isDanger()) {
+			ant.setState(new CollectFood(ant));
 			return;
 		}
 		if (!ant.isDanger()

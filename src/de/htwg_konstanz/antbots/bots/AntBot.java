@@ -21,6 +21,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
+import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -43,7 +44,7 @@ public class AntBot extends Bot {
 	private static EnemyHillManager enemyHillManager;
 	private static DefendOwnHillManager defendOwnHillManager;
 	private static LinkedList<Order> antsOrders;
-	private static LinkedList<Tile> invalidPositions;
+	private static boolean moveError = false;
 	private static Logger debug = new Logger("Debug.txt");
 	
 
@@ -73,7 +74,6 @@ public class AntBot extends Bot {
 		
 		debug.log("TURN " + turn);
 		antsOrders = new LinkedList<Order>();
-		invalidPositions = new LinkedList<>();
 		
 		logger.log("TURN " + turn);
 		boarder.buildBoarder();
@@ -91,6 +91,12 @@ public class AntBot extends Bot {
 			a.doLogic();
 			a.move();
 		});
+		
+		while(moveError){
+			resolveMoveError();
+		}
+		sendMovesToSimulation();
+		
 		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
 		
 		debug.log("---------------------------------------------------------------------------------------");
@@ -147,13 +153,48 @@ public class AntBot extends Bot {
 	public static LinkedList<Order> getAntsOrders(){
 		return antsOrders;
 	}
-
-	public static LinkedList<Tile> getInvalidPositions(){
-		return invalidPositions;
-	}
 	
 	public static Logger debug() {
 		return debug;
+	}
+	
+	public static void resolveMoveError(){
+		boolean skip = false;
+		LinkedList<Order> errorMoves = new LinkedList<>();
+		for(Order o1 : AntBot.getAntsOrders()){
+			for(Order o2 : AntBot.getAntsOrders()){
+				if((o1.getNewPosition().equals(o2.getNewPosition()) && !o1.equals(o2))){
+					skip = true;
+					if(o1.getDirection() == Aim.DONTMOVE){
+						errorMoves.add(o2);
+					}else{
+						errorMoves.add(o1);
+					}
+				}
+			}
+		}
+		if(skip) {
+			for(Order error : errorMoves){
+				AntBot.getAntsOrders().remove(error);
+				Order newOrder = new Order(error.getPosition(), Aim.DONTMOVE);
+				newOrder.setAnt(error.getAnt());
+				AntBot.getAntsOrders().add(newOrder);
+				newOrder.getAnt().setPosition(newOrder.getPosition().getRow(), newOrder.getPosition().getCol());
+			}
+			AntBot.setMoveError(true);
+		}else{
+			AntBot.setMoveError(false);
+		}
+	}
+
+	public static void setMoveError(boolean b) {
+		moveError = b;
+	}
+	
+	private static void sendMovesToSimulation(){
+		for(Order o : getAntsOrders()){
+			AntBot.getGameI().issueOrder(o.getPosition(), o.getDirection());
+		}
 	}
 	
 }

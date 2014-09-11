@@ -1,5 +1,6 @@
 package de.htwg_konstanz.antbots.common_java_package.model;
 
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 
 /**
@@ -11,6 +12,8 @@ public class Order {
     private final int col;
     
     private final Aim direction;
+    
+    private Ant ant;
     
     /**
      * Creates new {@link Order} object.
@@ -57,4 +60,14 @@ public class Order {
     public Aim getDirection(){
     	return direction;
     }
+
+	public Ant getAnt() {
+		return ant;
+	}
+
+	public void setAnt(Ant ant) {
+		this.ant = ant;
+	}
+    
+    
 }

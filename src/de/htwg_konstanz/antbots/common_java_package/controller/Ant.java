@@ -50,17 +50,21 @@ public class Ant {
 			
 			boolean skip = false;
 			Order thisOrder = new Order(position,aim);
+			thisOrder.setAnt(this);
 			for(Order o : AntBot.getAntsOrders()){
-				if((thisOrder.getNewPosition().equals(o.getNewPosition()) && !thisOrder.equals(o)) || AntBot.getInvalidPositions().contains(thisOrder.getNewPosition())){
+				if((thisOrder.getNewPosition().equals(o.getNewPosition()))){
 					skip = true;
 				}
 			}
 			if(!skip) {
-				AntBot.getGameI().issueOrder(position, aim);
 				AntBot.getAntsOrders().add(thisOrder);
 				setPosition(next.getRow(), next.getCol());
 			} else {
-				AntBot.getInvalidPositions().add(position);
+				AntBot.getAntsOrders().remove(thisOrder);
+				Order newOrder = new Order(position, Aim.DONTMOVE);
+				newOrder.setAnt(this);
+				AntBot.getAntsOrders().add(newOrder);
+				AntBot.setMoveError(true);
 			}
 		}
 		AntBot.debug().log("After  " + position + " state " + currentState + " route " + route.size());
