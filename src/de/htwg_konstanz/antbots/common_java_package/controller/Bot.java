@@ -62,32 +62,16 @@ public abstract class Bot extends AbstractSystemInputParser {
 		case 0:
 			type = Ilk.MY_ANT;
 			break;
-		case 1:
-			type = Ilk.ENEMY_ANT_1;
-			break;
-		case 2:
-			type = Ilk.ENEMY_ANT_2;
-			break;
-		case 3:
-			type = Ilk.ENEMY_ANT_3;
-			break;
-		case 4:
-			type = Ilk.ENEMY_ANT_4;
-			break;
+		case 1:		
+		case 2:			
+		case 3:			
+		case 4:			
 		case 5:
-			type = Ilk.ENEMY_ANT_5;
-			break;
 		case 6:
-			type = Ilk.ENEMY_ANT_6;
-			break;
 		case 7:
-			type = Ilk.ENEMY_ANT_7;
-			break;
 		case 8:
-			type = Ilk.ENEMY_ANT_8;
-			break;
 		case 9:
-			type = Ilk.ENEMY_ANT_9;
+			type = Ilk.ENEMY_ANT;
 			break;
 
 		default:

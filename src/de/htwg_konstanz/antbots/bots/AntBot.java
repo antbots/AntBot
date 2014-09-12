@@ -1,6 +1,7 @@
 package de.htwg_konstanz.antbots.bots;
 
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,6 +26,8 @@ import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 /**
  * 
@@ -71,12 +74,22 @@ public class AntBot extends Bot {
 		if (turn == 0) {
 			init();
 		}
+
+//			for(int i = 0; i< gameI.getMap().length; i++) {
+//				for(int y = 0; y < gameI.getMap().length; y++) {
+//					OverlayDrawer.setTileInfo(gameI.getMap()[i][y],""+gameI.getMap()[i][y].getDiscoverdAtTurn());
+//				}
+//			}
+			
+
+		
 		
 		debug.log("TURN " + turn);
 		antsOrders = new LinkedList<Order>();
 		
 		logger.log("TURN " + turn);
-		boarder.buildBoarder();
+		//boarder.buildBoarder();
+		boarder.improvedBoarder();
 		
 		enemyHillManager.antsToEnemyHill();
 		defendOwnHillManager.defendAntsToOwnHill();

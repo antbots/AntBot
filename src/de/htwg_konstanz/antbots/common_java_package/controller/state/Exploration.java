@@ -6,18 +6,24 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import javax.swing.OverlayLayout;
+
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
+import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 public class Exploration  implements State{
 	
-	Ant ant;
+	private Ant ant;
 	private StateName stateName;
+	private Tile destination;
 
 	public Exploration(Ant a) {
 		this.ant = a;
@@ -34,74 +40,65 @@ public class Exploration  implements State{
 			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
+		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT){
+		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT || BuildBoarder.getAreaAndBoarder() == null)){
 			return;
 		}
+		AntBot.debug().log("COLLECTFOOD FAILD");
 	}
 
 	@Override
 	public void execute() {
-		
-		int radius = (int) Math.sqrt(AntBot.getGameI().getViewRadius2()) + 2;
+		if(destination == null || destination.getType() != Ilk.UNKNOWN)  {
+			int radius = (int) Math.sqrt(AntBot.getGameI().getViewRadius2()) + 2;
 
-		Tile antTile = ant.getAntPosition();
+			Tile antTile = ant.getAntPosition();
 
-		// get the tiles in viewradius+2
-		Set<Tile> visibleTiles = AntBot.getGameI().getTilesInRadius(antTile, radius);
+			// get the tiles in viewradius+2
+			Set<Tile> visibleTiles = AntBot.getGameI().getTilesInRadius(antTile, radius);
 
 
-		List<Tile> route = null;
-		Tile target = null;
-		Set<Tile> targets = null;
+			List<Tile> route = null;
+			Tile target = null;
+			List<Tile> targets = null;
 
-		// get the route of the closest of the highest exploration tiles.
-		while (route == null) {
-			// get the tile with die highest exploreValue
-			targets = AntBot.getGameI().getMaxVisibilityAgo(visibleTiles);
+			// get the route of the closest of the highest exploration tiles.
+			while (route == null) {
+				// get the tile with die highest exploreValue
+				targets = AntBot.getGameI().getTilesToExplore(visibleTiles);
+				target = targets.iterator().next();
+				destination = target;
+				// get the route to the target
+				route = AntBot.getPathfinding().aStar(antTile, target);
+				
+				
+				// target is not rachable -> remove it form visitable
+				visibleTiles.remove(target);
+			}
 			
-
-			
-			target = targets.iterator().next();
-
-			// get the route to the target
-			route = AntBot.getPathfinding().aStar(antTile, target);
-			
-			
-			// target is not rachable -> remove it form visitable
-			visibleTiles.remove(target);
-		}
-
-
-		// draw
-		for (Tile rTile : route) {
-			OverlayDrawer.setFillColor(Color.WHITE);
-			OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
-					SubTile.MM);
-		}
-
-		// do step
-		if (route != null && route.size() > 1) {
-			for (Entry<Tile, Aim> neig : AntBot.getGameI().getMoveAbleNeighbours(
-					(antTile)).entrySet()) {
-				if (route.size() > 1) {
-					Tile a = neig.getKey();
-					if (a != null) {
-						if (a.equals(route.get(1))) {
-
-							List<Tile> order = new LinkedList<Tile>();
-							order.add(new Tile(neig.getKey().getRow(), neig.getKey().getCol()));
-							ant.setRoute(order);
-							AntBot.getLogger().log("Route is set: " + ant.getRoute());
-							route.remove(1);
-						}
-					} else {
-						// keine nachbarn vorhanden
+			// draw
+					for (Tile rTile : route) {
+						OverlayDrawer.setFillColor(Color.WHITE);
+						OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
+								SubTile.MM);
 					}
-				}
+					route.remove(0);
+			ant.setRoute(route);
+			AntBot.getLogger().log("Route is set: " + ant.getRoute());
+		} else {
+			List<Tile> route = null;
+			AntBot.debug().log("destiantion in Exploration " + destination.getType());
+			route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
+			route.remove(0);
+			
+			ant.setRoute(route);
+			for (Tile rTile : route) {
+				OverlayDrawer.setFillColor(Color.WHITE);
+				OverlayDrawer.drawTileSubtile(rTile.getRow(), rTile.getCol(),
+						SubTile.MM);
 			}
 		}
 	}

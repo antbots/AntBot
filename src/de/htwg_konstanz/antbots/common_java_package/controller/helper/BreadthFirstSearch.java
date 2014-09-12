@@ -52,15 +52,14 @@ public class BreadthFirstSearch {
 		Queue<Tile> q = new LinkedList<Tile>();
 		// visitableTiles = new HashSet<Tile>();
 
-		//for (Tile t : postion) {
-//			q.add(t);
+;
 		q.add(postion);
 			if (visitableTiles != null) {
 				visitableTiles.add(postion);
 			}
 
 			pathCosts.put(postion, 0);
-//		}
+
 
 		while (!q.isEmpty()) {
 			tmp = q.remove();

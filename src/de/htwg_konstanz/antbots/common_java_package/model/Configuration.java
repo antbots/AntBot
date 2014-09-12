@@ -23,9 +23,10 @@ public class Configuration {
 	
 	//Boardergroesse
 	public static final int BOARDDISTANCE = 15;
+	public static int LIMITANTSTOBOARDER = 2;
 	
 	//CollectFoodRadius
-	public static final int COLLECTFOODRADIUS = 10;
+	public static final int COLLECTFOODRADIUS = 15;
 	
 	
 }

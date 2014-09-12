@@ -20,9 +20,9 @@ set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
 
 
 set player1="java -jar %~dp0bots\AntBot.jar"
-set player2="java -jar %~dp0bots\MyBot.jar"
+::set player2="java -jar %~dp0bots\MyBot.jar"
 ::set player2="java -jar %~dp0bots\ExplorerBot.jar"
-
+set player2="python %~dp0aichallenge_tools\ants\dist\bots\MyBot.py3"
 
 ::set player2="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
 
@@ -45,7 +45,7 @@ echo Player1: %player1%
 ::start
 ::python %playgame% --verbose -e -So --engine_seed 42 --player_seed 42 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 200 --map_file %map% %* %player1% %player2% | java -jar %visualizer%
 
-python %playgame% --verbose -e --player_seed 42 --turntime 7000 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 500 --map_file %map% %* %player1% %player2% 
+python %playgame% --verbose -e --player_seed 42 --turntime 10000 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 400 --map_file %map% %* %player1% %player2% 
 
 ::--scenario --food none
 
