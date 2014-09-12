@@ -208,13 +208,13 @@ public class BuildBoarder {
 			areaToBoarder.put(entry.getKey(), bo);
 		}
 		for(Entry<Set<Tile>, Set<Tile>> test : areaToBoarder.entrySet()){
-			for(Tile areaTile : test.getKey()) {
-			
-				 OverlayDrawer.setFillColor(Color.PINK);
-				 OverlayDrawer.drawTileSubtile(areaTile.getRow(), areaTile.getCol(),
-				 SubTile.TL);
-
-			}
+//			for(Tile areaTile : test.getKey()) {
+//			
+//				 OverlayDrawer.setFillColor(Color.PINK);
+//				 OverlayDrawer.drawTileSubtile(areaTile.getRow(), areaTile.getCol(),
+//				 SubTile.TL);
+//
+//			}
 			for(Tile bTIle : test.getValue()) {
 				 OverlayDrawer.setFillColor(Color.CYAN);
 				 OverlayDrawer.drawTileSubtile(bTIle.getRow(), bTIle.getCol(),

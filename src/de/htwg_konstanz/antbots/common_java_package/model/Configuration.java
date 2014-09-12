@@ -5,8 +5,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
 
 public class Configuration {
 
-	// Zustand
-	public static final int EXPLORERANTSLIMIT = 5;
+
 	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) +2;
 	
 	// Angriffsalgorithmus
@@ -16,6 +15,7 @@ public class Configuration {
 	
 	//angriff auf gegnerischen Ameisenhügel
 	public static final int ANTSINGROUPTOENEMYHILL = 3;
+	public static final int RADIUSTOENEMYHILL = 15;
 	
 	//Verteidigung eigener Ameisenhügel
 	public static final int DEFENDANTS = 1;
@@ -23,10 +23,19 @@ public class Configuration {
 	
 	//Boardergroesse
 	public static final int BOARDDISTANCE = 15;
-	public static int LIMITANTSTOBOARDER = 2;
 	
 	//CollectFoodRadius
 	public static final int COLLECTFOODRADIUS = 15;
+	
+	
+	
+	public static int getExplorerAntsLimit(){
+		int size = AntBot.getGameI().getMyAnts().size();
+//		if(size <= 10) {
+//			return size;
+//		}
+		return (int) (size * 0.25)+10;
+	}
 	
 	
 }

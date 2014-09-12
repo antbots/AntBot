@@ -38,12 +38,12 @@ public class CollectFood implements State {
 		}
 		if (!ant.isDanger()
 				&& !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)
-				&& AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT && BuildBoarder.marktAnts().contains(ant)) {
+				&& AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)) {
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
 		if (!ant.isDanger()
-				&& !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& (( AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT || BuildBoarder.getAreaAndBoarder() == null) || (BuildBoarder.getAreaAndBoarder() != null && !BuildBoarder.getAreaAndBoarder().containsKey(ant))))  {
+				&& !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& (( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null) || (BuildBoarder.getAreaAndBoarder() != null && !BuildBoarder.getAreaAndBoarder().containsKey(ant))))  {
 			ant.setState(new Exploration(ant));
 			return;
 		}

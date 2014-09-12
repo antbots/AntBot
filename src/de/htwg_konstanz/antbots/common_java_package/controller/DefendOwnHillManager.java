@@ -36,7 +36,7 @@ public class DefendOwnHillManager {
 
 
 			Set<Tile> tilesAroundHill = new HashSet<>();
-			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, 8, tilesAroundHill);
+			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, 4, tilesAroundHill);
 			
 			int i = 0;
 			

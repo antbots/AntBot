@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -94,20 +95,27 @@ public class AntBot extends Bot {
 		enemyHillManager.antsToEnemyHill();
 		defendOwnHillManager.defendAntsToOwnHill();
 		
+		debug.log("markOwnAntsAsDangered davor");
 		attackManager.markOwnAntsAsDangered();
+		debug.log("markOwnAntsAsDangered danach");
+		debug.log("markAntsToAttack davor");
 		attackManager.markAntsToAttack();
+		debug.log("markAntsToAttack danach");
+		debug.log("moveError davor");
 		
+		debug.log("markAntsToCollectFood davor");
 		GameInformations.getFoodManager().markAntsToCollectFood();
+		debug.log("markAntsToCollectFood danach");
 		
 		gameI.getMyAnts().forEach(a -> {
 			logger.log("Process Ant: " + a.getAntPosition());
 			a.doLogic();
 			a.move();
 		});
-		
+		debug.log("moveError davor");
 		while(moveError){
 			resolveMoveError();
-		}
+		}debug.log("moveError danach");
 		sendMovesToSimulation();
 		
 		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
@@ -170,6 +178,8 @@ public class AntBot extends Bot {
 	public static Logger debug() {
 		return debug;
 	}
+
+	public static int t = 0;
 	
 	public static void resolveMoveError(){
 		boolean skip = false;
@@ -193,10 +203,42 @@ public class AntBot extends Bot {
 		if(skip) {
 			for(Order error : errorMoves){
 				AntBot.getAntsOrders().remove(error);
-				Order newOrder = new Order(error.getPosition(), Aim.DONTMOVE);
+				
+				Map<Aim, Order> aimToOder = new HashMap<>();
+				aimToOder.put(Aim.EAST, new Order(error.getPosition(),Aim.EAST));
+				aimToOder.put(Aim.NORTH, new Order(error.getPosition(),Aim.NORTH));
+				aimToOder.put(Aim.SOUTH, new Order(error.getPosition(),Aim.SOUTH));
+				aimToOder.put(Aim.WEST, new Order(error.getPosition(),Aim.WEST));
+				aimToOder.put(Aim.DONTMOVE, new Order(error.getPosition(),Aim.DONTMOVE));
+				
+				List<Aim> toRemove = new LinkedList<>();
+				for(Entry<Aim, Order> e: aimToOder.entrySet()){
+					Order o1 = e.getValue();
+					for(Order o2 : AntBot.getAntsOrders()){
+						if(o1.getNewPosition().equals(o2.getNewPosition())){
+							toRemove.add(e.getKey());
+							break;
+						}
+					}
+				}
+				for(Aim a : toRemove) {
+					aimToOder.remove(a);
+				}
+				Order newOrder= (Order) aimToOder.values().toArray()[0];
+
 				newOrder.setAnt(error.getAnt());
 				AntBot.getAntsOrders().add(newOrder);
-				newOrder.getAnt().setPosition(newOrder.getPosition().getRow(), newOrder.getPosition().getCol());
+				newOrder.getAnt().setPosition(newOrder.getNewPosition().getRow(), newOrder.getNewPosition().getCol());
+
+				
+				
+				debug.log("aufruf " + errorMoves.size() + t );
+				t++;
+				
+//				Order newOrder = new Order(error.getPosition(), Aim.DONTMOVE);
+//				newOrder.setAnt(error.getAnt());
+//				AntBot.getAntsOrders().add(newOrder);
+//				newOrder.getAnt().setPosition(newOrder.getPosition().getRow(), newOrder.getPosition().getCol());
 			}
 			AntBot.setMoveError(true);
 		}else{

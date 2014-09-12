@@ -1,18 +1,13 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.state;
 
 import java.awt.Color;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Map.Entry;
-
-import javax.swing.OverlayLayout;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
-import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -44,7 +39,7 @@ public class Exploration  implements State{
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT || BuildBoarder.getAreaAndBoarder() == null)){
+		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null)){
 			return;
 		}
 		AntBot.debug().log("COLLECTFOOD FAILD");
