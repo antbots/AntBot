@@ -52,6 +52,7 @@ public class GoToBoarder implements State{
 					ant.setRoute(route);
 
 					destination = route.get(route.size() - 1);
+					AntBot.debug().log("DESTINATION " + route.get(route.size() - 1));
 				}
 			}
 			

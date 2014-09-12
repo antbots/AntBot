@@ -157,6 +157,7 @@ public class BuildBoarder {
 		}
 	}
 	static Set<Ant> ants;
+	
 	public static void improvedBoarder() {
 		List<Set<Tile>> areas = buildAreas();
 		Map<Set<Tile>, Set<Ant>> areaToEnemyAnt = new HashMap<>();
