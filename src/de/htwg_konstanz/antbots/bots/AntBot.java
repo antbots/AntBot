@@ -3,9 +3,11 @@ package de.htwg_konstanz.antbots.bots;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import jdk.internal.org.objectweb.asm.commons.GeneratorAdapter;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
@@ -43,7 +45,7 @@ public class AntBot extends Bot {
 	private static AttackManager attackManager;
 	private static EnemyHillManager enemyHillManager;
 	private static DefendOwnHillManager defendOwnHillManager;
-	private static LinkedList<Order> antsOrders;
+	private static Set<Order> antsOrders;
 	private static boolean moveError = false;
 	private static Logger debug = new Logger("Debug.txt");
 	
@@ -73,7 +75,7 @@ public class AntBot extends Bot {
 		}
 		
 		debug.log("TURN " + turn);
-		antsOrders = new LinkedList<Order>();
+		antsOrders = new HashSet<Order>();
 		
 		logger.log("TURN " + turn);
 		boarder.buildBoarder();
@@ -150,7 +152,7 @@ public class AntBot extends Bot {
 		return defendOwnHillManager;
 	}
 	
-	public static LinkedList<Order> getAntsOrders(){
+	public static Set<Order> getAntsOrders(){
 		return antsOrders;
 	}
 	
