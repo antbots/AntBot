@@ -41,12 +41,17 @@ public class AttackInit {
 		}
 		merge(attack);
 		helpAnts(attack);
+		
+		for(Entry<Set<Ant>, Set<Ant>> a : attack.entrySet()) {
+			AntBot.debug().log(a.getKey() + " " + a.getValue());
+		}
+		
 		return attack;
 	}
 	
 	private Map<Set<Ant>, Set<Ant>> helpAnts(Map<Set<Ant>, Set<Ant>> attack){
 		for(Set<Ant> myAttackAnts : attack.keySet()) {
-			AntBot.debug().log("VOR HELPER " + myAttackAnts);
+//			AntBot.debug().log("VOR HELPER " + myAttackAnts);
 			Set<Ant> tmp = new HashSet<>(myAttackAnts);
 			
 			for(Ant ant : myAttackAnts) {
@@ -55,7 +60,7 @@ public class AttackInit {
 				if(helperAnts.size() == 0) {
 					continue;
 				}
-				while (tmp.size() <= Configuration.GROUPSIZE) {
+				while (tmp.size() < Configuration.GROUPSIZE) {
 					Ant help = helperAnts.remove(helperAnts.size() - 1);
 					if(!help.isDanger()) {
 						help.isDanger();
@@ -71,7 +76,7 @@ public class AttackInit {
 				
 			}
 			myAttackAnts = tmp;
-			AntBot.debug().log("VOR HELPER " + myAttackAnts);
+//			AntBot.debug().log("VOR HELPER " + myAttackAnts);
 		}
 		return attack;
 	}
@@ -92,8 +97,8 @@ public class AttackInit {
 					tmp.retainAll(attackGroups.getValue());
 
 					if (tmp.size() != 0) {
-						if (attackGroups.getKey().size() <= Configuration.GROUPSIZE
-								|| attackGroups.getValue().size() <= Configuration.GROUPSIZE) {
+						if (attackGroups.getKey().size() < Configuration.GROUPSIZE
+								|| attackGroups.getValue().size() < Configuration.GROUPSIZE) {
 							attackGroups.getKey().addAll(areaTwo.getKey());
 							attackGroups.getValue().addAll(areaTwo.getValue());
 							attack.remove(areaTwo.getKey());

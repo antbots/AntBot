@@ -68,16 +68,9 @@ public class FoodManager {
 				if(distance <= Configuration.COLLECTFOODRADIUS) {
 					antfood.add(new AntFood(a, t, distance));
 				}
-				
 			}
 		}
 		
-//		AntBot.debug().log("--------------------------------------");
-//		
-//		for(AntFood a : antfood) {
-//			AntBot.debug().log(a.toString());
-//		}
-//		AntBot.debug().log("--------------------------------------");
 		antfood.sort(new AntFoodComperator());
 		
 		List<Tile> tmpFood = new LinkedList<>();

@@ -39,10 +39,10 @@ public class Exploration  implements State{
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null)){
+		if(!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null)){
 			return;
 		}
-		AntBot.debug().log("COLLECTFOOD FAILD");
+//		AntBot.debug().log("COLLECTFOOD FAILD");
 	}
 
 	@Override
@@ -57,21 +57,26 @@ public class Exploration  implements State{
 
 
 			List<Tile> route = null;
-			Tile target = null;
 			List<Tile> targets = null;
+			Tile target = null;
 
 			// get the route of the closest of the highest exploration tiles.
 			while (route == null) {
 				// get the tile with die highest exploreValue
-				targets = AntBot.getGameI().getTilesToExplore(visibleTiles);
-				target = targets.iterator().next();
+				targets = AntBot.getGameI().getUnknowTilesToExplore(visibleTiles);
+				if(targets.size() != 0) {
+					target = targets.get((int)Math.random() * (targets.size() - 1));
+				} else {
+					targets = AntBot.getGameI().getValueTilesToExplore(visibleTiles);
+					target = targets.iterator().next();
+				}
 				destination = target;
 				// get the route to the target
-				route = AntBot.getPathfinding().aStar(antTile, target);
+				route = AntBot.getPathfinding().aStar(antTile, destination);
 				
 				
 				// target is not rachable -> remove it form visitable
-				visibleTiles.remove(target);
+				visibleTiles.remove(destination);
 			}
 			
 			// draw
@@ -85,7 +90,7 @@ public class Exploration  implements State{
 			AntBot.getLogger().log("Route is set: " + ant.getRoute());
 		} else {
 			List<Tile> route = null;
-			AntBot.debug().log("destiantion in Exploration " + destination.getType());
+//			AntBot.debug().log("destiantion in Exploration " + destination.getType());
 			route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
 			route.remove(0);
 			

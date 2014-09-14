@@ -70,21 +70,19 @@ public class AttackEnemyHill implements State{
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if (!ant.isDanger()
-				&& !AntBot.getGameI().getFoodManager().getMarkedAnts()
+		if (!AntBot.getGameI().getFoodManager().getMarkedAnts()
 						.containsKey(ant)
 				&& AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)) {
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
-		if (!ant.isDanger()
-				&& !AntBot.getGameI().getFoodManager().getMarkedAnts()
+		if (!AntBot.getGameI().getFoodManager().getMarkedAnts()
 						.containsKey(ant)
 				&& AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit()) {
 			ant.setState(new Exploration(ant));
 			return;
 		}
-		AntBot.debug().log("ATTACK ENEMY HILL FAILD");
+//		AntBot.debug().log("ATTACK ENEMY HILL FAILD");
 	}
 
 	@Override

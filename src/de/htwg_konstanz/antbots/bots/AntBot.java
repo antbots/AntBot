@@ -58,7 +58,7 @@ public class AntBot extends Bot {
 
 	private void init() {
 		gameI = gameStateInforamtions();
-		gameI.setLogger(logger);
+		GameInformations.setLogger(logger);
 		bsf = new BreadthFirstSearch(gameI);
 		pathfinding = new Pathfinding(gameI);
 		boarder = new BuildBoarder(gameI);
@@ -72,9 +72,11 @@ public class AntBot extends Bot {
 	@Override
 	public void doTurn() {
 		debug.log("---------------------------------------------------------------------------------------");
+		debug.log(""+turn);
 		if (turn == 0) {
 			init();
 		}
+		
 
 //			for(int i = 0; i< gameI.getMap().length; i++) {
 //				for(int y = 0; y < gameI.getMap().length; y++) {
@@ -85,40 +87,46 @@ public class AntBot extends Bot {
 
 		
 		
-		debug.log("TURN " + turn);
-		antsOrders = new LinkedList<Order>();
 		
-		logger.log("TURN " + turn);
-		//boarder.buildBoarder();
-		boarder.improvedBoarder();
+		antsOrders = new LinkedList<Order>();
+
+		BuildBoarder.improvedBoarder();
 		
 		enemyHillManager.antsToEnemyHill();
 		defendOwnHillManager.defendAntsToOwnHill();
 		
-		debug.log("markOwnAntsAsDangered davor");
-		attackManager.markOwnAntsAsDangered();
-		debug.log("markOwnAntsAsDangered danach");
-		debug.log("markAntsToAttack davor");
-		attackManager.markAntsToAttack();
-		debug.log("markAntsToAttack danach");
-		debug.log("moveError davor");
 		
-		debug.log("markAntsToCollectFood davor");
+		attackManager.markOwnAntsAsDangered();
+		attackManager.markAntsToAttack();
+		if(attackManager.getMarkedAnts() != null) 
+		for(Entry<Ant, Order> a : attackManager.getMarkedAnts().entrySet()) {
+			debug.log("Ameise " + a.getKey().getAntPosition() + " " +  a.getKey().isDanger());
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
 		GameInformations.getFoodManager().markAntsToCollectFood();
-		debug.log("markAntsToCollectFood danach");
+		
 		
 		gameI.getMyAnts().forEach(a -> {
 			logger.log("Process Ant: " + a.getAntPosition());
 			a.doLogic();
 			a.move();
 		});
-		debug.log("moveError davor");
+		
 		while(moveError){
 			resolveMoveError();
-		}debug.log("moveError danach");
+		}
 		sendMovesToSimulation();
 		
-		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
+//		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
 		
 		debug.log("---------------------------------------------------------------------------------------");
 		turn++;
