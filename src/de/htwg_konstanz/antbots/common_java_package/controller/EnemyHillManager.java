@@ -27,7 +27,7 @@ public class EnemyHillManager {
 				tileToAnt.put(t, a);
 			}
 
-			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, 30, null);
+			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, Configuration.RADIUSTOENEMYHILL, null);
 
 			if (myAnts.size() > Configuration.ANTSINGROUPTOENEMYHILL) {
 				int i = 0;

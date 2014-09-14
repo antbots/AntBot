@@ -3,9 +3,9 @@ package de.htwg_konstanz.antbots.common_java_package.controller.state;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
@@ -32,14 +32,15 @@ public class Attack implements State{
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.EXPLORERANTSLIMIT){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.EXPLORERANTSLIMIT){
+		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit()){
 			ant.setState(new Exploration(ant));
 			return;
 		}
+		AntBot.debug().log("ATTACK FAILD");
 	}
 
 	@Override

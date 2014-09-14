@@ -42,36 +42,11 @@ public class GameInformations {
 
 	private static Tile map[][];
 
-	/**
-	 * Stores the information when the tile was at last visible. Unknowns are
-	 * setuped with maxTurns.
-	 */
-	private final int atLastVisible[][];
 	
 	private Set<Ant> myAntsDangered = new HashSet<Ant>();
 
 
 	private final List<Ant> myAnts = new LinkedList<Ant>();
-
-	private final Set<Ant> enemyAnts_1 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_2 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_3 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_4 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_5 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_6 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_7 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_8 = new HashSet<Ant>();
-
-	private final Set<Ant> enemyAnts_9 = new HashSet<Ant>();
-	
-	private LinkedList<Set<Ant>> enemiesAsList = new LinkedList<>();
 
 	private final Set<Tile> myHills = new HashSet<Tile>();
 
@@ -82,7 +57,7 @@ public class GameInformations {
 
 	private final Set<Order> orders = new HashSet<Order>();
 
-	private Set<Ant> enemiesAsSingle = new HashSet<Ant>();
+	private Set<Ant> enemyAnts = new HashSet<Ant>();
 	
 	private int explorerAnts = 0;
 
@@ -124,16 +99,6 @@ public class GameInformations {
 		this.attackRadius2 = attackRadius2;
 		this.spawnRadius2 = spawnRadius2;
 
-		enemiesAsList.addLast(enemyAnts_1);
-		enemiesAsList.addLast(enemyAnts_2);
-		enemiesAsList.addLast(enemyAnts_3);
-		enemiesAsList.addLast(enemyAnts_4);
-		enemiesAsList.addLast(enemyAnts_5);
-		enemiesAsList.addLast(enemyAnts_6);
-		enemiesAsList.addLast(enemyAnts_7);
-		enemiesAsList.addLast(enemyAnts_8);
-		enemiesAsList.addLast(enemyAnts_9);
-
 		// map
 		map = new Tile[rows][cols];
 		for (int i = 0; i < rows; i++) {
@@ -146,12 +111,6 @@ public class GameInformations {
 		visible = new boolean[rows][cols];
 		for (boolean[] row : visible) {
 			Arrays.fill(row, false);
-		}
-
-		// init the atLastVisible with maxTurns
-		atLastVisible = new int[rows][cols];
-		for (int[] row : atLastVisible) {
-			Arrays.fill(row, getTurns());
 		}
 
 		// calc vision offsets
@@ -348,8 +307,6 @@ public class GameInformations {
 
 	/**
 	 * Next Turn. Is called by the bot itself.
-	 * 
-	 * @author Chrisi
 	 */
 	public void increaseTurn() {
 		turn++;
@@ -365,56 +322,38 @@ public class GameInformations {
 		return turn;
 	}
 
-	/**
-	 * Number turns since the tile was visible. Higher than maxTurns if the tile
-	 * was never visible.
-	 * 
-	 * @param tile
-	 * @author Chrisi
-	 * @return
-	 */
-	public int getVisibilityAgo(Tile tile) {
-		int i = getCurrentTurn() - getAtLastVisible(tile);
-		return (int) Math.abs(i);
-	}
 
-	/**
-	 * Turns while this tile was not visible.
-	 * 
-	 * @param tile
-	 * @author Chrisi
-	 * @return
-	 */
-	public int getAtLastVisible(Tile tile) {
-		return atLastVisible[tile.getRow()][tile.getCol()];
-	}
 
-	public void setAtLastVisible(Tile tile, int value) {
-		atLastVisible[tile.getRow()][tile.getCol()] = value;
-	}
-
-	/**
-	 * Returns the Tiles with the oldest Visibility.
-	 * 
-	 * @param collection
-	 * @author Chrisi
-	 * @return
-	 */
-	public Set<Tile> getMaxVisibilityAgo(Collection<Tile> c) {
-		Set<Tile> oldest = new HashSet<Tile>();
-		int max = 0;
-
-		for (Tile tile : c) {
-			int ago = getVisibilityAgo(tile);
-			if (ago >= max) {
-				if (ago > max) {
-					oldest.clear();
-					max = ago;
-				}
-				oldest.add(tile);
+	public List<Tile> getTilesToExplore(Collection<Tile> c) {
+		List<Tile> tilesToExplore = new LinkedList<>();
+		
+		for(Tile t : c) {
+			if(t.getType() == Ilk.UNKNOWN) {
+				tilesToExplore.add(t);
 			}
 		}
-		return oldest;
+		
+		if(tilesToExplore.size() == 0) {
+			for(Tile t : c) {
+				tilesToExplore.add(t);
+			}
+			
+			tilesToExplore.sort(new TilesComperator());
+			
+		}
+		
+		return tilesToExplore;
+	}
+	
+	class TilesComperator implements Comparator<Tile> {
+
+		@Override
+		public int compare(Tile o1, Tile o2) {
+			
+			return o1.getDiscoverdAtTurn() - o2.getDiscoverdAtTurn();
+		}
+
+		
 	}
 
 	/**
@@ -594,17 +533,7 @@ public class GameInformations {
 	 * @return a set containing all enemy ants locations
 	 */
 	public Set<Ant> getEnemyAnts() {
-		return enemiesAsSingle;
-	}
-
-	public LinkedList<Set<Ant>> getEnemyAntsAsList() {
-		LinkedList<Set<Ant>> tmp = new LinkedList<>();
-		for (Set<Ant> set : enemiesAsList) {
-			if (!set.isEmpty()) {
-				tmp.add(set);
-			}
-		}
-		return tmp;
+		return enemyAnts;
 	}
 
 	/**
@@ -758,14 +687,11 @@ public class GameInformations {
 	 * Clears game state information about enemy ants locations.
 	 */
 	public void clearEnemyAnts() {
-		for (Ant enemyAnt : enemiesAsSingle) {
+		for (Ant enemyAnt : enemyAnts) {
 			Tile position = enemyAnt.getAntPosition();
 			map[position.getRow()][position.getCol()].setType(Ilk.LAND);
 		}
-		enemiesAsSingle.clear();
-		for (Set<Ant> enemyAnts : enemiesAsList) {
-			enemyAnts.clear();
-		}
+		enemyAnts.clear();
 	}
 
 	/**
@@ -815,10 +741,11 @@ public class GameInformations {
 			for (Tile locOffset : vOffsets) {
 				Tile newLoc = getTile(ant.getAntPosition(), locOffset);
 				visible[newLoc.getRow()][newLoc.getCol()] = true;
+				
+				//for exploration
+				newLoc.setDiscoverdAtTurn(turn);
 
-				// set the atLastVisible value.
-				atLastVisible[newLoc.getRow()][newLoc.getCol()] = getCurrentTurn();
-
+				
 				if (newLoc.getType() == Ilk.UNKNOWN) {
 					newLoc.setType(Ilk.LAND);
 				}
@@ -861,53 +788,15 @@ public class GameInformations {
 
 			}
 			if (set == true) {
-				// logger.log("drinn");
+
 			} else {
 				myAnts.add(new Ant(tile,antIdCounter));
-				// logger.log("nicht drinn");
+
 			}
-			// if(myAnts.contains(tmp)) {
-			// logger.log("schon vorhanden");
-			// } else {
-			// myAnts.add(tmp);
-			// logger.log("nicht vorhanden");
-			// }
+
 			break;
-		case ENEMY_ANT_1:
-			enemyAnts_1.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_2:
-			enemyAnts_2.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_3:
-			enemyAnts_3.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_4:
-			enemyAnts_4.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_5:
-			enemyAnts_5.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_6:
-			enemyAnts_6.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_7:
-			enemyAnts_7.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_8:
-			enemyAnts_8.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
-			break;
-		case ENEMY_ANT_9:
-			enemyAnts_9.add(new Ant(tile,enemyIdCounter));
-			enemiesAsSingle.add(new Ant(tile,enemyIdCounter));
+		case ENEMY_ANT:
+			enemyAnts.add(new Ant(tile,enemyIdCounter));
 			break;
 		}
 		antIdCounter++;
