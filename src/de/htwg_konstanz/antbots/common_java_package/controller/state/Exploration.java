@@ -66,10 +66,17 @@ public class Exploration  implements State{
 				targets = AntBot.getGameI().getUnknowTilesToExplore(visibleTiles);
 				if(targets.size() != 0) {
 					target = targets.get((int)Math.random() * (targets.size() - 1));
+					if(AntBot.getGameI().getMoveAbleNeighbours(target).size() == 0) {
+						destination = null;
+						target.setType(Ilk.WATER);
+						execute();
+					}
 				} else {
 					targets = AntBot.getGameI().getValueTilesToExplore(visibleTiles);
 					target = targets.iterator().next();
 				}
+				
+
 				destination = target;
 				// get the route to the target
 				route = AntBot.getPathfinding().aStar(antTile, destination);

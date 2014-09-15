@@ -25,6 +25,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFir
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
@@ -200,7 +201,7 @@ public class AntBot extends Bot {
 						if(!errorMoves.contains(o2)){
 							errorMoves.add(o2);
 						}
-					}else{
+					} else {
 						if(!errorMoves.contains(o1)){
 							errorMoves.add(o1);
 						}
@@ -232,11 +233,17 @@ public class AntBot extends Bot {
 				for(Aim a : toRemove) {
 					aimToOder.remove(a);
 				}
-				Order newOrder= (Order) aimToOder.values().toArray()[0];
-
+				//Order newOrder= (Order) aimToOder.values().toArray()[0];
+				Order newOrder = null;
+				for(Order o : aimToOder.values()) {
+					if(o.getPosition().getType() != Ilk.WATER) {
+						newOrder = o;
+						break;
+					}
+				}
+				
 				newOrder.setAnt(error.getAnt());
 				AntBot.getAntsOrders().add(newOrder);
-				newOrder.getAnt().setPosition(newOrder.getNewPosition().getRow(), newOrder.getNewPosition().getCol());
 
 				
 				
@@ -261,6 +268,7 @@ public class AntBot extends Bot {
 	private static void sendMovesToSimulation(){
 		for(Order o : getAntsOrders()){
 			AntBot.getGameI().issueOrder(o.getPosition(), o.getDirection());
+			o.getAnt().setPosition(o.getNewPosition().getRow(), o.getNewPosition().getCol());
 		}
 	}
 	
