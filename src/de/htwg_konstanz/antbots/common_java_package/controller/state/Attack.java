@@ -28,15 +28,15 @@ public class Attack implements State{
 			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
-		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
+		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
+		if(!AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
-		if(!ant.isDanger() && !AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit()){
+		if(!AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit()){
 			ant.setState(new Exploration(ant));
 			return;
 		}

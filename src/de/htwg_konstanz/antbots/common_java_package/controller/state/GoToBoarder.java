@@ -89,11 +89,11 @@ public class GoToBoarder implements State{
 			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
-		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
+		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
+		if(!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
 			return;
 		}
 		AntBot.debug().log("GoToBoarder FAILD");

@@ -6,7 +6,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
 public class Configuration {
 
 
-	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) +2;
+	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) * 3;
 	
 	// Angriffsalgorithmus
 	public static final AlphaBeta.Strategy ATTACKSTRATEGY = AlphaBeta.Strategy.NEUTRAL;

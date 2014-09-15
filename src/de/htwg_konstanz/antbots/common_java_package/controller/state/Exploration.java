@@ -35,11 +35,11 @@ public class Exploration  implements State{
 			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
-		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && !ant.isDanger()){
+		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!ant.isDanger() && !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null)){
+		if(!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null)){
 			return;
 		}
 		AntBot.debug().log("COLLECTFOOD FAILD");

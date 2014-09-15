@@ -33,17 +33,15 @@ public class CollectFood implements State {
 			ant.setState(new AttackEnemyHill(ant));
 			return;
 		}
-		if (GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& !ant.isDanger()) {
+		if (GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)) {
 			return;
 		}
-		if (!ant.isDanger()
-				&& !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)
+		if (!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)
 				&& AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)) {
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
-		if (!ant.isDanger()
-				&& !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& (( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null) || (BuildBoarder.getAreaAndBoarder() != null && !BuildBoarder.getAreaAndBoarder().containsKey(ant))))  {
+		if (!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& (( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null) || (BuildBoarder.getAreaAndBoarder() != null && !BuildBoarder.getAreaAndBoarder().containsKey(ant))))  {
 			ant.setState(new Exploration(ant));
 			return;
 		}
