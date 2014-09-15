@@ -31,7 +31,8 @@ public class InitState  implements State{
 			ant.setState(new CollectFood(ant));
 			return;
 		}
-		if(!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
+
+		if( !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)){
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}

@@ -12,9 +12,9 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
-
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -288,8 +288,8 @@ public class Pathfinding {
 				return g + h;
 			}
 
-			public String getId() {
-				return node.toString();
+			public Tile getId() {
+				return node;
 			}
 
 			public int getG() {
@@ -334,6 +334,31 @@ public class Pathfinding {
 
 		public List<Tile> aStar(Tile source, Tile target, int weight) {
 			
+//			Set<AStarNode> openSet = new HashSet();
+//			AStarNode start = new AStarNode(source, 0, gameI.getDistance(source, target));
+//			
+//			Set<Vertex> kl;// Kandidatenliste
+//					for (jeden Knoten v) {
+//					d[v] = !;
+//					p[v] = undef;
+//					}
+//			
+//					d[s] = 0; // Startknoten
+//					kl.insert(s);
+//					while (! kl.empty() ) {
+//					lösche Knoten v aus kl mit d[v] + h(v,z) minimal;
+//					if (v == z) // Zielknoten z erreicht
+//					return true;
+//					for ( jeden adjazenten Knoten w von v ) {
+//					if (d[w] == !) // w noch nicht besucht und nicht in Kandidatenliste
+//					kl.insert(w);
+//					if (d[v] + c(v,w) < d[w]) {
+//					p[w] = v;
+//					d[w] = d[v] + c(v,w);
+//					}
+//					}
+//					}
+//					return false;		
 			
 			Map<Tile, AStarNode> openSet = new HashMap<Tile, AStarNode>();
 			PriorityQueue<AStarNode> pQueue = new PriorityQueue<AStarNode>(20,	new AStarNodeComparator());
@@ -354,8 +379,8 @@ public class Pathfinding {
 
 					
 				
-				openSet.remove(current.getId());
-				if (current.getId().equals(target.toString())) {
+				openSet.remove(current.getNode());
+				if (current.getNode().equals(target)) {
 					// found
 					goal = current;
 					break;
@@ -419,6 +444,10 @@ public class Pathfinding {
 				return list;
 			}
 //			AntBot.debug().log("Am ende");
+			
+			if(goal == null) {
+				AntBot.debug().log("Start " + source + " Ziel " + target);
+			}
 			return null;
 		}
 	}

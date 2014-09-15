@@ -6,7 +6,8 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.AlphaBeta;
 public class Configuration {
 
 
-	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) * 3;
+
+	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) + 3 ;
 	
 	// Angriffsalgorithmus
 	public static final AlphaBeta.Strategy ATTACKSTRATEGY = AlphaBeta.Strategy.NEUTRAL;
@@ -18,7 +19,7 @@ public class Configuration {
 	public static final int RADIUSTOENEMYHILL = 15;
 	
 	//Verteidigung eigener Ameisenhügel
-	public static final int DEFENDANTS = 1;
+	public static final int DEFENDANTS = 3;
 	public static final int LIMITWHENDEFENDANTSAREORDERD = 10;
 	
 	//Boardergroesse

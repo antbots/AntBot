@@ -42,9 +42,7 @@ public class GameInformations {
 
 	private static Tile map[][];
 
-	
 	private Set<Ant> myAntsDangered = new HashSet<Ant>();
-
 
 	private final List<Ant> myAnts = new LinkedList<Ant>();
 
@@ -53,16 +51,15 @@ public class GameInformations {
 	private final Set<Tile> enemyHills = new HashSet<Tile>();
 
 	private static FoodManager foodManager = new FoodManager();
-	
 
 	private final Set<Order> orders = new HashSet<Order>();
 
 	private Set<Ant> enemyAnts = new HashSet<Ant>();
-	
+
 	private int explorerAnts = 0;
 
 	private int antIdCounter = 0;
-	
+
 	private int enemyIdCounter = 0;
 
 	private static Logger logger;
@@ -143,16 +140,16 @@ public class GameInformations {
 		}
 		return set;
 	}
-	
-	public void increaseExplorerAnts(){
+
+	public void increaseExplorerAnts() {
 		explorerAnts++;
 	}
-	
-	public void decreaseExplorerAnts(){
+
+	public void decreaseExplorerAnts() {
 		explorerAnts--;
 	}
-	
-	public int getExplorerAnts(){
+
+	public int getExplorerAnts() {
 		return explorerAnts;
 	}
 
@@ -186,21 +183,21 @@ public class GameInformations {
 		for (Aim a : Aim.values()) {
 			if (a != Aim.DONTMOVE && getIlk(t) != Ilk.WATER) {
 				Tile tile = getTile(t, a);
-				if(getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
+				if (getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
 					list.put(tile, a);
 				}
-			}				
+			}
 		}
 		return list;
 	}
-	
+
 	public LinkedList<Aim> getMoveAbleDirections(Tile t) {
 		LinkedList<Aim> list = new LinkedList<Aim>();
 		for (Aim a : Aim.values()) {
 			Tile tile = getTile(t, a);
-			if(getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
+			if (getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
 				list.add(a);
-			}			
+			}
 		}
 		return list;
 	}
@@ -322,38 +319,37 @@ public class GameInformations {
 		return turn;
 	}
 
-
-
-	public List<Tile> getTilesToExplore(Collection<Tile> c) {
+	public List<Tile> getUnknowTilesToExplore(Collection<Tile> c) {
 		List<Tile> tilesToExplore = new LinkedList<>();
-		
-		for(Tile t : c) {
-			if(t.getType() == Ilk.UNKNOWN) {
+
+		for (Tile t : c) {
+			if (t.getType() == Ilk.UNKNOWN) {
 				tilesToExplore.add(t);
 			}
 		}
-		
-		if(tilesToExplore.size() == 0) {
-			for(Tile t : c) {
-				tilesToExplore.add(t);
-			}
-			
-			tilesToExplore.sort(new TilesComperator());
-			
-		}
-		
 		return tilesToExplore;
 	}
-	
+
+	public List<Tile> getValueTilesToExplore(Collection<Tile> c) {
+		List<Tile> tilesToExplore = new LinkedList<>();
+
+		for (Tile t : c) {
+			tilesToExplore.add(t);
+		}
+
+		tilesToExplore.sort(new TilesComperator());
+
+		return tilesToExplore;
+	}
+
 	class TilesComperator implements Comparator<Tile> {
 
 		@Override
 		public int compare(Tile o1, Tile o2) {
-			
+
 			return o1.getDiscoverdAtTurn() - o2.getDiscoverdAtTurn();
 		}
 
-		
 	}
 
 	/**
@@ -741,23 +737,20 @@ public class GameInformations {
 			for (Tile locOffset : vOffsets) {
 				Tile newLoc = getTile(ant.getAntPosition(), locOffset);
 				visible[newLoc.getRow()][newLoc.getCol()] = true;
-				
-				//for exploration
+
+				// for exploration
 				newLoc.setDiscoverdAtTurn(turn);
 
-				
 				if (newLoc.getType() == Ilk.UNKNOWN) {
 					newLoc.setType(Ilk.LAND);
 				}
 			}
 		}
 	}
-	
 
 	public static FoodManager getFoodManager() {
 		return foodManager;
 	}
-
 
 	/**
 	 * Updates game state information about new ants and food locations.
@@ -778,11 +771,11 @@ public class GameInformations {
 			boolean set = false;
 
 			if (turn == 1) {
-				myAnts.add(new Ant(tile,antIdCounter));
+				myAnts.add(new Ant(tile, antIdCounter));
 			}
 			for (Ant ant : myAnts) {
 				if (ant.getAntPosition().equals(tile)) {// .getAntPosition().equals(tile))
-												// {
+					// {
 					set = true;
 				}
 
@@ -790,13 +783,13 @@ public class GameInformations {
 			if (set == true) {
 
 			} else {
-				myAnts.add(new Ant(tile,antIdCounter));
+				myAnts.add(new Ant(tile, antIdCounter));
 
 			}
 
 			break;
 		case ENEMY_ANT:
-			enemyAnts.add(new Ant(tile,enemyIdCounter));
+			enemyAnts.add(new Ant(tile, enemyIdCounter));
 			break;
 		}
 		antIdCounter++;
@@ -928,30 +921,32 @@ public class GameInformations {
 	public void setMyAntDangered(Set<Ant> myAnts) {
 		myAntsDangered = myAnts;
 	}
-	
+
 	public Set<Ant> getOwnNotDangeredAnts() {
 		Set<Ant> notDangerd = new HashSet<>();
-		
-		for(Ant ant : myAnts) {
-			if(!ant.isDanger()) {
+
+		for (Ant ant : myAnts) {
+			if (!ant.isDanger()) {
 				notDangerd.add(ant);
 			}
 		}
 		return notDangerd;
 	}
-	
+
 	/**
 	 * gibt alle eigenen Ameisen im SIchtfeld zurück
 	 */
-	public Set<Ant> getOwnAntsInViewRadiusNotDangered(Ant ant, int antSize){
+	public Set<Ant> getOwnAntsInViewRadiusNotDangered(Ant ant, int antSize) {
 		Set<Ant> myAntsInViewRadius = new HashSet<>();
-		Set<Tile> tilesInViewRadius = getTilesInRadius(ant.getAntPosition(), (int)Math.sqrt(getViewRadius2()));
-		for(Ant myAnt : getMyAnts()) {
-			if(!myAnt.isDanger() && tilesInViewRadius.contains(myAnt.getAntPosition())) {
-				if(antSize + myAntsInViewRadius.size() <= Configuration.GROUPSIZE){
+		Set<Tile> tilesInViewRadius = getTilesInRadius(ant.getAntPosition(),
+				(int) Math.sqrt(getViewRadius2()));
+		for (Ant myAnt : getMyAnts()) {
+			if (!myAnt.isDanger()
+					&& tilesInViewRadius.contains(myAnt.getAntPosition())) {
+				if (antSize + myAntsInViewRadius.size() <= Configuration.GROUPSIZE) {
 					myAntsInViewRadius.add(myAnt);
 				}
-				
+
 			}
 		}
 		return myAntsInViewRadius;

@@ -179,9 +179,9 @@ public class BuildBoarder {
 			}
 		}
 		
-		for(Entry<Set<Tile>, Set<Ant>> test : areaToEnemyAnt.entrySet()) {
-			AntBot.debug().log("Size of enemy Ants " + test.getValue().size());
-		}
+//		for(Entry<Set<Tile>, Set<Ant>> test : areaToEnemyAnt.entrySet()) {
+//			AntBot.debug().log("Size of enemy Ants " + test.getValue().size());
+//		}
 		
 		
 		

@@ -24,7 +24,7 @@ public class CollectFood implements State {
 
 	@Override
 	public void changeState() {
-		AntBot.debug().log("Ameise " + ant + " " + GameInformations.getFoodManager().getMarkedAnts().get(ant) + " " +GameInformations.getFoodManager().getMarkedAnts().containsKey(ant));
+//		AntBot.debug().log("Ameise " + ant + " " + GameInformations.getFoodManager().getMarkedAnts().get(ant) + " " +GameInformations.getFoodManager().getMarkedAnts().containsKey(ant));
 		if (AntBot.getAttackManager().getMarkedAnts().containsKey(ant)) {
 			ant.setState(new Attack(ant));
 			return;
@@ -36,23 +36,25 @@ public class CollectFood implements State {
 		if (GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)) {
 			return;
 		}
-		if (!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)
+
+		if ( !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)
 				&& AntBot.getGameI().getExplorerAnts() >= Configuration.getExplorerAntsLimit() && BuildBoarder.marktAnts().contains(ant)) {
 			ant.setState(new GoToBoarder(ant));
 			return;
 		}
-		if (!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& (( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null) || (BuildBoarder.getAreaAndBoarder() != null && !BuildBoarder.getAreaAndBoarder().containsKey(ant))))  {
+
+		if ( !GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)	&& (( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null) || (BuildBoarder.getAreaAndBoarder() != null && !BuildBoarder.getAreaAndBoarder().containsKey(ant))))  {
 			ant.setState(new Exploration(ant));
 			return;
 		}
 		
-		AntBot.debug().log("COLLECT FOOD FAILD");
+//		AntBot.debug().log("COLLECT FOOD FAILD");
 
 	}
 
 	@Override
 	public void execute() {
-		AntBot.debug().log("Colleect Food ant " + ant.getAntPosition() + " " + GameInformations.getFoodManager().getMarkedAnts().get(ant));
+//		AntBot.debug().log("Colleect Food ant " + ant.getAntPosition() + " " + GameInformations.getFoodManager().getMarkedAnts().get(ant));
 		List<Tile> r = AntBot.getPathfinding().aStar(ant.getAntPosition(),	GameInformations.getFoodManager().getMarkedAnts().get(ant));
 
 		

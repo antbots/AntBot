@@ -27,6 +27,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFir
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
@@ -49,7 +50,7 @@ public class AntBot extends Bot {
 	private static AttackManager attackManager;
 	private static EnemyHillManager enemyHillManager;
 	private static DefendOwnHillManager defendOwnHillManager;
-	private static Set<Order> antsOrders;
+	private static LinkedList<Order> antsOrders;
 	private static boolean moveError = false;
 	private static Logger debug = new Logger("Debug.txt");
 	
@@ -60,7 +61,7 @@ public class AntBot extends Bot {
 
 	private void init() {
 		gameI = gameStateInforamtions();
-		gameI.setLogger(logger);
+		GameInformations.setLogger(logger);
 		bsf = new BreadthFirstSearch(gameI);
 		pathfinding = new Pathfinding(gameI);
 		boarder = new BuildBoarder(gameI);
@@ -74,9 +75,11 @@ public class AntBot extends Bot {
 	@Override
 	public void doTurn() {
 		debug.log("---------------------------------------------------------------------------------------");
+		debug.log(""+turn);
 		if (turn == 0) {
 			init();
 		}
+		
 
 //			for(int i = 0; i< gameI.getMap().length; i++) {
 //				for(int y = 0; y < gameI.getMap().length; y++) {
@@ -86,41 +89,45 @@ public class AntBot extends Bot {
 			
 
 		
-		
-		debug.log("TURN " + turn);
-		antsOrders = new HashSet<Order>();
-		
-		logger.log("TURN " + turn);
-		//boarder.buildBoarder();
-		boarder.improvedBoarder();
+		antsOrders = new LinkedList<Order>();
+
+		BuildBoarder.improvedBoarder();
 		
 		enemyHillManager.antsToEnemyHill();
 		defendOwnHillManager.defendAntsToOwnHill();
 		
-		debug.log("markOwnAntsAsDangered davor");
-		attackManager.markOwnAntsAsDangered();
-		debug.log("markOwnAntsAsDangered danach");
-		debug.log("markAntsToAttack davor");
-		attackManager.markAntsToAttack();
-		debug.log("markAntsToAttack danach");
-		debug.log("moveError davor");
 		
-		debug.log("markAntsToCollectFood davor");
+		attackManager.markOwnAntsAsDangered();
+		attackManager.markAntsToAttack();
+		if(attackManager.getMarkedAnts() != null) 
+		for(Entry<Ant, Order> a : attackManager.getMarkedAnts().entrySet()) {
+			debug.log("Ameise " + a.getKey().getAntPosition() + " " +  a.getKey().isDanger());
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
 		GameInformations.getFoodManager().markAntsToCollectFood();
-		debug.log("markAntsToCollectFood danach");
+		
 		
 		gameI.getMyAnts().forEach(a -> {
 			logger.log("Process Ant: " + a.getAntPosition());
 			a.doLogic();
 			a.move();
 		});
-		debug.log("moveError davor");
+		
 		while(moveError){
 			resolveMoveError();
-		}debug.log("moveError danach");
+		}
 		sendMovesToSimulation();
 		
-		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
+//		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
 		
 		debug.log("---------------------------------------------------------------------------------------");
 		turn++;
@@ -173,7 +180,7 @@ public class AntBot extends Bot {
 		return defendOwnHillManager;
 	}
 	
-	public static Set<Order> getAntsOrders(){
+	public static LinkedList<Order> getAntsOrders(){
 		return antsOrders;
 	}
 	
@@ -194,7 +201,7 @@ public class AntBot extends Bot {
 						if(!errorMoves.contains(o2)){
 							errorMoves.add(o2);
 						}
-					}else{
+					} else {
 						if(!errorMoves.contains(o1)){
 							errorMoves.add(o1);
 						}
@@ -226,11 +233,17 @@ public class AntBot extends Bot {
 				for(Aim a : toRemove) {
 					aimToOder.remove(a);
 				}
-				Order newOrder= (Order) aimToOder.values().toArray()[0];
-
+				//Order newOrder= (Order) aimToOder.values().toArray()[0];
+				Order newOrder = null;
+				for(Order o : aimToOder.values()) {
+					if(o.getPosition().getType() != Ilk.WATER) {
+						newOrder = o;
+						break;
+					}
+				}
+				
 				newOrder.setAnt(error.getAnt());
 				AntBot.getAntsOrders().add(newOrder);
-				newOrder.getAnt().setPosition(newOrder.getNewPosition().getRow(), newOrder.getNewPosition().getCol());
 
 				
 				
@@ -255,6 +268,7 @@ public class AntBot extends Bot {
 	private static void sendMovesToSimulation(){
 		for(Order o : getAntsOrders()){
 			AntBot.getGameI().issueOrder(o.getPosition(), o.getDirection());
+			o.getAnt().setPosition(o.getNewPosition().getRow(), o.getNewPosition().getCol());
 		}
 	}
 	

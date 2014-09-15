@@ -76,7 +76,7 @@ public class Defend implements State{
 		if(AntBot.getDefendOwnHillManager().getDefendAntsToHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
 			return;
 		}
-		AntBot.debug().log("DEFEND FAILD");
+//		AntBot.debug().log("DEFEND FAILD");
 	}
 
 	@Override
