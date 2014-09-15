@@ -64,7 +64,11 @@ public class FoodManager {
 
 
 			for (Tile t : foodTilesInViewRadius) {
-				int distance = AntBot.getPathfinding().aStar(a.getAntPosition(), t).size();
+				List<Tile> tmp = AntBot.getPathfinding().aStar(a.getAntPosition(), t);
+				if(tmp == null) {
+					AntBot.debug().log("Ameise " + a.getAntPosition() + " food Tile " + t);
+				}
+				int distance = tmp.size();
 				if(distance <= Configuration.COLLECTFOODRADIUS) {
 					antfood.add(new AntFood(a, t, distance));
 				}
