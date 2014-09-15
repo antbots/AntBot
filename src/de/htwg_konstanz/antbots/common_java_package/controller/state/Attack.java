@@ -21,11 +21,11 @@ public class Attack implements State{
 	
 	@Override
 	public void changeState() {
-		if(AntBot.getAttackManager().getMarkedAnts().containsKey(ant)){
-			return;
-		}
 		if(AntBot.getEnemyHillManager().getAntsToHill().containsKey(ant)) {
 			ant.setState(new AttackEnemyHill(ant));
+			return;
+		}
+		if(AntBot.getAttackManager().getMarkedAnts().containsKey(ant)){
 			return;
 		}
 		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){

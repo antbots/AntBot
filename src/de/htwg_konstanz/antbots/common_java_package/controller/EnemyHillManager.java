@@ -19,6 +19,7 @@ public class EnemyHillManager {
 
 		for (Tile hill : AntBot.getGameI().getEnemyHills()) {
 			Set<Tile> allMyAnts = new HashSet<>();
+			Set<Tile> allEnemyAnts = new HashSet<>();
 			Map<Tile, Ant> tileToAnt = new HashMap<>();
 			
 			for(Ant a : AntBot.getGameI().getMyAnts()) {
@@ -26,17 +27,16 @@ public class EnemyHillManager {
 				allMyAnts.add(t);
 				tileToAnt.put(t, a);
 			}
+			for(Ant a : AntBot.getGameI().getEnemyAnts()) {
+				allEnemyAnts.add(a.getAntPosition());
+			}
 
 			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, Configuration.RADIUSTOENEMYHILL, null);
+			Set<Tile> enemyAnt = AntBot.getBsf().extendedBSF(hill, allEnemyAnts, true, true, Configuration.RADIUSTOENEMYHILL, null);
 
-			if (myAnts.size() > Configuration.ANTSINGROUPTOENEMYHILL) {
-				int i = 0;
-				for (Tile t : myAnts) {	
-					Ant ant = tileToAnt.get(t);
-					if (i <= Configuration.ANTSINGROUPTOENEMYHILL) {
-						antToHill.put(ant, hill);
-						i++;
-					}
+			for(Tile myAnt :  myAnts){
+				if(enemyAnt.size() == 0 || (AntBot.getGameI().getDistance(myAnt, hill) < AntBot.getGameI().getDistance((Tile)enemyAnt.toArray()[0], hill))){
+					antToHill.put(tileToAnt.get(myAnt), hill);
 				}
 			}
 		}
