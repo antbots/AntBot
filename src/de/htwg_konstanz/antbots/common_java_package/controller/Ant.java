@@ -67,6 +67,15 @@ public class Ant {
 //				AntBot.getAntsOrders().add(newOrder);
 //				AntBot.setMoveError(true);
 //			}
+		}else{
+			Order thisOrder = null;
+			if(neighbours.size() == 0){
+				thisOrder = new Order(position, Aim.DONTMOVE);
+			}else{
+				thisOrder = new Order(position, (Aim) neighbours.values().toArray()[0]);
+			}
+			thisOrder.setAnt(this);
+			AntBot.getAntsOrders().add(thisOrder);
 		}
 //		AntBot.debug().log("After  " + position + " state " + currentState );
 	}

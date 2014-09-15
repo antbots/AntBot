@@ -3,12 +3,14 @@ package de.htwg_konstanz.antbots.bots;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 import jdk.internal.org.objectweb.asm.commons.GeneratorAdapter;
@@ -122,6 +124,7 @@ public class AntBot extends Bot {
 			a.move();
 		});
 		
+		AntBot.setMoveError(true);
 		while(moveError){
 			resolveMoveError();
 		}
@@ -188,8 +191,6 @@ public class AntBot extends Bot {
 		return debug;
 	}
 
-	public static int t = 0;
-	
 	public static void resolveMoveError(){
 		boolean skip = false;
 		LinkedList<Order> errorMoves = new LinkedList<>();
@@ -197,15 +198,8 @@ public class AntBot extends Bot {
 			for(Order o2 : AntBot.getAntsOrders()){
 				if((o1.getNewPosition().equals(o2.getNewPosition()) && !o1.equals(o2))){
 					skip = true;
-					if(o1.getDirection() == Aim.DONTMOVE){
-						if(!errorMoves.contains(o2)){
-							errorMoves.add(o2);
-						}
-					} else {
-						if(!errorMoves.contains(o1)){
-							errorMoves.add(o1);
-						}
-					}
+					errorMoves.add(o1);
+
 				}
 			}
 		}
@@ -213,42 +207,47 @@ public class AntBot extends Bot {
 			for(Order error : errorMoves){
 				AntBot.getAntsOrders().remove(error);
 				
-				Map<Aim, Order> aimToOder = new HashMap<>();
-				aimToOder.put(Aim.EAST, new Order(error.getPosition(),Aim.EAST));
-				aimToOder.put(Aim.NORTH, new Order(error.getPosition(),Aim.NORTH));
-				aimToOder.put(Aim.SOUTH, new Order(error.getPosition(),Aim.SOUTH));
-				aimToOder.put(Aim.WEST, new Order(error.getPosition(),Aim.WEST));
-				aimToOder.put(Aim.DONTMOVE, new Order(error.getPosition(),Aim.DONTMOVE));
+				LinkedList<Aim> aim = new LinkedList<>();
+				aim.add(Aim.EAST);
+				aim.add(Aim.NORTH);
+				aim.add(Aim.SOUTH);
+				aim.add(Aim.WEST);
+				//aim.add(Aim.DONTMOVE);
+				Collections.shuffle(aim);
+				
+//				Map<Aim, Order> aimToOder = new HashMap<>();
+//				aimToOder.put(Aim.EAST, new Order(error.getPosition(),Aim.EAST));
+//				aimToOder.put(Aim.NORTH, new Order(error.getPosition(),Aim.NORTH));
+//				aimToOder.put(Aim.SOUTH, new Order(error.getPosition(),Aim.SOUTH));
+//				aimToOder.put(Aim.WEST, new Order(error.getPosition(),Aim.WEST));
+				//aimToOder.put(Aim.DONTMOVE, new Order(error.getPosition(),Aim.DONTMOVE));
 				
 				List<Aim> toRemove = new LinkedList<>();
-				for(Entry<Aim, Order> e: aimToOder.entrySet()){
-					Order o1 = e.getValue();
+				for(Aim a: aim){
+					Order o1 = new Order(error.getPosition(),a);
 					for(Order o2 : AntBot.getAntsOrders()){
-						if(o1.getNewPosition().equals(o2.getNewPosition())){
-							toRemove.add(e.getKey());
+						if(o1.getNewPosition().equals(o2.getNewPosition()) || o1.getNewPosition().getType() == Ilk.WATER){
+							toRemove.add(a);
 							break;
 						}
 					}
 				}
 				for(Aim a : toRemove) {
-					aimToOder.remove(a);
-				}
-				//Order newOrder= (Order) aimToOder.values().toArray()[0];
-				Order newOrder = null;
-				for(Order o : aimToOder.values()) {
-					if(o.getPosition().getType() != Ilk.WATER) {
-						newOrder = o;
-						break;
-					}
+					aim.remove(a);
 				}
 				
+				Order newOrder = null;
+				// ist null wenn es überhaupt keinen anderen Weg gibt. Bei vielen Ameisen auf dem Haufen mögliche
+				// endloss schleife
+				if(aim.size() == 0){
+					newOrder = new Order(error.getPosition(), Aim.DONTMOVE);
+				}else{
+					newOrder = new Order(error.getPosition(), aim.get((int)(Math.random() * aim.size()-1)));
+				}
+
 				newOrder.setAnt(error.getAnt());
 				AntBot.getAntsOrders().add(newOrder);
 
-				
-				
-				debug.log("aufruf " + errorMoves.size() + t );
-				t++;
 				
 //				Order newOrder = new Order(error.getPosition(), Aim.DONTMOVE);
 //				newOrder.setAnt(error.getAnt());

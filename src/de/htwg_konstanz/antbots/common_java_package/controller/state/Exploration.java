@@ -70,6 +70,7 @@ public class Exploration  implements State{
 						destination = null;
 						target.setType(Ilk.WATER);
 						execute();
+						return;
 					}
 				} else {
 					targets = AntBot.getGameI().getValueTilesToExplore(visibleTiles);
@@ -99,6 +100,14 @@ public class Exploration  implements State{
 			List<Tile> route = null;
 //			AntBot.debug().log("destiantion in Exploration " + destination.getType());
 			route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
+			if(route == null){
+				if(AntBot.getGameI().getMoveAbleNeighbours(destination).size() == 0) {
+					destination.setType(Ilk.WATER);
+				}
+				destination = null;
+				execute();
+				return;
+			}
 			route.remove(0);
 			
 			ant.setRoute(route);

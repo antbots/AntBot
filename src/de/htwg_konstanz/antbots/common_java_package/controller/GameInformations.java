@@ -559,37 +559,6 @@ public class GameInformations {
 		return orders;
 	}
 
-	/**
-	 * Returns true if a location is visible this turn
-	 * 
-	 * @param tile
-	 *            location on the game map
-	 * 
-	 * @return true if the location is visible
-	 */
-	public boolean isVisible(Tile tile) {
-		return visible[tile.getRow()][tile.getCol()];
-	}
-
-	/**
-	 * Returns a set of the visible Tiles
-	 * 
-	 * @return
-	 * @author Chrisi
-	 */
-	public Set<Tile> visibles() {
-		Set<Tile> v = new HashSet<Tile>();
-
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
-				if (visible[i][j])
-					v.add(getTileOfMap(new Tile(i, j)));
-			}
-		}
-
-		return v;
-	}
-
 	public boolean[][] getVisibleTilesAsArray() {
 		return visible;
 	}
@@ -805,10 +774,13 @@ public class GameInformations {
 	 *            location on the game map to be updated
 	 */
 	public void updateHills(int owner, Tile tile) {
-		if (owner > 0)
+		if (owner > 0){
 			enemyHills.add(tile);
-		else
+			map[tile.getRow()][tile.getCol()].setType(Ilk.ENEMY_HILL);
+		}else{
 			myHills.add(tile);
+			map[tile.getRow()][tile.getCol()].setType(Ilk.HILL);
+		}
 	}
 
 	/**
@@ -834,75 +806,6 @@ public class GameInformations {
 	public void issueOrder(Order order) {
 		orders.add(order);
 		System.out.println(order);
-	}
-
-	/**
-	 * For better jUnit testing real maps are needed. The Bot can't read in a
-	 * map. It can ounly read mapupdates from the server.
-	 * 
-	 * This Method reads in the Map Tiles so no tile is UNKNOWN.
-	 * 
-	 * @return player,rows,cols
-	 */
-	public int[] initWholeMap(String[] line) {
-
-		int startline = 0;
-		int players = 0;
-		int rows = 0;
-		int cols = 0;
-		// find map start
-		for (int i = 0; i < line.length; i++) {
-			String l = line[i];
-			if (l.startsWith("players "))
-				players = Integer.parseInt(l.substring("players ".length()));
-			if (l.startsWith("rows "))
-				rows = Integer.parseInt(l.substring("rows ".length()));
-			if (l.startsWith("cols "))
-				cols = Integer.parseInt(l.substring("cols ".length()));
-			if (l.startsWith("m ")) {
-				if (startline == 0)
-					startline = i;
-			}
-
-		}
-
-		// System.out.println(startline+" " +players+" "+rows+" "+cols);
-
-		for (int y = startline; y < line.length; y++) {
-			// System.out.println("" + line[y]);
-			for (int x = 0; x < line[y].length(); x++) {
-				char c = line[y].charAt(x);
-
-				if (c == 'm' || c == ' ')
-					continue;
-				Tile tile = new Tile(y - startline, x - 2);
-				// System.out.println(tile);
-				if (c == '.') {
-					// Land
-					update(Ilk.LAND, tile);
-				} else if (c == '%') {
-					// Water
-					update(Ilk.WATER, tile);
-				} else if (Character.isDigit(c)) {
-					// Hill
-					int hillNr = Integer.parseInt(String.valueOf(c));
-					updateHills(hillNr, tile);
-
-				} else if (Character.isAlphabetic(c)) {
-					// Ant
-					if (c == 'a') {
-						update(Ilk.MY_ANT, tile);
-					} else {
-						// update(Ilk.ENEMY_ANT, tile);
-					}
-				}
-			}
-		}
-
-		// call set Vision Ants get Vision
-		setVision();
-
-		return new int[] { players, rows, cols };
 	}
 
 	public static void setLogger(Logger logger1) {
