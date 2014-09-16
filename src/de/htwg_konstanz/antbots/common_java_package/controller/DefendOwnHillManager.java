@@ -21,11 +21,11 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 public class DefendOwnHillManager {
 
 	private static Map<Tile, List<Tile>> defendTilesArroundHill = new HashMap<>();
-
+	
 	private static Map<Ant, Tile> defendAnts;
 
 	public static void initDefendTiles() {
-			
+		
 		for (Tile hill : AntBot.getGameI().getMyHills()) {
 
 			int col = hill.getCol();
@@ -50,6 +50,7 @@ public class DefendOwnHillManager {
 			}
 			defendTilesArroundHill.put(hill, defendTiles);
 		}
+		
 	}
 
 	static List<Ant> markedAnts;
@@ -63,6 +64,21 @@ public class DefendOwnHillManager {
 						SubTile.TL);
 			}
 			
+		}
+		
+		int antSize = AntBot.getGameI().getMyAnts().size();
+		int defenderAntsLimit = 0;
+		if(antSize <= 20){
+			defenderAntsLimit = 1;
+		}
+		if(antSize > 20 && antSize <= 40){
+			defenderAntsLimit = 2;
+		}
+		if(antSize > 40 && antSize <= 60){
+			defenderAntsLimit = 3;
+		}
+		if(antSize > 60){
+			defenderAntsLimit = 4;
 		}
 		
 		defendAnts = new HashMap<Ant, Tile>();
@@ -79,19 +95,24 @@ public class DefendOwnHillManager {
 		for (Entry<Tile, List<Tile>> entry : defendTilesArroundHill.entrySet()) {
 			List<Tile> tiles = entry.getValue();
 			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(entry.getKey(), allMyAnts, false, true, 4, null);
+			int defenderAnts = 0;
 			for(Tile tile : myAnts) {
 				Ant ant = tileToAnt.get(tile);
 				if (ant.getCurrentState() == StateName.Defend) {
 					markedAnts.add(ant);
-					break;
+					defenderAnts++;
 				}
 			}
 			for (Tile t : tiles) {
+				if(defenderAnts >= defenderAntsLimit){
+					break;
+				}
 				for(Tile tile : myAnts) {
 					Ant ant = tileToAnt.get(tile);
 					if(!markedAnts.contains(ant)) {
 						defendAnts.put(ant, t);
 						markedAnts.add(ant);
+						defenderAnts++;
 						break;
 					}
 				}
