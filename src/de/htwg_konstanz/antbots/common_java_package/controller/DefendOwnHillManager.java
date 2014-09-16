@@ -33,19 +33,19 @@ public class DefendOwnHillManager {
 			List<Tile> defendTiles = new LinkedList<>();
 			
 			Tile defendTile = AntBot.getGameI().getTileOfMap(new Tile(row - 1, col + 1));
-			if (defendTile.getType() != Ilk.WATER) {
+			if (defendTile.getType() != Ilk.WATER && defendTile.getType() != Ilk.MY_ANT) {
 				defendTiles.add(defendTile);
 			}
 			defendTile = AntBot.getGameI().getTileOfMap(new Tile(row - 1, col - 1));
-			if (defendTile.getType() != Ilk.WATER) {
+			if (defendTile.getType() != Ilk.WATER && defendTile.getType() != Ilk.MY_ANT) {
 				defendTiles.add(defendTile);
 			}
 			defendTile = AntBot.getGameI().getTileOfMap(new Tile(row + 1, col - 1));
-			if (defendTile.getType() != Ilk.WATER) {
+			if (defendTile.getType() != Ilk.WATER && defendTile.getType() != Ilk.MY_ANT) {
 				defendTiles.add(defendTile);
 			}
 			defendTile = AntBot.getGameI().getTileOfMap(new Tile(row + 1, col + 1));
-			if (defendTile.getType() != Ilk.WATER) {
+			if (defendTile.getType() != Ilk.WATER && defendTile.getType() != Ilk.MY_ANT) {
 				defendTiles.add(defendTile);
 			}
 			defendTilesArroundHill.put(hill, defendTiles);
@@ -78,28 +78,21 @@ public class DefendOwnHillManager {
 
 		for (Entry<Tile, List<Tile>> entry : defendTilesArroundHill.entrySet()) {
 			List<Tile> tiles = entry.getValue();
+			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(entry.getKey(), allMyAnts, false, true, 4, null);
+			for(Tile tile : myAnts) {
+				Ant ant = tileToAnt.get(tile);
+				if (ant.getCurrentState() == StateName.Defend) {
+					markedAnts.add(ant);
+					break;
+				}
+			}
 			for (Tile t : tiles) {
-
-				for (Ant a : AntBot.getGameI().getMyAnts()) {
-
-					if (a.getCurrentState() == StateName.Defend) {
-						if (t.equals(a.getDestination())) {
-							markedAnts.add(a);
-							break;
-						} else if(t.equals(a.getAntPosition())) {
-							markedAnts.add(a);
-							break;
-						}
-					} else {
-						Set<Tile> myAnts = AntBot.getBsf().extendedBSF(entry.getKey(), allMyAnts, false, true, 4, null);
-						for(Tile tile : myAnts) {
-							Ant ant = tileToAnt.get(tile);
-							if(ant.getCurrentState() != StateName.Defend) {
-								defendAnts.put(ant, t);
-								markedAnts.add(ant);
-							}
-						}
-
+				for(Tile tile : myAnts) {
+					Ant ant = tileToAnt.get(tile);
+					if(!markedAnts.contains(ant)) {
+						defendAnts.put(ant, t);
+						markedAnts.add(ant);
+						break;
 					}
 				}
 			}

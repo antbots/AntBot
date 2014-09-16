@@ -183,7 +183,7 @@ public class GameInformations {
 		for (Aim a : Aim.values()) {
 			if (a != Aim.DONTMOVE && getIlk(t) != Ilk.WATER) {
 				Tile tile = getTile(t, a);
-				if (getIlk(tile) != Ilk.WATER && getIlk(tile) != Ilk.HILL) {
+				if (getIlk(tile) != Ilk.WATER) {
 					list.put(tile, a);
 				}
 			}

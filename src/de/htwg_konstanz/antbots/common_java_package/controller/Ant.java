@@ -46,7 +46,14 @@ public class Ant {
 		if(route.size() == 0) {
 			return;
 		}
+		
 		destination = route.get(route.size() - 1);
+		if(destination.equals(position)){
+			Order thisOrder = new Order(position, Aim.DONTMOVE);
+			thisOrder.setAnt(this);
+			AntBot.getAntsOrders().add(thisOrder);
+			return;
+		}
 
 		Tile next = route.remove(0);
 		Map<Tile, Aim> neighbours = AntBot.getGameI().getMoveAbleNeighbours(position);
