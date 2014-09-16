@@ -38,6 +38,7 @@ public class Defend implements State {
 			if(destination.equals(ant.getAntPosition())){
 				List<Tile> route = new LinkedList<Tile>();
 				route.add(ant.getAntPosition());
+				ant.setRoute(route);
 			}else{
 				List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(),	destination);
 				route.remove(0);
