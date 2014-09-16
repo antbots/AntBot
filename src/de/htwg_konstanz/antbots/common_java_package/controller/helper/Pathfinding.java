@@ -446,7 +446,7 @@ public class Pathfinding {
 //			AntBot.debug().log("Am ende");
 			
 			if(goal == null) {
-				AntBot.debug().log("Start " + source + " Ziel " + target);
+				AntBot.debug().log("Start " + source + " Ziel " + target + " target Ilk " + target.getType());
 			}
 			return null;
 		}

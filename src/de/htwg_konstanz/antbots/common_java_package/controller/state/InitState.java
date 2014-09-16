@@ -2,6 +2,7 @@ package de.htwg_konstanz.antbots.common_java_package.controller.state;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
+import de.htwg_konstanz.antbots.common_java_package.controller.DefendOwnHillManager;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
@@ -23,10 +24,10 @@ public class InitState  implements State{
 			ant.setState(new Attack(ant));
 			return;
 		}
-//		if(AntBot.getDefendOwnHillManager().getDefendAntsToHills().containsKey(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
-//			ant.setState(new Defend(ant));
-//			return;
-//		}
+		if(DefendOwnHillManager.getMarkedAnts().contains(ant) && AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
+			ant.setState(new Defend(ant));
+			return;
+		}
 		if(GameInformations.getFoodManager().getMarkedAnts().containsKey(ant)){
 			ant.setState(new CollectFood(ant));
 			return;

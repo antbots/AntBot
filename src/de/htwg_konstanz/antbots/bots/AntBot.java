@@ -51,7 +51,6 @@ public class AntBot extends Bot {
 	private static AlphaBeta gameStrategy;
 	private static AttackManager attackManager;
 	private static EnemyHillManager enemyHillManager;
-	private static DefendOwnHillManager defendOwnHillManager;
 	private static LinkedList<Order> antsOrders;
 	private static boolean moveError = false;
 	private static Logger debug = new Logger("Debug.txt");
@@ -71,7 +70,7 @@ public class AntBot extends Bot {
 		gameStrategy = new AlphaBeta();
 		attackManager = new AttackManager();
 		enemyHillManager = new EnemyHillManager();
-		defendOwnHillManager = new DefendOwnHillManager();
+
 	}
 
 	@Override
@@ -80,8 +79,9 @@ public class AntBot extends Bot {
 		debug.log(""+turn);
 		if (turn == 0) {
 			init();
+			
 		}
-		
+		DefendOwnHillManager.initDefendTiles();
 
 //			for(int i = 0; i< gameI.getMap().length; i++) {
 //				for(int y = 0; y < gameI.getMap().length; y++) {
@@ -96,7 +96,8 @@ public class AntBot extends Bot {
 		BuildBoarder.improvedBoarder();
 		
 		enemyHillManager.antsToEnemyHill();
-		defendOwnHillManager.defendAntsToOwnHill();
+
+		DefendOwnHillManager.defendAntsToDefendTile();
 		
 		
 		attackManager.markOwnAntsAsDangered();
@@ -178,11 +179,7 @@ public class AntBot extends Bot {
 	public static EnemyHillManager getEnemyHillManager() {
 		return enemyHillManager;
 	}
-	
-	public static DefendOwnHillManager getDefendOwnHillManager(){
-		return defendOwnHillManager;
-	}
-	
+		
 	public static LinkedList<Order> getAntsOrders(){
 		return antsOrders;
 	}

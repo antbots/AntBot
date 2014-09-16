@@ -1,5 +1,6 @@
 package de.htwg_konstanz.antbots.common_java_package.model;
 
+import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 
 
@@ -13,6 +14,9 @@ public class Tile  {
     private int col;
     private Ilk ilk = Ilk.UNKNOWN;
     private int discoverdAtTurn = Integer.MAX_VALUE;
+    private Ant ant;
+    
+    
     
     public void setType(Ilk ilk) {
     	this.ilk = ilk;
@@ -96,5 +100,13 @@ public class Tile  {
 
 	public void setDiscoverdAtTurn(int discoverdAtTurn) {
 		this.discoverdAtTurn = discoverdAtTurn;
+	}
+
+	public Ant getAnt() {
+		return ant;
+	}
+
+	public void setAnt(Ant ant) {
+		this.ant = ant;
 	}
 }

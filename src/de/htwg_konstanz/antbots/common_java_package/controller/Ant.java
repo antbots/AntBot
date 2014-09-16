@@ -27,7 +27,8 @@ public class Ant {
 	private State state;
 	private StateName currentState;
 	private int id;
-	private boolean markedAsDead = false;;
+	private boolean markedAsDead = false;
+	private Tile destination;
 	
 	private Set<Ant> enemysInViewRadius = new HashSet<Ant>();
 
@@ -36,19 +37,23 @@ public class Ant {
 		state.changeState();
 		state.execute();
 	}
+	public Tile getDestination() {
+		return destination;
+	}
 	
 	public void move() {
 //		AntBot.debug().log("Before " + position + " state " + currentState);
 		if(route.size() == 0) {
 			return;
 		}
+		destination = route.get(route.size() - 1);
+
 		Tile next = route.remove(0);
 		Map<Tile, Aim> neighbours = AntBot.getGameI().getMoveAbleNeighbours(position);
 
 		if (neighbours.containsKey(next)) {
 			Aim aim = neighbours.get(next);
-			
-//			boolean skip = false;
+			//			boolean skip = false;
 			Order thisOrder = new Order(position,aim);
 			thisOrder.setAnt(this);
 			AntBot.getAntsOrders().add(thisOrder);

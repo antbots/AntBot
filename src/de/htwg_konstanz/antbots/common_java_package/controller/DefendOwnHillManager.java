@@ -1,5 +1,6 @@
 package de.htwg_konstanz.antbots.common_java_package.controller;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,75 +10,109 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
-
+import de.htwg_konstanz.antbots.common_java_package.controller.state.State;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.StateName;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
+import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
+import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 public class DefendOwnHillManager {
 
-	Map<Ant, Tile> defendAnts;
-	Map<Ant, List<Tile>> antTotilesAroundHill;
-	
-	public void defendAntsToOwnHill() {
-		defendAnts = new HashMap<>();
-		antTotilesAroundHill = new HashMap<>();
+	private static Map<Tile, List<Tile>> defendTilesArroundHill = new HashMap<>();
+
+	private static Map<Ant, Tile> defendAnts;
+
+	public static void initDefendTiles() {
+			
 		for (Tile hill : AntBot.getGameI().getMyHills()) {
 
-			Set<Tile> allMyAnts = new HashSet<>();
-			Map<Tile, Ant> tileToAnt = new HashMap<>();
+			int col = hill.getCol();
+			int row = hill.getRow();
+			List<Tile> defendTiles = new LinkedList<>();
 			
-			for(Ant a : AntBot.getGameI().getMyAnts()) {
-				Tile t = a.getAntPosition();
-				allMyAnts.add(t);
-				tileToAnt.put(t, a);
+			Tile defendTile = AntBot.getGameI().getTileOfMap(new Tile(row - 1, col + 1));
+			if (defendTile.getType() != Ilk.WATER) {
+				defendTiles.add(defendTile);
 			}
-
-
-			Set<Tile> tilesAroundHill = new HashSet<>();
-			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, 4, tilesAroundHill);
-			
-			int i = 0;
-			
-			//TODO bug behoben aber schlechte lösung
-			for(Tile a : myAnts) {
-				Ant ant = tileToAnt.get(a);
-				if(ant.getCurrentState() == StateName.Defend) {
-					defendAnts.put(ant, hill);
-					List<Tile> tmp = new LinkedList<>();
-					tilesAroundHill.remove(ant.getAntPosition());
-					tmp.addAll(tilesAroundHill);
-					antTotilesAroundHill.put(ant, tmp);
-					i++;
-				}
+			defendTile = AntBot.getGameI().getTileOfMap(new Tile(row - 1, col - 1));
+			if (defendTile.getType() != Ilk.WATER) {
+				defendTiles.add(defendTile);
 			}
-			
-			for(Tile a : myAnts) {
-				Ant ant = tileToAnt.get(a);
-				if (i < Configuration.DEFENDANTS) {
-					defendAnts.put(ant, hill);
-					List<Tile> tmp = new LinkedList<>();
-					tilesAroundHill.remove(ant.getAntPosition());
-					tmp.addAll(tilesAroundHill);
-					antTotilesAroundHill.put(ant, tmp);
-					i++;
-				}
+			defendTile = AntBot.getGameI().getTileOfMap(new Tile(row + 1, col - 1));
+			if (defendTile.getType() != Ilk.WATER) {
+				defendTiles.add(defendTile);
 			}
-
+			defendTile = AntBot.getGameI().getTileOfMap(new Tile(row + 1, col + 1));
+			if (defendTile.getType() != Ilk.WATER) {
+				defendTiles.add(defendTile);
+			}
+			defendTilesArroundHill.put(hill, defendTiles);
 		}
-		for (Entry<Ant, Tile> e : defendAnts.entrySet()) {
-			AntBot.getGameI().getLogger().log("Ameise " + e.getKey() + " verteidigt "	+ e.getValue());
-		}
-
-		AntBot.getGameI().getLogger().log("defend hill");
 	}
 
-	public Map<Ant, Tile> getDefendAntsToHills() {
-		return defendAnts;
-	}
+	static List<Ant> markedAnts;
 	
-	public Map<Ant,List<Tile>> getTilesAroundHill() {		
-		return antTotilesAroundHill;
+	public static void defendAntsToDefendTile() {
+		
+		for (Entry<Tile, List<Tile>> rTile : defendTilesArroundHill.entrySet()) {
+			for(Tile t : rTile.getValue()) {
+				OverlayDrawer.setFillColor(Color.BLACK);
+				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
+						SubTile.TL);
+			}
+			
+		}
+		
+		defendAnts = new HashMap<Ant, Tile>();
+		markedAnts = new LinkedList<>();
+		Set<Tile> allMyAnts = new HashSet<>();
+		Map<Tile, Ant> tileToAnt = new HashMap<>();
+		
+		for (Ant a : AntBot.getGameI().getMyAnts()) {
+			Tile t = a.getAntPosition();
+			allMyAnts.add(t);
+			tileToAnt.put(t, a);
+		}
+
+		for (Entry<Tile, List<Tile>> entry : defendTilesArroundHill.entrySet()) {
+			List<Tile> tiles = entry.getValue();
+			for (Tile t : tiles) {
+
+				for (Ant a : AntBot.getGameI().getMyAnts()) {
+
+					if (a.getCurrentState() == StateName.Defend) {
+						if (t.equals(a.getDestination())) {
+							markedAnts.add(a);
+							break;
+						} else if(t.equals(a.getAntPosition())) {
+							markedAnts.add(a);
+							break;
+						}
+					} else {
+						Set<Tile> myAnts = AntBot.getBsf().extendedBSF(entry.getKey(), allMyAnts, false, true, 4, null);
+						for(Tile tile : myAnts) {
+							Ant ant = tileToAnt.get(tile);
+							if(ant.getCurrentState() != StateName.Defend) {
+								defendAnts.put(ant, t);
+								markedAnts.add(ant);
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+	}
+
+	public static List<Ant> getMarkedAnts() {
+		return markedAnts;
+	}
+
+
+	public static Map<Ant, Tile> getDefendAntsToHills() {
+		return defendAnts;
 	}
 }
