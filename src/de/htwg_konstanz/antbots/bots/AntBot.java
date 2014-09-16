@@ -54,6 +54,7 @@ public class AntBot extends Bot {
 	private static LinkedList<Order> antsOrders;
 	private static boolean moveError = false;
 	private static Logger debug = new Logger("Debug.txt");
+	private static long startTurnTime;
 	
 
 	public static void main(String[] args) throws IOException {
@@ -75,6 +76,7 @@ public class AntBot extends Bot {
 
 	@Override
 	public void doTurn() {
+		startTurnTime = System.nanoTime();
 		debug.log("---------------------------------------------------------------------------------------");
 		debug.log(""+turn);
 		if (turn == 0) {
@@ -128,6 +130,9 @@ public class AntBot extends Bot {
 		AntBot.setMoveError(true);
 		while(moveError){
 			resolveMoveError();
+			if((AntBot.getStartTime() - System.nanoTime())/1000000 > 10000){
+				moveError = false;
+			}
 		}
 		sendMovesToSimulation();
 		
@@ -266,6 +271,10 @@ public class AntBot extends Bot {
 			AntBot.getGameI().issueOrder(o.getPosition(), o.getDirection());
 			o.getAnt().setPosition(o.getNewPosition().getRow(), o.getNewPosition().getCol());
 		}
+	}
+
+	public static long getStartTime() {
+		return startTurnTime;
 	}
 	
 }

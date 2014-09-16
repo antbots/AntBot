@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
+import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -36,19 +37,24 @@ public class AttackManager {
 			
 			AntBot.getLogger().log("key " + a.getKey()+ " value " + a.getValue());
 			
-			
-			LinkedList<Order> move = AntBot.getGameStrategy().alphaBeta(AntBot.getGameI(), Configuration.ATTACKSEARCHDEPTH, Configuration.ATTACKSTRATEGY, beteiligteAmeisen);
-			if (move != null){
-				for(Ant ant : AntBot.getGameI().getMyAnts()){
-					for(Order o : move){
-						if(ant.getAntPosition().equals(o.getPosition())){
-							markedAnts.put(ant, o);
+			if((AntBot.getStartTime() - System.nanoTime())/1000000 > 7000){
+				for(Ant ant : a.getKey()){
+					markedAnts.put(ant, new Order(ant.getAntPosition(), Aim.DONTMOVE));
+				}
+			}else{
+				LinkedList<Order> move = AntBot.getGameStrategy().alphaBeta(AntBot.getGameI(), Configuration.ATTACKSEARCHDEPTH, Configuration.ATTACKSTRATEGY, beteiligteAmeisen);
+				if (move != null){
+					for(Ant ant : a.getKey()){
+						for(Order o : move){
+							if(ant.getAntPosition().equals(o.getPosition())){
+								markedAnts.put(ant, o);
+							}
 						}
 					}
+					
+					///AntBot.getGameI().getMyAntsDangered().forEach( ant -> {Optional<Order> matchedOrder = move.stream().filter(o -> ant.getAntPosition().equals(o.getPosition())).findAny();
+					//markedAnts.put(ant, matchedOrder.get());});
 				}
-				
-				///AntBot.getGameI().getMyAntsDangered().forEach( ant -> {Optional<Order> matchedOrder = move.stream().filter(o -> ant.getAntPosition().equals(o.getPosition())).findAny();
-				//markedAnts.put(ant, matchedOrder.get());});
 			}
 		}
 		// DEBUG
