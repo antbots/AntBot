@@ -110,7 +110,6 @@ public class MoveCommand implements Command {
 		for(Ant a: antsToRemove){
 			myAntsToGo.remove(a);
 		}
-		AntBot.getLogger().log(Integer.toString(numOfDeadAnts));
 		return numOfDeadAnts;
 	}
 	
@@ -137,7 +136,6 @@ public class MoveCommand implements Command {
 			if(!ants.isEmpty()){
 				for (Aim aim : ab.getBoard().getDirections(ant.getPosBefore(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
 					if(ant.getexecutedDirection() == aim){
-						AntBot.getLogger().log("increase");
 						points = points + increase;
 						break;
 					}
@@ -145,7 +143,6 @@ public class MoveCommand implements Command {
 			}else{
 				for (Aim aim : ab.getBoard().getDirections(ant.getPosBefore(), ants.get((int)((Math.random()) * ants.size()-1 + 0)).getAntPosition())) {
 					if(ant.getexecutedDirection() == aim){
-						AntBot.getLogger().log("increase");
 						points = points + increase;
 						break;
 					}

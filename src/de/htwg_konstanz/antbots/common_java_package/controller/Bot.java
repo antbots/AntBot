@@ -95,11 +95,7 @@ public abstract class Bot extends AbstractSystemInputParser {
     public void removeAnt(int row, int col, int owner) {
         gameI.update(Ilk.DEAD, new Tile(row, col));
         
-        //TODO remove own death ants
         if(owner == 0) {
-        	gameI.getLogger().log("nicht tot " + row + " " + col);
-        	
-        	
         	for(int i = 0; i < gameI.getMyAnts().size(); i++) {
         		
         		Ant ownAnt = gameI.getMyAnts().get(i);

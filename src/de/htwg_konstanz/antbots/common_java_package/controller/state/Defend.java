@@ -29,7 +29,6 @@ public class Defend implements State {
 		if (destination == null) {
 			Tile a = DefendOwnHillManager.getDefendAntsToHills().get(ant);
 			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(),	a);
-			AntBot.debug().log("AMiese " + ant.getAntPosition() + " " + route + "                " + a);
 			destination = route.get(route.size() - 1);
 			// remove because position 0 is the ant position
 			route.remove(0);
@@ -45,7 +44,6 @@ public class Defend implements State {
 				ant.setRoute(route);
 			}
 		}
-		AntBot.debug().log("Amiese " + ant.getAntPosition() + " destination " + destination);
 	}
 
 	@Override
@@ -54,17 +52,16 @@ public class Defend implements State {
 		if (DefendOwnHillManager.getMarkedAnts().contains(ant)	&& AntBot.getGameI().getMyAnts().size() > Configuration.LIMITWHENDEFENDANTSAREORDERD) {
 			return;
 		}
-		// AntBot.debug().log("DEFEND FAILD");
 	}
 
 	@Override
 	public void stateEnter() {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void stateExit() {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override

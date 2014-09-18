@@ -24,7 +24,6 @@ public class CollectFood implements State {
 
 	@Override
 	public void changeState() {
-//		AntBot.debug().log("Ameise " + ant + " " + GameInformations.getFoodManager().getMarkedAnts().get(ant) + " " +GameInformations.getFoodManager().getMarkedAnts().containsKey(ant));
 		if (AntBot.getAttackManager().getMarkedAnts().containsKey(ant)) {
 			ant.setState(new Attack(ant));
 			return;
@@ -47,17 +46,13 @@ public class CollectFood implements State {
 			ant.setState(new Exploration(ant));
 			return;
 		}
-		
-//		AntBot.debug().log("COLLECT FOOD FAILD");
 
 	}
 
 	@Override
 	public void execute() {
-//		AntBot.debug().log("Colleect Food ant " + ant.getAntPosition() + " " + GameInformations.getFoodManager().getMarkedAnts().get(ant));
 		List<Tile> r = AntBot.getPathfinding().aStar(ant.getAntPosition(),	GameInformations.getFoodManager().getMarkedAnts().get(ant));
 
-		
 		// da beim essen sammel nicht direkt das Tile besucht werden muss,
 		// auf dem es liegt. Es reicht wenn man daneben steht.
 		r.remove(r.size() - 1);
@@ -69,7 +64,6 @@ public class CollectFood implements State {
 			OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(), SubTile.TR);
 		}
 		ant.setRoute(r);
-		AntBot.getLogger().log("Route is set: " + ant.getRoute());
 
 	}
 
@@ -84,17 +78,11 @@ public class CollectFood implements State {
 
 	@Override
 	public void stateEnter() {
-		AntBot.getLogger().log(ant.getState().toString());
+
 	}
 
 	@Override
 	public void stateExit() {
-//		if (AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)) {
-//			AntBot.getGameI()
-//					.getFoodManager()
-//					.declineFood(
-//							AntBot.getGameI().getFoodManager().getMarkedAnts()
-//									.get(ant), ant);
-//		}
+
 	}
 }

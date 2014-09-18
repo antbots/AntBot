@@ -28,16 +28,10 @@ import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 public class BuildBoarder {
 
 	private GameInformations gameI;
-	private BreadthFirstSearch bsf;
-	private Pathfinding pathfinding;
 	private static Map<Set<Tile>, Set<Tile>> boarders;
-
-//	private List<Boarder> boarderToAnt;
 
 	public BuildBoarder(GameInformations gameI) {
 		this.gameI = gameI;
-		bsf = new BreadthFirstSearch(gameI);
-		pathfinding = new Pathfinding(gameI);
 	}
 
 	public void buildBoarder() {
@@ -86,52 +80,16 @@ public class BuildBoarder {
 	}
 
 	private static List<Set<Tile>> buildAreas() {
-		Set<Tile> enemyTilesSet = new HashSet<>();
 		List<Set<Tile>> areas = new LinkedList<Set<Tile>>();
 
 		for (Ant myAnt : AntBot.getGameI().getMyAnts()) {
 			Tile myAntPos = myAnt.getAntPosition();
 			Set<Tile> tilesInRadius = AntBot.getGameI().getTilesInRadius(myAntPos,	Configuration.BOARDDISTANCE);
 			Set<Tile> visitableTiles = AntBot.getBsf().visitableFromSet(myAntPos,tilesInRadius);
-			Set<Ant> enemyAnts = new HashSet<>();
 
-			// ermittle gegner im Sichtradius
-//			for (Ant enemy : gameI.getEnemyAnts()) {
-//				if (tilesInRadius.contains(enemy.getAntPosition())) {
-//					enemyAnts.add(enemy);
-//				}
-//			}
-
-			// ermittle Strecke zum gegner und entferne die Tiles, die eine
-			// entfernung von size von der gegnerischen Ameise hat
-			// von der menge visitableTiles ab
-
-//			for (Ant enemyAntInRange : enemyAnts) {
-//				Tile enemyAntPos = enemyAntInRange.getAntPosition();
-//				int size = AntBot.getGameI().getDistance(enemyAntPos, myAntPos);
-//
-//				if (size < 9) {
-//					size = size / 2;
-//					Set<Tile> enemyTiles = gameI.getTilesInRadius(enemyAntPos,
-//							size);
-//
-//					enemyTilesSet.addAll(enemyTiles);
-//
-//					// for(Tile enemyTile : tmp) {
-//					// OverlayDrawer.setFillColor(Color.GREEN);
-//					// OverlayDrawer.drawTileSubtile(enemyTile.getRow(),
-//					// enemyTile.getCol(),
-//					// SubTile.TL);
-//					// }
-//
-//				}
-//			}
 			areas.add(visitableTiles);
 		}
 		merge(areas);
-//		for (Set<Tile> t : areas) {
-//			t.removeAll(enemyTilesSet);
-//		}
 
 		return areas;
 
@@ -178,13 +136,6 @@ public class BuildBoarder {
 				}
 			}
 		}
-		
-//		for(Entry<Set<Tile>, Set<Ant>> test : areaToEnemyAnt.entrySet()) {
-//			AntBot.debug().log("Size of enemy Ants " + test.getValue().size());
-//		}
-		
-		
-		
 
 		for (Entry<Set<Tile>, Set<Ant>> entry : areaToEnemyAnt.entrySet()) {
 			Set<Tile> enemyArea = new HashSet<>();
@@ -208,13 +159,6 @@ public class BuildBoarder {
 			areaToBoarder.put(entry.getKey(), bo);
 		}
 		for(Entry<Set<Tile>, Set<Tile>> test : areaToBoarder.entrySet()){
-//			for(Tile areaTile : test.getKey()) {
-//			
-//				 OverlayDrawer.setFillColor(Color.PINK);
-//				 OverlayDrawer.drawTileSubtile(areaTile.getRow(), areaTile.getCol(),
-//				 SubTile.TL);
-//
-//			}
 			for(Tile bTIle : test.getValue()) {
 				 OverlayDrawer.setFillColor(Color.CYAN);
 				 OverlayDrawer.drawTileSubtile(bTIle.getRow(), bTIle.getCol(),
@@ -236,80 +180,5 @@ public class BuildBoarder {
 	public static Set<Ant> marktAnts() {
 		return ants;
 	}
-
-//	public void getNewBoarder() {
-//		boarderToAnt = new LinkedList<>();
-//		val = 1;
-//
-//		List<Set<Tile>> areas = new LinkedList<>();
-//		for (Ant enemy : AntBot.getGameI().getEnemyAnts()) {
-//			Set<Tile> area = new HashSet<>();
-//			area.addAll((AntBot.getGameI().getTilesInRadius(
-//					enemy.getAntPosition(),
-//					(int) Math.sqrt(AntBot.getGameI().getViewRadius2()) / 2)));
-//			areas.add(area);
-//		}
-//		merge(areas);
-//
-//		List<Set<Tile>> boarder = new LinkedList<>();
-//		for (Set<Tile> a : areas) {
-//			Set<Tile> bo = new HashSet<>();
-//			for (Tile t : a) {
-//				for (Tile t1 : AntBot.getGameI().getMoveAbleNeighbours(t)
-//						.keySet()) {
-//					if (!a.contains(t1)) {
-//						bo.add(t1);
-//					}
-//				}
-//			}
-//			boarderToAnt.add(new Boarder(new HashSet<Ant>(), bo));
-//		}
-//
-//	}
-//
-//	int val = 1;
-//
-//	public Boarder AntToBoarderScheduler(Ant a) {
-//		// Boarder b = boarderToAnt.get((int)Math.random() *
-//		// (boarderToAnt.size() -1));
-//		Boarder boarder = null;
-//		int listSize = 0;
-//		for (Boarder b : boarderToAnt) {
-//			int size = b.getAtns().size();
-//			listSize++;
-//			if (size <= Configuration.LIMITANTSTOBOARDER && size < val) {
-//
-//				b.getAtns().add(a);
-//				boarder = b;
-//				break;
-//			}
-//		}
-//
-//		if (listSize == boarderToAnt.size()) {
-//			val++;
-//		}
-//		return boarder;
-//
-//	}
-
-//	private class Boarder {
-//
-//		int atns;
-//		Set<Tile> boarder;
-//
-//		public Boarder(Set<Ant> ants, Set<Tile> boarder) {
-//			this.boarder = boarder;
-//			this.atns = ants;
-//		}
-//
-//		public Set<Ant> getAtns() {
-//			return atns;
-//		}
-//
-//		public Set<Tile> getBoarder() {
-//			return boarder;
-//		}
-//
-//	}
 
 }

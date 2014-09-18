@@ -20,7 +20,6 @@ public class Statistic {
 		try {
 			logStream = new PrintStream(new File("statistics.txt"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		logStream.println("Turn:\tAnzahl Ameisen:\tAnzahl Futter:\tAnzahl Gegner:\tSichtbarer Bereich von " + gameI.getRows()*gameI.getCols() + " (in Tiles):");
@@ -31,7 +30,7 @@ public class Statistic {
 	}
 	
 	private String trackNumberOfFood(){
-		return Integer.toString(0/*gameI.getFoodTiles().size()*/);
+		return Integer.toString(0);
 	}
 	
 	private String trackNumberOfEnemies(){

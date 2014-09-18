@@ -644,8 +644,6 @@ public class GameInformations {
 				map[position.getRow()][position.getCol()].setType(Ilk.LAND);
 			}
 		}
-		// myAnts.clear(); TODO
-
 	}
 
 	/**
@@ -743,8 +741,7 @@ public class GameInformations {
 				myAnts.add(new Ant(tile, antIdCounter));
 			}
 			for (Ant ant : myAnts) {
-				if (ant.getAntPosition().equals(tile)) {// .getAntPosition().equals(tile))
-					// {
+				if (ant.getAntPosition().equals(tile)) {
 					set = true;
 				}
 

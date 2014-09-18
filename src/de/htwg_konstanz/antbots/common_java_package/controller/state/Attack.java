@@ -41,15 +41,10 @@ public class Attack implements State{
 			ant.setState(new Exploration(ant));
 			return;
 		}
-//		AntBot.debug().log("ATTACK FAILD");
 	}
 
 	@Override
 	public void execute() {
-		//falls eine Ameise markiert wird aber in einen anderen Zustand (attack) kommt
-//		if(AntBot.getGameI().getFoodManager().getMarkedAnts().containsKey(ant)){
-////			AntBot.getGameI().getFoodManager().declineFood(AntBot.getGameI().getFoodManager().getMarkedAnts().get(ant), ant);
-//		}
 		List<Tile> order = new LinkedList<Tile>();
 		order.add(AntBot.getAttackManager().getMarkedAnts().get(ant).getNewPosition());
 		ant.setRoute(order);
@@ -66,7 +61,7 @@ public class Attack implements State{
 	
 	@Override
 	public void stateEnter() {
-		AntBot.getLogger().log(ant.getState().toString());
+		
 	}
 
 	@Override

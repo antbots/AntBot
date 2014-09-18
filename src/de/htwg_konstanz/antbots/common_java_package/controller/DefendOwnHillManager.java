@@ -57,15 +57,6 @@ public class DefendOwnHillManager {
 	
 	public static void defendAntsToDefendTile() {
 		
-		for (Entry<Tile, List<Tile>> rTile : defendTilesArroundHill.entrySet()) {
-			for(Tile t : rTile.getValue()) {
-				OverlayDrawer.setFillColor(Color.BLACK);
-				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-						SubTile.TL);
-			}
-			
-		}
-		
 		int antSize = AntBot.getGameI().getMyAnts().size();
 		int defenderAntsLimit = 0;
 		if(antSize <= 20){

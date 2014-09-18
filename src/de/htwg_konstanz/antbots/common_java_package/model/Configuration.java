@@ -32,9 +32,7 @@ public class Configuration {
 	
 	public static int getExplorerAntsLimit(){
 		int size = AntBot.getGameI().getMyAnts().size();
-//		if(size <= 10) {
-//			return size;
-//		}
+
 		return (int) (size * 0.25)+10;
 	}
 	

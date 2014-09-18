@@ -6,7 +6,6 @@ import java.util.Set;
 
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
@@ -19,8 +18,6 @@ public class MaxN {
 		PASSIVE,
 		NEUTRAL
 	}
-	
-	private Logger logger = new Logger("log.txt");
 	
 	LinkedList<Order> bestMove;
 	GameInformations board;
@@ -171,7 +168,7 @@ public class MaxN {
 			try {
 				possibleMovesTmp.removeFirst();
 			} catch (Exception e) {
-				// TODO: handle exception
+
 			}
 		}
 	}

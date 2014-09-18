@@ -65,9 +65,6 @@ public class FoodManager {
 
 			for (Tile t : foodTilesInViewRadius) {
 				List<Tile> tmp = AntBot.getPathfinding().aStar(a.getAntPosition(), t);
-				if(tmp == null) {
-					AntBot.debug().log("Ameise " + a.getAntPosition() + " food Tile " + t);
-				}
 				int distance = tmp.size();
 				if(distance <= Configuration.COLLECTFOODRADIUS) {
 					antfood.add(new AntFood(a, t, distance));
@@ -80,7 +77,6 @@ public class FoodManager {
 		List<Tile> tmpFood = new LinkedList<>();
 		
 		for(AntFood a : antfood) {
-//			AntBot.debug().log(a.toString());
 			Ant ant = a.getA();
 			Tile foodT = a.getFood();
 			if(!markedAnts.containsKey(ant) && !tmpFood.contains(foodT)) {
@@ -88,7 +84,6 @@ public class FoodManager {
 				tmpFood.add(foodT);
 			}
 		}
-//		AntBot.debug().log("--------------------------------------");
 	}
 	
 	class AntFood {

@@ -3,26 +3,20 @@ package de.htwg_konstanz.antbots.common_java_package.controller.helper;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
-
-import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 
 public class BreadthFirstSearch {
 
 	GameInformations gameI;
-	Logger logger;
 
 	public BreadthFirstSearch(GameInformations gameI) {
 		this.gameI = gameI;
-		this.logger = gameI.getLogger();
 	}
 
 	/**
@@ -50,9 +44,7 @@ public class BreadthFirstSearch {
 		Map<Tile, Integer> pathCosts = new HashMap<Tile, Integer>();
 		Tile tmp;
 		Queue<Tile> q = new LinkedList<Tile>();
-		// visitableTiles = new HashSet<Tile>();
 
-;
 		q.add(postion);
 			if (visitableTiles != null) {
 				visitableTiles.add(postion);
@@ -74,7 +66,6 @@ public class BreadthFirstSearch {
 					if (!q.contains(next)) {
 
 						for (Tile pos : targets) {
-							//Tile pos = target.getAntPosition();
 							if (pos.getCol() == next.getCol()
 									&& pos.getRow() == next.getRow()) {
 
@@ -90,9 +81,6 @@ public class BreadthFirstSearch {
 
 							}
 						}
-						// OverlayDrawer.setFillColor(Color.BLACK);
-						// OverlayDrawer.drawTileSubtile(next.getRow(),
-						// next.getCol(), SubTile.MM);
 						if (isStepUsed == true && steps >= pathCosts.get(next)) {
 							q.add(next);
 							if (visitableTiles != null) {

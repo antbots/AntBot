@@ -42,7 +42,6 @@ public class Exploration  implements State{
 		if(!GameInformations.getFoodManager().getMarkedAnts().containsKey(ant) && ( AntBot.getGameI().getExplorerAnts() < Configuration.getExplorerAntsLimit() || BuildBoarder.getAreaAndBoarder() == null)){
 			return;
 		}
-//		AntBot.debug().log("COLLECTFOOD FAILD");
 	}
 
 	@Override
@@ -95,10 +94,8 @@ public class Exploration  implements State{
 					}
 					route.remove(0);
 			ant.setRoute(route);
-			AntBot.getLogger().log("Route is set: " + ant.getRoute());
 		} else {
 			List<Tile> route = null;
-//			AntBot.debug().log("destiantion in Exploration " + destination.getType());
 			route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
 			if(route == null){
 				if(AntBot.getGameI().getMoveAbleNeighbours(destination).size() == 0) {
@@ -131,7 +128,6 @@ public class Exploration  implements State{
 	@Override
 	public void stateEnter() {
 		AntBot.getGameI().increaseExplorerAnts();
-		AntBot.getLogger().log(ant.getState().toString());
 	}
 
 	@Override

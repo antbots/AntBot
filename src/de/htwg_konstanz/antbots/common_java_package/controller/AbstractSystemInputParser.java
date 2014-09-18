@@ -17,12 +17,6 @@ public abstract class AbstractSystemInputParser extends AbstractSystemInputReade
     
     private final List<String> input = new ArrayList<String>();
     
-    
-//    //TODO
-//    boolean isLog = false;
-//    
-//    Logger logger;
-    
     private enum SetupToken {
         LOADTIME, TURNTIME, ROWS, COLS, TURNS, VIEWRADIUS2, ATTACKRADIUS2, SPAWNRADIUS2;
         
@@ -82,12 +76,6 @@ public abstract class AbstractSystemInputParser extends AbstractSystemInputReade
         int attackRadius2 = 0;
         int spawnRadius2 = 0;
         
-//        if(!isLog) {
-//        	logger = new Logger();
-//        	logger.log("create logger");
-//        	isLog = true;
-//        }
-        
         for (String line : input) {
             line = removeComment(line);
             if (line.isEmpty()) {
@@ -98,7 +86,6 @@ public abstract class AbstractSystemInputParser extends AbstractSystemInputReade
                 continue;
             }
             String token = scanner.next().toUpperCase();
-//            logger.log(token);
             if (!SetupToken.PATTERN.matcher(token).matches()) {
                 continue;
             }
