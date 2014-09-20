@@ -77,21 +77,11 @@ public class AntBot extends Bot {
 	@Override
 	public void doTurn() {
 		startTurnTime = System.nanoTime();
-		debug.log("---------------------------------------------------------------------------------------");
-		debug.log(""+turn);
 		if (turn == 0) {
 			init();
 			
 		}
 		DefendOwnHillManager.initDefendTiles();
-
-//			for(int i = 0; i< gameI.getMap().length; i++) {
-//				for(int y = 0; y < gameI.getMap().length; y++) {
-//					OverlayDrawer.setTileInfo(gameI.getMap()[i][y],""+gameI.getMap()[i][y].getDiscoverdAtTurn());
-//				}
-//			}
-			
-
 		
 		antsOrders = new LinkedList<Order>();
 
@@ -101,28 +91,13 @@ public class AntBot extends Bot {
 
 		DefendOwnHillManager.defendAntsToDefendTile();
 		
-		
 		attackManager.markOwnAntsAsDangered();
 		attackManager.markAntsToAttack();
-		if(attackManager.getMarkedAnts() != null) 
-		for(Entry<Ant, Order> a : attackManager.getMarkedAnts().entrySet()) {
-			debug.log("Ameise " + a.getKey().getAntPosition() + " " +  a.getKey().isDanger());
-		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-	
 		GameInformations.getFoodManager().markAntsToCollectFood();
 		
 		
 		gameI.getMyAnts().forEach(a -> {
-			logger.log("Process Ant: " + a.getAntPosition());
 			a.doLogic();
 			a.move();
 		});
@@ -136,9 +111,6 @@ public class AntBot extends Bot {
 		}
 		sendMovesToSimulation();
 		
-//		gameI.getMyAnts().forEach(b -> { debug.log("Position " + b.getAntPosition() + " Zustand " + b.getCurrentState() + " Route " + b.getRoute() );});
-		
-		debug.log("---------------------------------------------------------------------------------------");
 		turn++;
 		GameInformations.getFoodManager().initFood();
 	}
@@ -217,13 +189,6 @@ public class AntBot extends Bot {
 				//aim.add(Aim.DONTMOVE);
 				Collections.shuffle(aim);
 				
-//				Map<Aim, Order> aimToOder = new HashMap<>();
-//				aimToOder.put(Aim.EAST, new Order(error.getPosition(),Aim.EAST));
-//				aimToOder.put(Aim.NORTH, new Order(error.getPosition(),Aim.NORTH));
-//				aimToOder.put(Aim.SOUTH, new Order(error.getPosition(),Aim.SOUTH));
-//				aimToOder.put(Aim.WEST, new Order(error.getPosition(),Aim.WEST));
-				//aimToOder.put(Aim.DONTMOVE, new Order(error.getPosition(),Aim.DONTMOVE));
-				
 				List<Aim> toRemove = new LinkedList<>();
 				for(Aim a: aim){
 					Order o1 = new Order(error.getPosition(),a);
@@ -250,11 +215,6 @@ public class AntBot extends Bot {
 				newOrder.setAnt(error.getAnt());
 				AntBot.getAntsOrders().add(newOrder);
 
-				
-//				Order newOrder = new Order(error.getPosition(), Aim.DONTMOVE);
-//				newOrder.setAnt(error.getAnt());
-//				AntBot.getAntsOrders().add(newOrder);
-//				newOrder.getAnt().setPosition(newOrder.getPosition().getRow(), newOrder.getPosition().getCol());
 			}
 			AntBot.setMoveError(true);
 		}else{

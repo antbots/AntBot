@@ -3,7 +3,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
@@ -40,11 +39,6 @@ public class EnemyHillManager {
 				}
 			}
 		}
-		for(Entry<Ant, Tile> e : antToHill.entrySet()) {
-			AntBot.getLogger().log("Ameise " + e.getKey() + " geht zu Hill " + e.getValue());
-		}
-		
-		AntBot.getLogger().log("Attack Enemy Hill");
 	}
 
 	public Map<Ant, Tile> getAntsToHill() {

@@ -42,16 +42,11 @@ public class AttackInit {
 		merge(attack);
 		helpAnts(attack);
 		
-		for(Entry<Set<Ant>, Set<Ant>> a : attack.entrySet()) {
-			AntBot.debug().log(a.getKey() + " " + a.getValue());
-		}
-		
 		return attack;
 	}
 	
 	private Map<Set<Ant>, Set<Ant>> helpAnts(Map<Set<Ant>, Set<Ant>> attack){
 		for(Set<Ant> myAttackAnts : attack.keySet()) {
-//			AntBot.debug().log("VOR HELPER " + myAttackAnts);
 			Set<Ant> tmp = new HashSet<>(myAttackAnts);
 			
 			for(Ant ant : myAttackAnts) {
@@ -76,7 +71,6 @@ public class AttackInit {
 				
 			}
 			myAttackAnts = tmp;
-//			AntBot.debug().log("VOR HELPER " + myAttackAnts);
 		}
 		return attack;
 	}

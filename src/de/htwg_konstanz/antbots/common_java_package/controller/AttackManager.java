@@ -17,8 +17,6 @@ import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 public class AttackManager {
 
 	Map<Ant,Order> markedAnts;
-	private static int groupSize = 2;
-	
 	
 	public AttackManager() {
 		
@@ -27,15 +25,12 @@ public class AttackManager {
 	public void markAntsToAttack(){
 		this.markedAnts = new HashMap<>();
 		Map<Set<Ant>, Set<Ant>> att = AntBot.getAttack().initAttackGroups();
-		AntBot.getLogger().log("Groups for AlphaBeta:");
 		for(Entry<Set<Ant>, Set<Ant>> a : att.entrySet()) {
 			
 			List<Set<Ant>> beteiligteAmeisen = new LinkedList<>();
 			
 			beteiligteAmeisen.add(a.getKey());
 			beteiligteAmeisen.add(a.getValue());
-			
-			AntBot.getLogger().log("key " + a.getKey()+ " value " + a.getValue());
 			
 			if((AntBot.getStartTime() - System.nanoTime())/1000000 > 7000){
 				for(Ant ant : a.getKey()){
@@ -51,16 +46,8 @@ public class AttackManager {
 							}
 						}
 					}
-					
-					///AntBot.getGameI().getMyAntsDangered().forEach( ant -> {Optional<Order> matchedOrder = move.stream().filter(o -> ant.getAntPosition().equals(o.getPosition())).findAny();
-					//markedAnts.put(ant, matchedOrder.get());});
 				}
 			}
-		}
-		// DEBUG
-		AntBot.getLogger().log("Marked Ants:");
-		for(Entry<Ant,Order> entry : markedAnts.entrySet()){
-			AntBot.getLogger().log(entry.toString());
 		}
 	}
 	
@@ -93,13 +80,6 @@ public class AttackManager {
 			
 			Tile myAntTile = myAnt.getAntPosition();
 			Set<Tile> myTiles = AntBot.getGameI().getTilesInRadius(myAntTile,Configuration.DANGERRADIUS);
-			
-			//DEBUG
-//			for(Tile t : myTiles) {
-//				OverlayDrawer.setFillColor(Color.GREEN);
-//				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-//						SubTile.BR);
-//			}
 			
 			for (Ant enemyAnt : AntBot.getGameI().getEnemyAnts()) {
 				Tile enemyAntTile = enemyAnt.getAntPosition();

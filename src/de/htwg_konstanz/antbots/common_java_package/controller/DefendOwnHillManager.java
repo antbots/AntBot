@@ -1,6 +1,5 @@
 package de.htwg_konstanz.antbots.common_java_package.controller;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,13 +9,9 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
-import de.htwg_konstanz.antbots.common_java_package.controller.state.State;
 import de.htwg_konstanz.antbots.common_java_package.controller.state.StateName;
-import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 public class DefendOwnHillManager {
 
@@ -56,15 +51,6 @@ public class DefendOwnHillManager {
 	static List<Ant> markedAnts;
 	
 	public static void defendAntsToDefendTile() {
-		
-		for (Entry<Tile, List<Tile>> rTile : defendTilesArroundHill.entrySet()) {
-			for(Tile t : rTile.getValue()) {
-				OverlayDrawer.setFillColor(Color.BLACK);
-				OverlayDrawer.drawTileSubtile(t.getRow(), t.getCol(),
-						SubTile.TL);
-			}
-			
-		}
 		
 		int antSize = AntBot.getGameI().getMyAnts().size();
 		int defenderAntsLimit = 0;

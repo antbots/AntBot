@@ -45,7 +45,6 @@ public class InitState  implements State{
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -60,7 +59,7 @@ public class InitState  implements State{
 
 	@Override
 	public void stateEnter() {
-		AntBot.getLogger().log(ant.getState().toString());
+		
 	}
 
 	@Override

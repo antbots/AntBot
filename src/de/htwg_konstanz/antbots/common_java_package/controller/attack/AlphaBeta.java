@@ -4,18 +4,8 @@ package de.htwg_konstanz.antbots.common_java_package.controller.attack;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-
-
-
-
-
-
-import de.htwg_konstanz.antbots.bots.AntBot;
-
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.controller.Logger;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Order;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -28,8 +18,6 @@ public class AlphaBeta {
 		PASSIVE,
 		NEUTRAL
 	}
-	
-private Logger logger  = new Logger("log.txt");
 	
 	LinkedList<Order> bestMove;
 	GameInformations board;
@@ -69,27 +57,7 @@ private Logger logger  = new Logger("log.txt");
 		gameStrategy = st;
 
 		
-//		OverlayDrawer.setFillColor(Color.BLACK);
-//		for(Tile t : board.getTilesInAttackRadius(enemyAntsToGo.get(0).getAntPosition(), (int)Math.sqrt(board.getAttackRadius2()))){
-//			AntBot.getLogger().log(t.toString());
-//			OverlayDrawer.drawTileSubtile(t.getRow(),t.getCol(), SubTile.MM);
-//		}
-		
-		
-		
 		max(depth,Integer.MIN_VALUE , Integer.MAX_VALUE);
-		
-
-		String[] tt = new String[] {""};
-//		if(AntBot.getTurn() == 1){
-//			SwingDemo.main(tt);
-//			try {
-//				Thread.sleep(5000000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
 		
 		return bestMove;
 	}
@@ -104,8 +72,7 @@ private Logger logger  = new Logger("log.txt");
 	    LinkedList<LinkedList<Order>> possibleMoves = new LinkedList<LinkedList<Order>>();
 	    possibleMovesTmp = new LinkedList<Order>();
 	    generatePossibleMoves(myAntsToGo.size(), myAntsToGo, possibleMoves);
-	    logger.log("max");
-	    //printPossibleMoves(possibleMoves);
+
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
 	    	ExecuteNextMove(childMove,myAntsToGo,enemyAntsToGo, false);
@@ -123,16 +90,6 @@ private Logger logger  = new Logger("log.txt");
 	    return maxValue;
 	 }
 
-	private void printPossibleMoves(LinkedList<LinkedList<Order>> possibleMoves2) {
-		for (LinkedList<Order> linkedList : possibleMoves2) {
-			StringBuilder sb = new StringBuilder(Integer.toString(linkedList.size()));
-			for (Order order : linkedList) {
-				sb.append(order + " ,");
-			}
-			logger.log(sb + "\n");
-		}
-	}
-
 	private int min(int depth, int alpha, int beta) {
 	    if (depth == 0 || enemyAntsToGo.isEmpty() || myAntsToGo.isEmpty()){
 	    	int result = evaluation(gameStrategy);
@@ -144,8 +101,7 @@ private Logger logger  = new Logger("log.txt");
 	    LinkedList<LinkedList<Order>> possibleMoves = new LinkedList<LinkedList<Order>>();
 	    possibleMovesTmp = new LinkedList<Order>();
 	    generatePossibleMoves(enemyAntsToGo.size(), enemyAntsToGo, possibleMoves);
-	    logger.log("min");
-	    //printPossibleMoves(possibleMoves);
+
 	    while (!possibleMoves.isEmpty()) {
 	    	LinkedList<Order> childMove = possibleMoves.poll();
 	    	ExecuteNextMove(childMove,enemyAntsToGo,myAntsToGo,true);
@@ -172,7 +128,6 @@ private Logger logger  = new Logger("log.txt");
 	}
 	
 	private void generatePossibleMoves(int depth, LinkedList<Ant> antsToGo, LinkedList<LinkedList<Order>> possibleMoves) {
-		// TODO Auto-generated method stub
 		if (depth == 0){
 			LinkedList<Order> tmp = new LinkedList<Order>();
 			for (Order order : possibleMovesTmp) {
@@ -200,7 +155,7 @@ private Logger logger  = new Logger("log.txt");
 			try {
 				possibleMovesTmp.removeFirst();
 			} catch (Exception e) {
-				// TODO: handle exception
+
 			}
 		}
 	}
@@ -243,7 +198,6 @@ private Logger logger  = new Logger("log.txt");
 		}else{
 			w3 = -1;
 		}
-		AntBot.getLogger().log(w1 + " " + t1 + " " + w2 + " " +t2 + " " + w3 + " " + t3);
 		return w1 * t1 + w2 * t2 + w3 * t3;
 	}
 

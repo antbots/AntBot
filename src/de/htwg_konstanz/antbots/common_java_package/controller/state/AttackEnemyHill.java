@@ -83,18 +83,15 @@ public class AttackEnemyHill implements State{
 			ant.setState(new Exploration(ant));
 			return;
 		}
-//		AntBot.debug().log("ATTACK ENEMY HILL FAILD");
 	}
 
 	@Override
 	public void stateEnter() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void stateExit() {
-		// TODO Auto-generated method stub
 		
 	}
 
