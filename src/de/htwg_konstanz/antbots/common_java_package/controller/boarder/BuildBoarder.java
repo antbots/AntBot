@@ -93,7 +93,10 @@ public class BuildBoarder {
 			Tile myAntPos = myAnt.getAntPosition();
 			Set<Tile> tilesInRadius = AntBot.getGameI().getTilesInRadius(myAntPos,	Configuration.BOARDDISTANCE);
 			Set<Tile> visitableTiles = AntBot.getBsf().visitableFromSet(myAntPos,tilesInRadius);
-			Set<Ant> enemyAnts = new HashSet<>();
+
+
+			
+			
 
 			// ermittle gegner im Sichtradius
 //			for (Ant enemy : gameI.getEnemyAnts()) {
@@ -178,21 +181,15 @@ public class BuildBoarder {
 				}
 			}
 		}
-		
-//		for(Entry<Set<Tile>, Set<Ant>> test : areaToEnemyAnt.entrySet()) {
-//			AntBot.debug().log("Size of enemy Ants " + test.getValue().size());
-//		}
-		
-		
-		
 
 		for (Entry<Set<Tile>, Set<Ant>> entry : areaToEnemyAnt.entrySet()) {
 			Set<Tile> enemyArea = new HashSet<>();
+			
 			for (Ant enemy : entry.getValue()) {
-				enemyArea
-						.addAll((AntBot.getGameI().getTilesInRadius(enemy
-								.getAntPosition(), (int) Math.sqrt(AntBot
-								.getGameI().getViewRadius2()) / 2)));
+				Tile enemyTile = enemy.getAntPosition();
+				Set<Tile> tmpEnemyArea = new HashSet<>();
+				tmpEnemyArea.addAll((AntBot.getGameI().getTilesInRadius(enemyTile, (int) Math.sqrt(AntBot.getGameI().getViewRadius2()) / 2)));
+				enemyArea = AntBot.getBsf().visitableFromSet(enemyTile,tmpEnemyArea);
 			}
 
 			Set<Tile> bo = new HashSet<>();
@@ -218,7 +215,7 @@ public class BuildBoarder {
 			for(Tile bTIle : test.getValue()) {
 				 OverlayDrawer.setFillColor(Color.CYAN);
 				 OverlayDrawer.drawTileSubtile(bTIle.getRow(), bTIle.getCol(),
-				 SubTile.TL);
+				 SubTile.BL);
 			}
 		}
 		boarders = areaToBoarder;

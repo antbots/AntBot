@@ -15,7 +15,7 @@ set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
 
 
 ::set map="%~dp0\aichallenge_tools\ants\maps\cell_maze\cell_maze_p02_11.map"
-
+::set map="%~dp0\aichallenge_tools\ants\maps\cell_maze\cell_maze_p02_07.map"
 ::players
 
 
@@ -46,7 +46,7 @@ echo Player1: %player1%
 ::start
 ::python %playgame% --verbose -e -So --engine_seed 42 --player_seed 42 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 200 --map_file %map% %* %player1% %player2% | java -jar %visualizer%
 
-python %playgame% --verbose -e --player_seed 42 --turntime 20000 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 300 --map_file %map% %* %player1% %player2% 
+python %playgame% --verbose -e --player_seed 42 --turntime 100000 --end_wait=0 --log_dir %~dp0bots\game_logs --turns 700 --map_file %map% %* %player1% %player2% 
 
 ::--scenario --food none
 
