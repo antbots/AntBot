@@ -7,14 +7,14 @@ set playgame="%~dp0aichallenge_tools\ants\playgame.py"
 
 ::map
 ::set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_04p_01.map"
-set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
+::set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\erkunden\exploration_skull.map"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\erkunden\exploration_1.map"
 ::set map="%~dp0aichallenge_tools/ants/maps/example/tutorial1.map"
 ::set map="%~dp0\src\de\htwg_konstanz\antbots\karten\angreifen\1vs1w.map"
 
 
-::set map="%~dp0\aichallenge_tools\ants\maps\cell_maze\cell_maze_p02_11.map"
+set map="%~dp0\aichallenge_tools\ants\maps\cell_maze\cell_maze_p02_11.map"
 ::set map="%~dp0\aichallenge_tools\ants\maps\cell_maze\cell_maze_p02_07.map"
 ::players
 
@@ -22,9 +22,9 @@ set map="%~dp0\aichallenge_tools\ants\maps\maze\maze_p02_02.map"
 set player1="java -jar %~dp0bots\AntBot.jar"
 ::set player2="java -jar %~dp0bots\MyBot.jar"
 ::set player2="java -jar %~dp0bots\ExplorerBot.jar"
-set player2="python %~dp0aichallenge_tools\ants\dist\bots\MyBot.py"
+::set player2="python %~dp0aichallenge_tools\ants\dist\bots\MyBot.py"
 
-::set player2="java -jar %~dp0aichallenge_tools\ants\dist\bots\MyBot.jar"
+set player2="java -jar %~dp0aichallenge_tools\ants\dist\bots\MyBot.jar"
 ::set player2="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
 
 
