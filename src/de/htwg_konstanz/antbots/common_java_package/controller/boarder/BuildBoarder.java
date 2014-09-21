@@ -3,7 +3,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller.boarder;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +12,6 @@ import java.util.Set;
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
-import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
-import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Ilk;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
@@ -87,6 +84,7 @@ public class BuildBoarder {
 			Set<Tile> tilesInRadius = AntBot.getGameI().getTilesInRadius(myAntPos,	Configuration.BOARDDISTANCE);
 			Set<Tile> visitableTiles = AntBot.getBsf().visitableFromSet(myAntPos,tilesInRadius);
 
+
 			areas.add(visitableTiles);
 		}
 		merge(areas);
@@ -139,11 +137,12 @@ public class BuildBoarder {
 
 		for (Entry<Set<Tile>, Set<Ant>> entry : areaToEnemyAnt.entrySet()) {
 			Set<Tile> enemyArea = new HashSet<>();
+			
 			for (Ant enemy : entry.getValue()) {
-				enemyArea
-						.addAll((AntBot.getGameI().getTilesInRadius(enemy
-								.getAntPosition(), (int) Math.sqrt(AntBot
-								.getGameI().getViewRadius2()) / 2)));
+				Tile enemyTile = enemy.getAntPosition();
+				Set<Tile> tmpEnemyArea = new HashSet<>();
+				tmpEnemyArea.addAll((AntBot.getGameI().getTilesInRadius(enemyTile, (int) Math.sqrt(AntBot.getGameI().getViewRadius2()) / 2)));
+				enemyArea = AntBot.getBsf().visitableFromSet(enemyTile,tmpEnemyArea);
 			}
 
 			Set<Tile> bo = new HashSet<>();
@@ -162,7 +161,7 @@ public class BuildBoarder {
 			for(Tile bTIle : test.getValue()) {
 				 OverlayDrawer.setFillColor(Color.CYAN);
 				 OverlayDrawer.drawTileSubtile(bTIle.getRow(), bTIle.getCol(),
-				 SubTile.TL);
+				 SubTile.BL);
 			}
 		}
 		boarders = areaToBoarder;

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
-import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
 

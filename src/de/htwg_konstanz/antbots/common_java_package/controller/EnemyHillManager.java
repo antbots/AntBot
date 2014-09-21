@@ -3,7 +3,6 @@ package de.htwg_konstanz.antbots.common_java_package.controller;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import de.htwg_konstanz.antbots.bots.AntBot;

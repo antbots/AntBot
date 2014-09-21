@@ -110,7 +110,7 @@ public class Statistic {
 		
 		public Measure(String name){
 			this.name=name;
-			times = new LinkedList();
+			times = new LinkedList<>();
 		}
 		
 		private String getName() {

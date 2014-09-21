@@ -1,17 +1,13 @@
 package de.htwg_konstanz.antbots.common_java_package.controller.state;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.DefendOwnHillManager;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
 import de.htwg_konstanz.antbots.common_java_package.model.Tile;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer;
-import de.htwg_konstanz.antbots.visualizer.OverlayDrawer.SubTile;
 
 public class Defend implements State {
 
