@@ -27,7 +27,7 @@ public class GoToBoarder implements State{
 		this.stateName = StateName.GoToBoarder;
 		ant = a;
 	}
-
+boolean test = false;
 	@Override
 	public void execute() {
 		if(destination != null && destination.getType() == Ilk.WATER) {
@@ -41,6 +41,7 @@ public class GoToBoarder implements State{
 			for(Entry<Set<Tile>, Set<Tile>> e : BuildBoarder.getAreaAndBoarder().entrySet()) {
 				if(e.getKey().contains(ant.getAntPosition())) {
 					Tile target = (Tile) e.getValue().toArray()[(int) (Math.random() * (e.getValue().size())-1)  ];
+					
 					List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), target);
 					route.remove(0);
 					if(route.size() == 0) {
@@ -50,12 +51,18 @@ public class GoToBoarder implements State{
 					ant.setRoute(route);
 
 					destination = route.get(route.size() - 1);
-				}
-			}
+					test = true;
+					
+				} 
+				
+			} 
+			if(test)
+				AntBot.debug().log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANT " + ant.getAntPosition() +  " " + test+ " destination " + destination + " type " + destination.getType().name());
 			
 			goToBoarder = true;
 		} else {
 			//damit der weg jedes mal neu berechnet wird um zu verhindern, dass die Route über unentdecktes Land geht(könnte nämlich Wasser sein)
+			AntBot.debug().log("Ant " + ant.getAntPosition() + "Ziel " + destination + " type ");
 			List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), destination);
 			
 			route.remove(0);

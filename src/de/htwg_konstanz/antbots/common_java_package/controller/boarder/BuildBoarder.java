@@ -141,8 +141,18 @@ public class BuildBoarder {
 			for (Ant enemy : entry.getValue()) {
 				Tile enemyTile = enemy.getAntPosition();
 				Set<Tile> tmpEnemyArea = new HashSet<>();
+				
 				tmpEnemyArea.addAll((AntBot.getGameI().getTilesInRadius(enemyTile, (int) Math.sqrt(AntBot.getGameI().getViewRadius2()) / 2)));
-				enemyArea = AntBot.getBsf().visitableFromSet(enemyTile,tmpEnemyArea);
+				Set<Tile> inVIewRadius = new HashSet<>();
+				Set<Tile> tmp = new HashSet<>();
+				tmp.addAll(AntBot.getBsf().visitableFromSet(enemyTile,tmpEnemyArea));
+				for(Tile t : tmp) {
+					if(t.getType() != Ilk.UNKNOWN && t.getType() != Ilk.WATER) {
+						inVIewRadius.add(t);
+					}
+				}
+				enemyArea.addAll(inVIewRadius);
+				
 			}
 
 			Set<Tile> bo = new HashSet<>();
@@ -151,7 +161,7 @@ public class BuildBoarder {
 				for (Tile t : AntBot.getGameI().getMoveAbleNeighbours(tile)
 						.keySet()) {
 					if (!enemyArea.contains(t)) {
-						bo.add(t);
+						bo.add(tile);
 					}
 				}
 			}

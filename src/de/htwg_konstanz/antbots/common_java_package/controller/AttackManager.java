@@ -31,12 +31,15 @@ public class AttackManager {
 			
 			beteiligteAmeisen.add(a.getKey());
 			beteiligteAmeisen.add(a.getValue());
+			long timeNow = System.currentTimeMillis();
+	
 			
-			if((AntBot.getStartTime() - System.nanoTime())/1000000 > 7000){
+			if(( timeNow - AntBot.getStartTime() ) > 7000){ ///1000000
 				for(Ant ant : a.getKey()){
 					markedAnts.put(ant, new Order(ant.getAntPosition(), Aim.DONTMOVE));
 				}
 			}else{
+//				AntBot.debug().log("size " + beteiligteAmeisen.size() + " eigne Ameisen " + beteiligteAmeisen.get(0) + " gegnerische Ameisen " + beteiligteAmeisen.get(1));
 				LinkedList<Order> move = AntBot.getGameStrategy().alphaBeta(AntBot.getGameI(), Configuration.ATTACKSEARCHDEPTH, Configuration.ATTACKSTRATEGY, beteiligteAmeisen);
 				if (move != null){
 					for(Ant ant : a.getKey()){
@@ -49,6 +52,7 @@ public class AttackManager {
 				}
 			}
 		}
+		AntBot.debug().log("Alpha Beta fertig");
 	}
 	
 	public Map<Ant, Order> getMarkedAnts() {
@@ -81,8 +85,13 @@ public class AttackManager {
 			Tile myAntTile = myAnt.getAntPosition();
 			Set<Tile> myTiles = AntBot.getGameI().getTilesInRadius(myAntTile,Configuration.DANGERRADIUS);
 			
+			
 			for (Ant enemyAnt : AntBot.getGameI().getEnemyAnts()) {
+				if(enemyAnts.size() == 3) {
+					break;
+				}
 				Tile enemyAntTile = enemyAnt.getAntPosition();
+				
 				if (myTiles.contains(enemyAntTile)) {
 					myAnt.setDanger(true);
 					enemyAnts.add(enemyAnt);

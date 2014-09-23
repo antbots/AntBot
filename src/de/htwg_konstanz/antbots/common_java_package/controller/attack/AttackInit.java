@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.htwg_konstanz.antbots.bots.AntBot;
 import de.htwg_konstanz.antbots.common_java_package.controller.Ant;
 import de.htwg_konstanz.antbots.common_java_package.controller.GameInformations;
 import de.htwg_konstanz.antbots.common_java_package.model.Configuration;
@@ -36,9 +37,18 @@ public class AttackInit {
 			Set<Ant> myAntSet = new HashSet<Ant>();
 			myAntSet.add(myAnt);
 			attack.put(myAntSet, myAnt.getEnemysInViewRadius());
+			
 
 		}
+		for(Entry<Set<Ant>, Set<Ant>> entry : attack.entrySet()) {
+			AntBot.debug().log("Before_________________________Eigen AMeisen " + entry.getKey() + " gegnerische Ameisen " + entry.getValue());
+		}
 		merge(attack);
+		
+		for(Entry<Set<Ant>, Set<Ant>> entry : attack.entrySet()) {
+			AntBot.debug().log("After__________________________Eigen AMeisen " + entry.getKey() + " gegnerische Ameisen " + entry.getValue());
+		}
+		
 		helpAnts(attack);
 		
 		return attack;
@@ -84,17 +94,25 @@ public class AttackInit {
 	 */
 	private void merge(Map<Set<Ant>, Set<Ant>> attack) {
 		for (Entry<Set<Ant>, Set<Ant>> attackGroups : attack.entrySet()) {
-			for (Entry<Set<Ant>, Set<Ant>> areaTwo : attack.entrySet()) {
-				if (areaTwo != attackGroups) {
-					Set<Ant> tmp = new HashSet<>(areaTwo.getValue());
+			for (Entry<Set<Ant>, Set<Ant>> attackGroupTwo : attack.entrySet()) {
+				if (attackGroupTwo != attackGroups) {
+					
+					Set<Ant> tmp = new HashSet<>(attackGroupTwo.getValue());
 					tmp.retainAll(attackGroups.getValue());
 
 					if (tmp.size() != 0) {
-						if (attackGroups.getKey().size() < Configuration.GROUPSIZE
-								|| attackGroups.getValue().size() < Configuration.GROUPSIZE) {
-							attackGroups.getKey().addAll(areaTwo.getKey());
-							attackGroups.getValue().addAll(areaTwo.getValue());
-							attack.remove(areaTwo.getKey());
+						if (attackGroups.getKey().size() < Configuration.GROUPSIZE) {
+								//|| attackGroups.getValue().size() < Configuration.GROUPSIZE) {
+							
+							attackGroups.getKey().addAll(attackGroupTwo.getKey());
+							List<Ant> enemyTmp = new LinkedList<>();
+							enemyTmp.addAll(attackGroupTwo.getValue());
+	
+							while(attackGroups.getValue().size() < 3 && enemyTmp.size() > 0) {
+								attackGroups.getValue().add(enemyTmp.remove(0));
+							}
+							//attackGroups.getValue().addAll(attackGroupTwo.getValue());
+							attack.remove(attackGroupTwo.getKey());
 							merge(attack);
 						}
 

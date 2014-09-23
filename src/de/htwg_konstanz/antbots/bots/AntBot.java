@@ -26,6 +26,7 @@ import de.htwg_konstanz.antbots.common_java_package.controller.attack.AttackInit
 import de.htwg_konstanz.antbots.common_java_package.controller.attack.MaxN;
 import de.htwg_konstanz.antbots.common_java_package.controller.boarder.BuildBoarder;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.BreadthFirstSearch;
+import de.htwg_konstanz.antbots.common_java_package.controller.helper.CardPrinter;
 import de.htwg_konstanz.antbots.common_java_package.controller.helper.Pathfinding;
 import de.htwg_konstanz.antbots.common_java_package.model.Aim;
 import de.htwg_konstanz.antbots.common_java_package.model.Food;
@@ -76,26 +77,37 @@ public class AntBot extends Bot {
 
 	@Override
 	public void doTurn() {
-		startTurnTime = System.nanoTime();
+		debug.log("--------------------------------------");
+		startTurnTime = System.currentTimeMillis();
 		if (turn == 0) {
 			init();
 			
 		}
+		debug.log("TURN " + turn);
+		CardPrinter.PrintCard(turn);
 		DefendOwnHillManager.initDefendTiles();
 		
 		antsOrders = new LinkedList<Order>();
 
+		long timeBefore = System.currentTimeMillis();
 		BuildBoarder.improvedBoarder();
+		Long timeAfter = System.currentTimeMillis();
+		
+		//debug.log("Time Boarder " + ((timeAfter - timeBefore)));
+		
+		//debug().log("After boarder");
 		
 		enemyHillManager.antsToEnemyHill();
-
+		//debug().log("After antsToEnemyHill");
+		
 		DefendOwnHillManager.defendAntsToDefendTile();
 		
 		attackManager.markOwnAntsAsDangered();
 		attackManager.markAntsToAttack();
+		//debug().log("After attackManager");
 		
 		GameInformations.getFoodManager().markAntsToCollectFood();
-		
+		//debug().log("After getFoodManager");
 		
 		gameI.getMyAnts().forEach(a -> {
 			a.doLogic();
@@ -105,7 +117,7 @@ public class AntBot extends Bot {
 		AntBot.setMoveError(true);
 		while(moveError){
 			resolveMoveError();
-			if((AntBot.getStartTime() - System.nanoTime())/1000000 > 10000){
+			if((System.nanoTime()- AntBot.getStartTime())/1000000 > 10000){
 				moveError = false;
 			}
 		}
@@ -113,6 +125,7 @@ public class AntBot extends Bot {
 		
 		turn++;
 		GameInformations.getFoodManager().initFood();
+		debug.log("--------------------------------------");
 	}
 	
 	

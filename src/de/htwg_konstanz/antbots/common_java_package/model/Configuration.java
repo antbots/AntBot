@@ -7,7 +7,7 @@ public class Configuration {
 
 
 
-	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) + 3 ;
+	public static final int DANGERRADIUS = (int)Math.sqrt(AntBot.getGameI().getAttackRadius2()) + 1 ;
 	
 	// Angriffsalgorithmus
 	public static final AlphaBeta.Strategy ATTACKSTRATEGY = AlphaBeta.Strategy.NEUTRAL;

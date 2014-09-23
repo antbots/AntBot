@@ -31,10 +31,10 @@ public class EnemyHillManager {
 			}
 
 			Set<Tile> myAnts = AntBot.getBsf().extendedBSF(hill, allMyAnts, false, true, Configuration.RADIUSTOENEMYHILL, null);
-			Set<Tile> enemyAnt = AntBot.getBsf().extendedBSF(hill, allEnemyAnts, true, true, Configuration.RADIUSTOENEMYHILL, null);
+			Set<Tile> enemyAnt = AntBot.getBsf().extendedBSF(hill, allEnemyAnts, false, true, Configuration.RADIUSTOENEMYHILL, null);
 
 			for(Tile myAnt :  myAnts){
-				if(enemyAnt.size() == 0 || (AntBot.getGameI().getDistance(myAnt, hill) < AntBot.getGameI().getDistance((Tile)enemyAnt.toArray()[0], hill))){
+				if(enemyAnt.size() == 0 || enemyAnt.size() <=3 || (AntBot.getGameI().getDistance(myAnt, hill) < AntBot.getGameI().getDistance((Tile)enemyAnt.toArray()[0], hill))){
 					antToHill.put(tileToAnt.get(myAnt), hill);
 				}
 			}
