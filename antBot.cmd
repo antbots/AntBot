@@ -29,10 +29,10 @@ set player1="java  -Xms1024m  -jar %~dp0bots\AntBot.jar"
 ::set player2="python %~dp0aichallenge_tools\ants\dist\bots\Platz750\MyBot.py3"
 ::set player2="java -jar %~dp0aichallenge_tools\ants\dist\bots\84\MyBot.jar"
 
-::set player2="java -jar %~dp0aichallenge_tools\ants\dist\bots\MyBot.jar"
+set player2="java -jar %~dp0aichallenge_tools\ants\dist\bots\MyBot.jar"
 ::set player3="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\HunterBot.py"
 
-set player2="python %~dp0aichallenge_tools\ants\dist\bots\300\MyBot.py"
+::set player2="python %~dp0aichallenge_tools\ants\dist\bots\300\MyBot.py"
 
 
 ::set player3="python %~dp0aichallenge_tools\ants\dist\sample_bots\python\LeftyBot.py"

@@ -41,6 +41,7 @@ public class AttackEnemyHill implements State{
 				List<Tile> route = AntBot.getPathfinding().aStar(ant.getAntPosition(), antToHill.get(ant));
 				//remove because position 0 is the ant position
 				route.remove(0);
+				AntBot.debug().log("Route " + route.size());
 				ant.setRoute(route);
 				destination = route.get(route.size() - 1);
 			}
