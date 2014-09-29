@@ -1,3 +1,3 @@
 Read me:
 
-check: http://robosrv.in.htwg-konstanz.de/trac/mobRob/wiki/Antbot
+check: https://bitbucket.org/antbot/antbot/wiki/Home
